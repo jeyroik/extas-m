@@ -118,7 +118,7 @@ class MachineConfig implements IMachineConfig
      */
     public function getEndState(): string
     {
-        return $this->config[static::FIELD__END_STATE] ?? '';
+        return $this->config[IStateMachine::MACHINE__CONFIG][static::FIELD__END_STATE] ?? '';
     }
 
     /**
@@ -126,7 +126,7 @@ class MachineConfig implements IMachineConfig
      */
     public function getStartState(): string
     {
-        return $this->config[static::FIELD__START_STATE] ?? '';
+        return $this->config[IStateMachine::MACHINE__CONFIG][static::FIELD__START_STATE] ?? '';
     }
 
     /**
@@ -134,7 +134,7 @@ class MachineConfig implements IMachineConfig
      */
     public function getAlias(): string
     {
-        return $this->config[static::FIELD__ALIAS] ?? '';
+        return $this->config[IStateMachine::MACHINE__CONFIG][static::FIELD__ALIAS] ?? '';
     }
 
     /**
@@ -142,7 +142,7 @@ class MachineConfig implements IMachineConfig
      */
     public function getVersion()
     {
-        return $this->config[static::FIELD__VERSION];
+        return $this->config[IStateMachine::MACHINE__CONFIG][static::FIELD__VERSION];
     }
 
     /**
