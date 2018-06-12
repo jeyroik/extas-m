@@ -6,7 +6,7 @@ use tratabor\components\systems\SystemContainer;
 use tratabor\interfaces\systems\IState;
 use tratabor\interfaces\systems\plugins\IPluginRepository;
 use tratabor\interfaces\systems\states\dispatchers\IDispatchersFactory;
-use tratabor\interfaces\systems\states\IExtension;
+use tratabor\interfaces\systems\IExtension;
 use tratabor\interfaces\systems\states\IStateExtension;
 
 /**

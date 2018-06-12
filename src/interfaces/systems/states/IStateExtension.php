@@ -1,6 +1,8 @@
 <?php
 namespace tratabor\interfaces\systems\states;
 
+use tratabor\interfaces\systems\IExtension;
+
 /**
  * Interface IStatePlugin
  *

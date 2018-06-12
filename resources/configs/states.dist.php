@@ -2,7 +2,7 @@
 
 use tratabor\interfaces\systems\states\IStateFactory as State;
 use tratabor\interfaces\systems\states\IStateMachine as Machine;
-use tratabor\components\systems\states\machines\plugins\PluginInitConfigStatePlugins as StatePlugins;
+use tratabor\components\systems\states\machines\plugins\PluginInitConfigStatePlugins as PStatePlugins;
 use tratabor\interfaces\systems as ISystems;
 use tratabor\components\systems\states\plugins as StatesPlugins;
 use tratabor\components\systems\states\machines\plugins as MachinePlugins;
@@ -36,7 +36,7 @@ return [
              */
         ],
 
-        StatePlugins::MACHINE__STATE_PLUGINS => [
+        PStatePlugins::MACHINE__STATE_PLUGINS => [
             /**
              * Plugins for each state.
              * Current option is ignoring if state has own plugins definition.

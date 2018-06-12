@@ -5,7 +5,7 @@ use tratabor\components\systems\plugins\TPluginAcceptable;
 use tratabor\components\systems\SystemContainer;
 use tratabor\interfaces\systems\IPluginsAcceptable;
 use tratabor\interfaces\systems\plugins\IPluginRepository;
-use tratabor\interfaces\systems\states\IExtension;
+use tratabor\interfaces\systems\IExtension;
 use tratabor\interfaces\systems\states\IStateMachine;
 use tratabor\interfaces\systems\states\machines\IMachineConfig;
 
