@@ -1,6 +1,7 @@
 <?php
 namespace tratabor\components\systems\states\machines\plugins;
 
+use tratabor\components\systems\Plugin;
 use tratabor\interfaces\systems\states\IStateMachine;
 use tratabor\interfaces\systems\states\machines\plugins\IPluginBeforeStateRun;
 
@@ -10,7 +11,7 @@ use tratabor\interfaces\systems\states\machines\plugins\IPluginBeforeStateRun;
  * @package tratabor\components\systems\states\machines\plugins
  * @author Funcraft <me@funcraft.ru>
  */
-class PluginBeforeStateRunExistingState implements IPluginBeforeStateRun
+class PluginBeforeStateRunExistingState extends Plugin implements IPluginBeforeStateRun
 {
     /**
      * @param IStateMachine $machine
