@@ -1,0 +1,19 @@
+{
+  "name": "jeyroik/extas-m",
+  "description": "EXTendable State Machine.",
+  "require": {
+    "jeyroik/sm-plugin-error-state": "*",
+    "jeyroik/sm-plugin-guarantee-id": "*",
+    "jeyroik/sm-plugin-init-config-state-plugins": "*",
+    "jeyroik/sm-plugin-max-try": "*",
+    "jeyroik/sm-plugin-on-failure": "*",
+    "jeyroik/sm-plugin-states-route": "*",
+    "jeyroik/sm-plugin-route-path": "*",
+    "jeyroik/sm-plugin-error-route-from-start": "*"
+  },
+  "autoload": {
+    "psr-4": {
+      "tratabor\\": "src/"
+    }
+  }
+}
