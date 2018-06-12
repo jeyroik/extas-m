@@ -79,6 +79,7 @@ class StateBasic implements IState
         $this->setId($id)
             ->setFromState($fromState)
             ->setCreatedAt()
+            ->setDispatchers($dispatchers)
             ->registerAdditional($additional)
             ->registerPlugins($this->getAdditional(static::FIELD__PLUGINS))
             ->triggerCreated();

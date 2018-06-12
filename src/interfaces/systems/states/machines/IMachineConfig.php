@@ -50,6 +50,9 @@ interface IMachineConfig extends \ArrayAccess, \Iterator, IPluginsAcceptable, IE
      */
     public function getStateConfig($stateId);
 
+    /**
+     * @return mixed
+     */
     public function getMachinePluginsList();
 
     /**

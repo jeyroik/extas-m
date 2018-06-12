@@ -2,6 +2,7 @@
 
 use tratabor\interfaces\systems\states\IStateFactory as State;
 use tratabor\interfaces\systems\states\IStateMachine as Machine;
+use tratabor\interfaces\systems\states\machines\IMachineConfig;
 use tratabor\components\systems\states\machines\plugins\PluginInitConfigStatePlugins as PStatePlugins;
 use tratabor\interfaces\systems as ISystems;
 use tratabor\components\systems\states\plugins as StatesPlugins;
@@ -20,12 +21,12 @@ use tratabor\components\systems\states\machines\plugins as MachinePlugins;
 
 return [
     Machine::MACHINE__CONFIG => [
-        Machine::MACHINE__CONFIG__VERSION => '1.0',
-        Machine::MACHINE__CONFIG__ALIAS => 'primary machine',
-        Machine::MACHINE__CONFIG__START_STATE => 'app:run',
-        Machine::MACHINE__CONFIG__END_STATE => 'app:terminate',
+        IMachineConfig::FIELD__VERSION  => '1.0',
+        IMachineConfig::FIELD__ALIAS => 'primary machine',
+        IMachineConfig::FIELD__START_STATE => 'app:run',
+        IMachineConfig::FIELD__END_STATE => 'app:terminate',
 
-        Machine::MACHINE__CONFIG__PLUGINS => [
+        ISystems\IPluginsAcceptable::FIELD__PLUGINS => [
             /**
              * Plugins for the current machine config.
              * [
