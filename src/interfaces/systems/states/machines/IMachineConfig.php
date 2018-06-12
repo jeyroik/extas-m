@@ -20,7 +20,6 @@ interface IMachineConfig extends \ArrayAccess, \Iterator, IPluginsAcceptable, IE
 
     const STAGE__ON_PROPERTY_SET = 'machine_config__on_property_set';
     const STAGE__ON_PROPERTY_GET = 'machine_config__on_property_get';
-    const STAGE__EXTENDED_METHOD_CALL = 'machine_config__ext_method_call';
     const STAGE__CREATED = 'machine_config__created';
     const STAGE__DESTRUCTED = 'machine_config__destructed';
 
