@@ -21,7 +21,6 @@ use tratabor\interfaces\systems\states\IStateExtension;
  */
 class StateBasic implements IState
 {
-    const STAGE__EXTENDED_METHOD_CALL = 'state__ext_method_call';
     const STAGE__CREATED = 'state__created';
     const STAGE__DESTRUCTED = 'state__destructed';
 
