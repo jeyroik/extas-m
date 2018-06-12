@@ -1,11 +1,11 @@
 <?php
 namespace tratabor\components\systems\states\machines;
 
+use tratabor\components\systems\extensions\TExtendable;
 use tratabor\components\systems\plugins\TPluginAcceptable;
 use tratabor\components\systems\SystemContainer;
 use tratabor\interfaces\systems\IPluginsAcceptable;
 use tratabor\interfaces\systems\plugins\IPluginRepository;
-use tratabor\interfaces\systems\IExtension;
 use tratabor\interfaces\systems\states\IStateMachine;
 use tratabor\interfaces\systems\states\machines\IMachineConfig;
 
@@ -18,19 +18,10 @@ use tratabor\interfaces\systems\states\machines\IMachineConfig;
 class MachineConfig implements IMachineConfig
 {
     use TPluginAcceptable;
+    use TExtendable;
 
     protected $config = [];
     protected $currentKey = 0;
-
-    /**
-     * @var IExtension[]
-     */
-    protected $registeredInterfaces = [];
-
-    /**
-     * @var array
-     */
-    protected $extendedMethodToInterface = [];
 
     /**
      * MachineConfig constructor.
@@ -243,35 +234,6 @@ class MachineConfig implements IMachineConfig
     public function offsetUnset($offset)
     {
         unset($this->config[$offset]);
-    }
-
-    /**
-     * @param string $interface
-     * @param IExtension $interfaceImplementation
-     *
-     * @return bool
-     */
-    public function registerInterface(string $interface, IExtension $interfaceImplementation): bool
-    {
-        if (!$this->isImplementsInterface($interface)) {
-            $this->registeredInterfaces[$interface] = $interfaceImplementation;
-            $methods = $interfaceImplementation->getMethodsNames();
-            $this->extendedMethodToInterface += $methods;
-
-            return true;
-        } else {
-            return false;
-        }
-    }
-
-    /**
-     * @param string $interface
-     *
-     * @return bool
-     */
-    public function isImplementsInterface(string $interface): bool
-    {
-        return isset($this->registeredInterfaces[$interface]);
     }
 
     /**
