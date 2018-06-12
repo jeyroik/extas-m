@@ -24,7 +24,7 @@ class PluginBeforeStateRunExistingState extends Plugin implements IPluginBeforeS
     {
         $config = $machine->getConfig();
 
-        if ($config->hasState($stateId)) {
+        if (!$stateId || $config->hasState($stateId)) {
             return $stateId;
         }
 
