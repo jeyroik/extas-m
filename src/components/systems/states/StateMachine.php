@@ -26,7 +26,10 @@ use tratabor\interfaces\systems\states\machines\IMachineConfig;
  *  ): array [array $stateConfig, string $fromState, string $stateId]
  * @sm-stage-interface is_state_valid(IStateMachine $machine, IState $state): bool
  * @sm-stage-interface next_state(IStateMachine $machine, IState $state, IContext $currentContext): string next state id
- * @sm-stage-interface state_result(IContext $currentContext): bool is valid result, continue dispatching?
+ * @sm-stage-interface state_result(
+ *      IStateMachine $machine,
+ *      IContext $currentContext
+ * ): bool is valid result, continue dispatching?
  * @sm-stage-interface init_config(IStateMachine, IMachineConfig $config): IMachineConfig
  * @sm-stage-interface init_context(IStateMachine $machine, IContext $context): IContext
  * @sm-stage-interface init_state_factory(IStateMachine $machine, IStateFactory $factory): IStateFactory
@@ -195,7 +198,7 @@ class StateMachine implements IStateMachine
             $this->currentContext = $dispatcher($state, $this->currentContext);
 
             foreach ($this->findPluginsByStage(IStateMachine::STAGE__STATE_RESULT) as $plugin) {
-                if (!$plugin($this->currentContext)) {
+                if (!$plugin($this, $this->currentContext)) {
                     break 2;
                 }
             }
