@@ -134,13 +134,14 @@ class StateBasic implements IState
 
     /**
      * @param string $name
+     * @param mixed $default
      *
      * @return array|mixed|null
      */
-    public function getAdditional($name = '')
+    public function getAdditional($name = '', $default = null)
     {
         return $name
-            ? ($this->additional[$name] ?? null)
+            ? ($this->additional[$name] ?? $default)
             : $this->additional;
     }
 
