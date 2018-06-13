@@ -24,8 +24,6 @@ use tratabor\interfaces\systems\states\IStateFactory;
  */
 class StateFactory implements IStateFactory
 {
-    const STAGE__AFTER_STATE_BUILD = 'after_state_build';
-
     use TPluginAcceptable;
     use TExtendable;
 
@@ -53,7 +51,7 @@ class StateFactory implements IStateFactory
      */
     public static function injectPlugins($plugins)
     {
-        static::$plugins = $plugins;
+        static::$plugins += $plugins;
 
         return true;
     }

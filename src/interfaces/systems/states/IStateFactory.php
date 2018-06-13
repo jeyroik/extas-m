@@ -20,6 +20,8 @@ interface IStateFactory extends IPluginsAcceptable, IExtendable
     const STATE__ON_FAILURE = 'on_failure';
     const STATE__ON_TERMINATE = 'on_terminate';
 
+    const STAGE__AFTER_STATE_BUILD = 'after_state_build';
+
     /**
      * @param $stateConfig
      * @param string $fromState
@@ -28,4 +30,11 @@ interface IStateFactory extends IPluginsAcceptable, IExtendable
      * @return IState
      */
     public static function buildState($stateConfig, $fromState, $stateId = null): IState;
+
+    /**
+     * @param $plugins
+     *
+     * @return bool
+     */
+    public static function injectPlugins($plugins);
 }
