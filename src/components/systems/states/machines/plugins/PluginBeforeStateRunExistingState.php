@@ -32,7 +32,7 @@ class PluginBeforeStateRunExistingState extends Plugin implements IPluginBeforeS
         $from = $currentState ? $currentState->getId() : '@directive.initializeMachine()';
 
         throw new \Exception(
-            'Unknown to state "' . $stateId . '" from "' . $from . '"'
+            'Missed or unknown "to" state "' . $stateId . '" from "' . $from . '"'
         );
     }
 }

@@ -7,6 +7,8 @@ use tratabor\components\systems\states\machines\plugins\PluginInitConfigStatePlu
 use tratabor\interfaces\systems as ISystems;
 use tratabor\components\systems\states\plugins as StatesPlugins;
 use tratabor\components\systems\states\machines\plugins as MachinePlugins;
+use tratabor\components\systems\states\plugins\ExtensionMaxTry as EMaxTry;
+use tratabor\components\systems\states\plugins\PluginNextStateOnFailure as POnFail;
 
 /**
  * README
@@ -126,28 +128,28 @@ return [
     Machine::MACHINE__STATES => [
         'app:run' => [
             State::STATE__ID => 'app:run',
-            State::STATE__MAX_TRY => 1,
+            EMaxTry::STATE__MAX_TRY => 1,
             State::STATE__DISPATCHERS => [
                 \tratabor\components\dispatchers\DispatcherSuccess::class
             ],
-            State::STATE__ON_SUCCESS => 'test:to_state',
-            State::STATE__ON_FAILURE => 'app:failure',
-            State::STATE__ON_TERMINATE => 'app:terminate',
+            POnFail::STATE__ON_SUCCESS => 'test:to_state',
+            POnFail::STATE__ON_FAILURE => 'app:failure',
+            EMaxTry::STATE__ON_TERMINATE => 'app:terminate',
         ],
 
         'test:to_state' => [
             State::STATE__ID => 'test:to_state',
-            State::STATE__MAX_TRY => 1,
+            EMaxTry::STATE__MAX_TRY => 1,
             State::STATE__DISPATCHERS => [
                 \tratabor\components\dispatchers\DispatcherSuccess::class
             ],
-            State::STATE__ON_SUCCESS => '',
-            State::STATE__ON_FAILURE => '',
-            State::STATE__ON_TERMINATE => ''
+            POnFail::STATE__ON_SUCCESS => '',
+            POnFail::STATE__ON_FAILURE => '',
+            EMaxTry::STATE__ON_TERMINATE => ''
         ],
         'app:terminate' => [
             State::STATE__ID => 'app:terminate',
-            State::STATE__MAX_TRY => 1,
+            EMaxTry::STATE__MAX_TRY => 1,
             State::STATE__DISPATCHERS => [
                 function ($currentState, $context) {
                     /**
@@ -160,13 +162,13 @@ return [
                     return $context;
                 }
             ],
-            State::STATE__ON_SUCCESS => '',
-            State::STATE__ON_FAILURE => '',
-            State::STATE__ON_TERMINATE => '',
+            POnFail::STATE__ON_SUCCESS => '',
+            POnFail::STATE__ON_FAILURE => '',
+            EMaxTry::STATE__ON_TERMINATE => '',
         ],
         'app:failure' => [
             State::STATE__ID => 'app:failure',
-            State::STATE__MAX_TRY => 1,
+            EMaxTry::STATE__MAX_TRY => 1,
             State::STATE__DISPATCHERS => [
                 function ($currentState, $context) {
                     /**
@@ -179,9 +181,9 @@ return [
                     return $context;
                 }
             ],
-            State::STATE__ON_SUCCESS => '',
-            State::STATE__ON_FAILURE => '',
-            State::STATE__ON_TERMINATE => '',
+            POnFail::STATE__ON_SUCCESS => '',
+            POnFail::STATE__ON_FAILURE => '',
+            EMaxTry::STATE__ON_TERMINATE => '',
         ]
     ]
 ];

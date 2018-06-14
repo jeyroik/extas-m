@@ -14,11 +14,7 @@ use tratabor\interfaces\systems\IState;
 interface IStateFactory extends IPluginsAcceptable, IExtendable
 {
     const STATE__ID = 'id';
-    const STATE__MAX_TRY = 'max_try';
     const STATE__DISPATCHERS = 'dispatchers';
-    const STATE__ON_SUCCESS = 'on_success';
-    const STATE__ON_FAILURE = 'on_failure';
-    const STATE__ON_TERMINATE = 'on_terminate';
 
     const STAGE__AFTER_STATE_BUILD = 'after_state_build';
 
