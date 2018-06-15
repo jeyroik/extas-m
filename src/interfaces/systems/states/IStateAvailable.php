@@ -1,12 +1,12 @@
 <?php
-namespace tratabor\interfaces\systems\states;
+namespace jeyroik\extas\interfaces\systems\states;
 
-use tratabor\interfaces\systems\IState;
+use jeyroik\extas\interfaces\systems\IState;
 
 /**
  * Interface IStateAvailable
  *
- * @package tratabor\interfaces\systems\states
+ * @package jeyroik\extas\interfaces\systems\states
  * @author Funcraft <me@funcraft.ru>
  */
 interface IStateAvailable

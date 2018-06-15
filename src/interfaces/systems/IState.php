@@ -1,11 +1,11 @@
 <?php
-namespace tratabor\interfaces\systems;
+namespace jeyroik\extas\interfaces\systems;
 
-use tratabor\interfaces\systems\states\IStateDispatcher;
+use jeyroik\extas\interfaces\systems\states\IStateDispatcher;
 
 /**
  * Interface IState
- * @package tratabor\interfaces\system
+ * @package jeyroik\extas\interfaces\system
  * @author Funcraft <me@funcraft.ru>
  */
 interface IState extends IExtendable, IPluginsAcceptable

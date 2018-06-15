@@ -1,12 +1,12 @@
 <?php
-namespace tratabor\interfaces\systems\states\machines\plugins;
+namespace jeyroik\extas\interfaces\systems\states\machines\plugins;
 
-use tratabor\interfaces\systems\IPlugin;
+use jeyroik\extas\interfaces\systems\IPlugin;
 
 /**
  * Interface IPluginValidation
  *
- * @package tratabor\interfaces\systems\states\machines\plugins
+ * @package jeyroik\extas\interfaces\systems\states\machines\plugins
  * @author Funcraft <me@funcraft.ru>
  */
 interface IPluginValidation extends IPlugin

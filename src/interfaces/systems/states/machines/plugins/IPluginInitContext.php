@@ -1,14 +1,14 @@
 <?php
-namespace tratabor\interfaces\systems\states\machines\plugins;
+namespace jeyroik\extas\interfaces\systems\states\machines\plugins;
 
-use tratabor\interfaces\systems\IContext;
-use tratabor\interfaces\systems\IPlugin;
-use tratabor\interfaces\systems\states\IStateMachine;
+use jeyroik\extas\interfaces\systems\IContext;
+use jeyroik\extas\interfaces\systems\IPlugin;
+use jeyroik\extas\interfaces\systems\states\IStateMachine;
 
 /**
  * Interface IPluginInitContext
  *
- * @package tratabor\interfaces\systems\states\machines\plugins
+ * @package jeyroik\extas\interfaces\systems\states\machines\plugins
  * @author Funcraft <me@funcraft.ru>
  */
 interface IPluginInitContext extends IPlugin

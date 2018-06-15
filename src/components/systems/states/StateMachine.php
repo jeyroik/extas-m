@@ -1,18 +1,18 @@
 <?php
-namespace tratabor\components\systems\states;
+namespace jeyroik\extas\components\systems\states;
 
-use tratabor\components\systems\Context;
-use tratabor\components\systems\extensions\TExtendable;
-use tratabor\components\systems\plugins\TPluginAcceptable;
-use tratabor\components\systems\states\machines\MachineConfig;
-use tratabor\components\systems\SystemContainer;
-use tratabor\interfaces\systems\IContext;
-use tratabor\interfaces\systems\IPlugin;
-use tratabor\interfaces\systems\IState;
-use tratabor\interfaces\systems\plugins\IPluginRepository;
-use tratabor\interfaces\systems\states\IStateFactory;
-use tratabor\interfaces\systems\states\IStateMachine;
-use tratabor\interfaces\systems\states\machines\IMachineConfig;
+use jeyroik\extas\components\systems\Context;
+use jeyroik\extas\components\systems\extensions\TExtendable;
+use jeyroik\extas\components\systems\plugins\TPluginAcceptable;
+use jeyroik\extas\components\systems\states\machines\MachineConfig;
+use jeyroik\extas\components\systems\SystemContainer;
+use jeyroik\extas\interfaces\systems\IContext;
+use jeyroik\extas\interfaces\systems\IPlugin;
+use jeyroik\extas\interfaces\systems\IState;
+use jeyroik\extas\interfaces\systems\plugins\IPluginRepository;
+use jeyroik\extas\interfaces\systems\states\IStateFactory;
+use jeyroik\extas\interfaces\systems\states\IStateMachine;
+use jeyroik\extas\interfaces\systems\states\machines\IMachineConfig;
 
 /**
  * Class StateMachine
@@ -36,7 +36,7 @@ use tratabor\interfaces\systems\states\machines\IMachineConfig;
  * @sm-stage-interface init_machine(IStateMachine &$machine): IStateMachine
  * @sm-stage-interface state_machine_destructed(IStateMachine &$machine)
  *
- * @package tratabor\components\systems\states
+ * @package jeyroik\extas\components\systems\states
  * @author Funcraft <me@funcraft.ru>
  */
 class StateMachine implements IStateMachine

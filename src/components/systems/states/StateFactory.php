@@ -1,12 +1,12 @@
 <?php
-namespace tratabor\components\systems\states;
+namespace jeyroik\extas\components\systems\states;
 
-use tratabor\components\systems\extensions\TExtendable;
-use tratabor\components\systems\plugins\TPluginAcceptable;
-use tratabor\components\systems\SystemContainer;
-use tratabor\interfaces\systems\IState;
-use tratabor\interfaces\systems\plugins\IPluginRepository;
-use tratabor\interfaces\systems\states\IStateFactory;
+use jeyroik\extas\components\systems\extensions\TExtendable;
+use jeyroik\extas\components\systems\plugins\TPluginAcceptable;
+use jeyroik\extas\components\systems\SystemContainer;
+use jeyroik\extas\interfaces\systems\IState;
+use jeyroik\extas\interfaces\systems\plugins\IPluginRepository;
+use jeyroik\extas\interfaces\systems\states\IStateFactory;
 
 /**
  * Class StateFactory
@@ -19,7 +19,7 @@ use tratabor\interfaces\systems\states\IStateFactory;
  *
  * @sm-stage-interface after_state_build(IState $state): IState
  *
- * @package tratabor\components\systems\states
+ * @package jeyroik\extas\components\systems\states
  * @author Funcraft <me@funcraft.ru>
  */
 class StateFactory implements IStateFactory

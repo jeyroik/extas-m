@@ -1,13 +1,13 @@
 <?php
-namespace tratabor\components\systems\plugins;
+namespace jeyroik\extas\components\systems\plugins;
 
-use tratabor\interfaces\systems\IPlugin;
-use tratabor\interfaces\systems\plugins\IPluginStage;
+use jeyroik\extas\interfaces\systems\IPlugin;
+use jeyroik\extas\interfaces\systems\plugins\IPluginStage;
 
 /**
  * Class PluginStage
  *
- * @package tratabor\components\systems\plugins
+ * @package jeyroik\extas\components\systems\plugins
  * @author Funcraft <me@funcraft.ru>
  */
 class PluginStage implements IPluginStage

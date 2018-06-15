@@ -1,16 +1,16 @@
 <?php
-namespace tratabor\components\systems;
+namespace jeyroik\extas\components\systems;
 
-use tratabor\components\systems\states\machines\TMachineAvailable;
-use tratabor\components\systems\states\TStateAvailable;
-use tratabor\interfaces\systems\IItem;
-use tratabor\interfaces\systems\states\IStateAvailable;
-use tratabor\interfaces\systems\states\machines\IMachineAvailable;
+use jeyroik\extas\components\systems\states\machines\TMachineAvailable;
+use jeyroik\extas\components\systems\states\TStateAvailable;
+use jeyroik\extas\interfaces\systems\IItem;
+use jeyroik\extas\interfaces\systems\states\IStateAvailable;
+use jeyroik\extas\interfaces\systems\states\machines\IMachineAvailable;
 
 /**
  * Class Item
  *
- * @package tratabor\components\systems
+ * @package jeyroik\extas\components\systems
  * @author Funcraft <me@funcraft.ru>
  */
 class Item implements IItem, IMachineAvailable, IStateAvailable

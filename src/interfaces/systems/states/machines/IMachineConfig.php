@@ -1,13 +1,13 @@
 <?php
-namespace tratabor\interfaces\systems\states\machines;
+namespace jeyroik\extas\interfaces\systems\states\machines;
 
-use tratabor\interfaces\systems\IExtendable;
-use tratabor\interfaces\systems\IPluginsAcceptable;
+use jeyroik\extas\interfaces\systems\IExtendable;
+use jeyroik\extas\interfaces\systems\IPluginsAcceptable;
 
 /**
  * Interface IMachineConfig
  *
- * @package tratabor\interfaces\systems\states\machines
+ * @package jeyroik\extas\interfaces\systems\states\machines
  * @author Funcraft <me@funcraft.ru>
  */
 interface IMachineConfig extends \ArrayAccess, \Iterator, IPluginsAcceptable, IExtendable

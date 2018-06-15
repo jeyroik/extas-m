@@ -1,16 +1,16 @@
 <?php
-namespace tratabor\components\systems\plugins;
+namespace jeyroik\extas\components\systems\plugins;
 
-use tratabor\components\systems\Plugin;
-use tratabor\components\systems\SystemContainer;
-use tratabor\interfaces\systems\IPlugin;
-use tratabor\interfaces\systems\IPluginsAcceptable;
-use tratabor\interfaces\systems\plugins\IPluginRepository;
+use jeyroik\extas\components\systems\Plugin;
+use jeyroik\extas\components\systems\SystemContainer;
+use jeyroik\extas\interfaces\systems\IPlugin;
+use jeyroik\extas\interfaces\systems\IPluginsAcceptable;
+use jeyroik\extas\interfaces\systems\plugins\IPluginRepository;
 
 /**
  * Trait TPluginAcceptable
  *
- * @package tratabor\components\systems\plugins
+ * @package jeyroik\extas\components\systems\plugins
  * @author Funcraft <me@funcraft.ru>
  */
 trait TPluginAcceptable

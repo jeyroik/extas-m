@@ -1,11 +1,11 @@
 <?php
 
-use tratabor\interfaces\systems as ISystems;
-use tratabor\components\systems\states\machines\plugins as MachinePlugins;
-use tratabor\interfaces\systems\states\IStateMachine as Machine;
+use jeyroik\extas\interfaces\systems as ISystems;
+use jeyroik\extas\components\systems\states\machines\plugins as MachinePlugins;
+use jeyroik\extas\interfaces\systems\states\IStateMachine as Machine;
 
 return [
-    \tratabor\interfaces\systems\IPluginsAcceptable::FIELD__PLUGINS => [
+    \jeyroik\extas\interfaces\systems\IPluginsAcceptable::FIELD__PLUGINS => [
         [
             ISystems\IPlugin::FIELD__CLASS => MachinePlugins\PluginBeforeMachineInitPhpConfig::class,
             ISystems\IPlugin::FIELD__VERSION => '1.0',

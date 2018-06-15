@@ -1,12 +1,12 @@
 <?php
-namespace tratabor\interfaces\systems\plugins;
+namespace jeyroik\extas\interfaces\systems\plugins;
 
-use tratabor\interfaces\systems\IPlugin;
+use jeyroik\extas\interfaces\systems\IPlugin;
 
 /**
  * Interface IPluginSubject
  *
- * @package tratabor\interfaces\systems\plugins
+ * @package jeyroik\extas\interfaces\systems\plugins
  * @author Funcraft <me@funcraft.ru>
  */
 interface IPluginSubject

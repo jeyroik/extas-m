@@ -1,12 +1,12 @@
 <?php
-namespace tratabor\components\systems;
+namespace jeyroik\extas\components\systems;
 
-use tratabor\interfaces\systems\IPlugin;
+use jeyroik\extas\interfaces\systems\IPlugin;
 
 /**
  * Class Plugin
  *
- * @package tratabor\components\systems
+ * @package jeyroik\extas\components\systems
  * @author Funcraft <me@funcraft.ru>
  */
 class Plugin implements IPlugin

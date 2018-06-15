@@ -1,14 +1,14 @@
 <?php
-namespace tratabor\interfaces\systems\states;
+namespace jeyroik\extas\interfaces\systems\states;
 
-use tratabor\interfaces\systems\IExtendable;
-use tratabor\interfaces\systems\IPluginsAcceptable;
-use tratabor\interfaces\systems\IState;
+use jeyroik\extas\interfaces\systems\IExtendable;
+use jeyroik\extas\interfaces\systems\IPluginsAcceptable;
+use jeyroik\extas\interfaces\systems\IState;
 
 /**
  * Interface IStateFactory
  *
- * @package tratabor\interfaces\systems\states
+ * @package jeyroik\extas\interfaces\systems\states
  * @author Funcraft <me@funcraft.ru>
  */
 interface IStateFactory extends IPluginsAcceptable, IExtendable

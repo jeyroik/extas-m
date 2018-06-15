@@ -1,13 +1,12 @@
 <?php
-namespace tratabor\interfaces\systems\states\machines;
+namespace jeyroik\extas\interfaces\systems\states\machines;
 
-use tratabor\interfaces\systems\IState;
-use tratabor\interfaces\systems\states\IStateMachine;
+use jeyroik\extas\interfaces\systems\states\IStateMachine;
 
 /**
  * Interface IMachineAvailable
  *
- * @package tratabor\interfaces\systems\states\machines
+ * @package jeyroik\extas\interfaces\systems\states\machines
  * @author Funcraft <me@funcraft.ru>
  */
 interface IMachineAvailable

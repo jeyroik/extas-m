@@ -1,12 +1,12 @@
 <?php
-namespace tratabor\interfaces\systems\states;
+namespace jeyroik\extas\interfaces\systems\states;
 
-use tratabor\interfaces\systems\IExtension;
+use jeyroik\extas\interfaces\systems\IExtension;
 
 /**
  * Interface IStatePlugin
  *
- * @package tratabor\interfaces\systems\states
+ * @package jeyroik\extas\interfaces\systems\states
  * @author Funcraft <me@funcraft.ru>
  */
 interface IStateExtension extends IExtension

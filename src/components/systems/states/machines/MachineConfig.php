@@ -1,18 +1,18 @@
 <?php
-namespace tratabor\components\systems\states\machines;
+namespace jeyroik\extas\components\systems\states\machines;
 
-use tratabor\components\systems\extensions\TExtendable;
-use tratabor\components\systems\plugins\TPluginAcceptable;
-use tratabor\components\systems\SystemContainer;
-use tratabor\interfaces\systems\IPluginsAcceptable;
-use tratabor\interfaces\systems\plugins\IPluginRepository;
-use tratabor\interfaces\systems\states\IStateMachine;
-use tratabor\interfaces\systems\states\machines\IMachineConfig;
+use jeyroik\extas\components\systems\extensions\TExtendable;
+use jeyroik\extas\components\systems\plugins\TPluginAcceptable;
+use jeyroik\extas\components\systems\SystemContainer;
+use jeyroik\extas\interfaces\systems\IPluginsAcceptable;
+use jeyroik\extas\interfaces\systems\plugins\IPluginRepository;
+use jeyroik\extas\interfaces\systems\states\IStateMachine;
+use jeyroik\extas\interfaces\systems\states\machines\IMachineConfig;
 
 /**
  * Class MachineConfig
  *
- * @package tratabor\components\systems\states\machines
+ * @package jeyroik\extas\components\systems\states\machines
  * @author Funcraft <me@funcraft.ru>
  */
 class MachineConfig implements IMachineConfig

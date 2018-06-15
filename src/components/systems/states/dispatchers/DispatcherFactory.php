@@ -1,13 +1,13 @@
 <?php
-namespace tratabor\components\systems\states\dispatchers;
+namespace jeyroik\extas\components\systems\states\dispatchers;
 
-use tratabor\interfaces\systems\states\dispatchers\IDispatchersFactory;
-use tratabor\interfaces\systems\states\IStateDispatcher;
+use jeyroik\extas\interfaces\systems\states\dispatchers\IDispatchersFactory;
+use jeyroik\extas\interfaces\systems\states\IStateDispatcher;
 
 /**
  * Class DispatcherFactory
  *
- * @package tratabor\components\systems\states\dispatchers
+ * @package jeyroik\extas\components\systems\states\dispatchers
  * @author Funcraft <me@funcraft.ru>
  */
 class DispatcherFactory implements IDispatchersFactory

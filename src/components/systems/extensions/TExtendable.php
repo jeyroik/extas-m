@@ -1,15 +1,15 @@
 <?php
-namespace tratabor\components\systems\extensions;
+namespace jeyroik\extas\components\systems\extensions;
 
-use tratabor\components\systems\SystemContainer;
-use tratabor\interfaces\systems\IExtendable;
-use tratabor\interfaces\systems\plugins\IPluginRepository;
-use tratabor\interfaces\systems\IExtension;
+use jeyroik\extas\components\systems\SystemContainer;
+use jeyroik\extas\interfaces\systems\IExtendable;
+use jeyroik\extas\interfaces\systems\plugins\IPluginRepository;
+use jeyroik\extas\interfaces\systems\IExtension;
 
 /**
  * Trait TExtendable
  *
- * @package tratabor\components\systems\extensions
+ * @package jeyroik\extas\components\systems\extensions
  * @author Funcraft <me@funcraft.ru>
  */
 trait TExtendable

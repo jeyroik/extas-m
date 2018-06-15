@@ -1,10 +1,10 @@
 <?php
-namespace tratabor\interfaces\systems\states\machines;
+namespace jeyroik\extas\interfaces\systems\states\machines;
 
 /**
  * Interface IMachineVersion
  *
- * @package tratabor\interfaces\systems\states\machines
+ * @package jeyroik\extas\interfaces\systems\states\machines
  * @author Funcraft <me@funcraft.ru>
  */
 interface IMachineVersion

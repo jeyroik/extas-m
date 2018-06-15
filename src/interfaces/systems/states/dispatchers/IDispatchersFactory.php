@@ -1,10 +1,10 @@
 <?php
-namespace tratabor\interfaces\systems\states\dispatchers;
+namespace jeyroik\extas\interfaces\systems\states\dispatchers;
 
 /**
  * Interface IDispatchersFactory
  *
- * @package tratabor\interfaces\systems\states\dispatchers
+ * @package jeyroik\extas\interfaces\systems\states\dispatchers
  * @author Funcraft <me@funcraft.ru>
  */
 interface IDispatchersFactory

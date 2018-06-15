@@ -1,12 +1,12 @@
 <?php
-namespace tratabor\components\systems;
+namespace jeyroik\extas\components\systems;
 
-use tratabor\interfaces\systems\IExtension;
+use jeyroik\extas\interfaces\systems\IExtension;
 
 /**
  * Class Extension
  *
- * @package tratabor\components\systems
+ * @package jeyroik\extas\components\systems
  * @author Funcraft <me@funcraft.ru>
  */
 class Extension implements IExtension

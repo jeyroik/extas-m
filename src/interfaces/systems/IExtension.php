@@ -1,10 +1,10 @@
 <?php
-namespace tratabor\interfaces\systems;
+namespace jeyroik\extas\interfaces\systems;
 
 /**
  * Interface IExtension
  *
- * @package tratabor\interfaces\systems\states
+ * @package jeyroik\extas\interfaces\systems\states
  * @author Funcraft <me@funcraft.ru>
  */
 interface IExtension

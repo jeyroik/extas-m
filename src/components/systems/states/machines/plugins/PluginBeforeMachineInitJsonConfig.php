@@ -1,14 +1,14 @@
 <?php
-namespace tratabor\components\systems\states\machines\plugins;
+namespace jeyroik\extas\components\systems\states\machines\plugins;
 
-use tratabor\components\systems\Plugin;
-use tratabor\interfaces\systems\states\IStateMachine;
-use tratabor\interfaces\systems\states\machines\plugins\IPluginBeforeMachineInit;
+use jeyroik\extas\components\systems\Plugin;
+use jeyroik\extas\interfaces\systems\states\IStateMachine;
+use jeyroik\extas\interfaces\systems\states\machines\plugins\IPluginBeforeMachineInit;
 
 /**
  * Class PluginInitConfigJson
  *
- * @package tratabor\components\systems\states\machines\plugins
+ * @package jeyroik\extas\components\systems\states\machines\plugins
  * @author Funcraft <me@funcraft.ru>
  */
 class PluginBeforeMachineInitJsonConfig extends Plugin implements IPluginBeforeMachineInit
@@ -17,7 +17,7 @@ class PluginBeforeMachineInitJsonConfig extends Plugin implements IPluginBeforeM
      * @param IStateMachine $machine
      * @param string $config
      *
-     * @return array|mixed|null|string|\tratabor\interfaces\systems\states\machines\IMachineConfig
+     * @return array|mixed|null|string|\jeyroik\extas\interfaces\systems\states\machines\IMachineConfig
      */
     public function __invoke(IStateMachine &$machine, $config)
     {

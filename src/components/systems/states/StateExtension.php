@@ -1,13 +1,13 @@
 <?php
-namespace tratabor\components\systems\states;
+namespace jeyroik\extas\components\systems\states;
 
-use tratabor\interfaces\systems\IState;
-use tratabor\interfaces\systems\states\IStateExtension;
+use jeyroik\extas\interfaces\systems\IState;
+use jeyroik\extas\interfaces\systems\states\IStateExtension;
 
 /**
  * Class StatePlugin
  *
- * @package tratabor\components\systems\states
+ * @package jeyroik\extas\components\systems\states
  * @author Funcraft <me@funcraft.ru>
  */
 abstract class StateExtension implements IStateExtension

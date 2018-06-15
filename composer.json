@@ -13,7 +13,7 @@
   },
   "autoload": {
     "psr-4": {
-      "tratabor\\": "src/"
+      "jeyroik\\extas\\": "src/"
     }
   }
 }

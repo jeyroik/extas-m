@@ -1,11 +1,10 @@
 <?php
-namespace tratabor\interfaces\systems;
-use tratabor\interfaces\basics\ICell;
-use tratabor\interfaces\basics\ICreature;
+namespace jeyroik\extas\interfaces\systems;
 
 /**
  * Interface IItem
- * @package tratabor\interfaces\system
+ *
+ * @package jeyroik\extas\interfaces\system
  * @author Funcraft <me@funcraft.ru>
  */
 interface IItem

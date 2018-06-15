@@ -1,8 +1,8 @@
 <?php
-namespace tratabor\components\systems\states\machines;
+namespace jeyroik\extas\components\systems\states\machines;
 
-use tratabor\components\systems\states\StateMachine;
-use tratabor\interfaces\systems\states\IStateMachine;
+use jeyroik\extas\components\systems\states\StateMachine;
+use jeyroik\extas\interfaces\systems\states\IStateMachine;
 
 /**
  * Trait TMachineAvailable
@@ -12,7 +12,7 @@ use tratabor\interfaces\systems\states\IStateMachine;
  * If you want to have public initialization of your state machine, set  $stateMachineIsPublicInit to "true".
  * Default is "false".
  *
- * @package tratabor\components\systems\states\machines
+ * @package jeyroik\extas\components\systems\states\machines
  * @author Funcraft <me@funcraft.ru>
  */
 trait TMachineAvailable

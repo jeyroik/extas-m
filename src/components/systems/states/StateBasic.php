@@ -1,13 +1,13 @@
 <?php
-namespace tratabor\components\systems\states;
+namespace jeyroik\extas\components\systems\states;
 
-use tratabor\components\systems\plugins\TPluginAcceptable;
-use tratabor\components\systems\SystemContainer;
-use tratabor\interfaces\systems\IState;
-use tratabor\interfaces\systems\plugins\IPluginRepository;
-use tratabor\interfaces\systems\states\dispatchers\IDispatchersFactory;
-use tratabor\interfaces\systems\IExtension;
-use tratabor\interfaces\systems\states\IStateExtension;
+use jeyroik\extas\components\systems\plugins\TPluginAcceptable;
+use jeyroik\extas\components\systems\SystemContainer;
+use jeyroik\extas\interfaces\systems\IState;
+use jeyroik\extas\interfaces\systems\plugins\IPluginRepository;
+use jeyroik\extas\interfaces\systems\states\dispatchers\IDispatchersFactory;
+use jeyroik\extas\interfaces\systems\IExtension;
+use jeyroik\extas\interfaces\systems\states\IStateExtension;
 
 /**
  * Class StateBasic
@@ -16,7 +16,7 @@ use tratabor\interfaces\systems\states\IStateExtension;
  * @sm-stage-interface state__ext_method_call(IState $state, string $methodName, array $arguments): array $arguments
  * @sm-stage-interface state__destructed(IState &$state): void
  *
- * @package tratabor\components\systems\states
+ * @package jeyroik\extas\components\systems\states
  * @author Funcraft <me@funcraft.ru>
  */
 class StateBasic implements IState
@@ -177,7 +177,7 @@ class StateBasic implements IState
     }
 
     /**
-     * @return \Generator|\tratabor\interfaces\systems\states\IStateDispatcher[]
+     * @return \Generator|\jeyroik\extas\interfaces\systems\states\IStateDispatcher[]
      */
     public function getDispatchers()
     {

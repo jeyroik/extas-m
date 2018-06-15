@@ -1,16 +1,16 @@
 <?php
-namespace tratabor\components\systems\states\dispatchers;
+namespace jeyroik\extas\components\systems\states\dispatchers;
 
-use tratabor\interfaces\systems\IContext;
-use tratabor\interfaces\systems\IState;
-use tratabor\interfaces\systems\states\IStateDispatcher;
+use jeyroik\extas\interfaces\systems\IContext;
+use jeyroik\extas\interfaces\systems\IState;
+use jeyroik\extas\interfaces\systems\states\IStateDispatcher;
 
 /**
  * Class DispatcherError
  *
  * todo: log an error
  *
- * @package tratabor\components\systems\states\dispatchers
+ * @package jeyroik\extas\components\systems\states\dispatchers
  * @author Funcraft <me@funcraft.ru>
  */
 class DispatcherError implements IStateDispatcher

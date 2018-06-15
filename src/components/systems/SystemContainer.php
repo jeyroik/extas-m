@@ -1,13 +1,13 @@
 <?php
-namespace tratabor\components\systems;
+namespace jeyroik\extas\components\systems;
 
 use League\Container\Container;
-use tratabor\interfaces\systems\IContainer;
+use jeyroik\extas\interfaces\systems\IContainer;
 
 /**
  * Class SystemContainer
  *
- * @package tratabor\components\systems
+ * @package jeyroik\extas\components\systems
  * @author Funcraft <me@funcraft.ru>
  */
 class SystemContainer implements IContainer

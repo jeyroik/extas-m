@@ -1,10 +1,10 @@
 <?php
-namespace tratabor\interfaces\systems;
+namespace jeyroik\extas\interfaces\systems;
 
 /**
  * Interface IContext
  *
- * @package tratabor\interfaces\systems
+ * @package jeyroik\extas\interfaces\systems
  * @author Funcraft <me@funcraft.ru>
  */
 interface IContext extends IPluginsAcceptable, IExtendable

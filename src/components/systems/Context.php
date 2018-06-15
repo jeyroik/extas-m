@@ -1,15 +1,15 @@
 <?php
-namespace tratabor\components\systems;
+namespace jeyroik\extas\components\systems;
 
-use tratabor\components\systems\extensions\TExtendable;
-use tratabor\components\systems\plugins\TPluginAcceptable;
-use tratabor\interfaces\systems\IContext;
-use tratabor\interfaces\systems\IItem;
+use jeyroik\extas\components\systems\extensions\TExtendable;
+use jeyroik\extas\components\systems\plugins\TPluginAcceptable;
+use jeyroik\extas\interfaces\systems\IContext;
+use jeyroik\extas\interfaces\systems\IItem;
 
 /**
  * Class Context
  *
- * @package tratabor\components\systems
+ * @package jeyroik\extas\components\systems
  * @author Funcraft <me@funcraft.ru>
  */
 class Context extends Extension implements IContext

@@ -1,13 +1,13 @@
 <?php
-namespace tratabor\interfaces\systems\states\machines\plugins;
+namespace jeyroik\extas\interfaces\systems\states\machines\plugins;
 
-use tratabor\interfaces\systems\IState;
-use tratabor\interfaces\systems\states\IStateMachine;
+use jeyroik\extas\interfaces\systems\IState;
+use jeyroik\extas\interfaces\systems\states\IStateMachine;
 
 /**
  * Interface IPluginIsStateValid
  *
- * @package tratabor\interfaces\systems\states\machines\plugins
+ * @package jeyroik\extas\interfaces\systems\states\machines\plugins
  * @author Funcraft <me@funcraft.ru>
  */
 interface IPluginIsStateValid extends IPluginValidation

@@ -1,14 +1,14 @@
 <?php
 
-use tratabor\interfaces\systems\states\IStateFactory as State;
-use tratabor\interfaces\systems\states\IStateMachine as Machine;
-use tratabor\interfaces\systems\states\machines\IMachineConfig;
-use tratabor\components\systems\states\machines\plugins\PluginInitConfigStatePlugins as PStatePlugins;
-use tratabor\interfaces\systems as ISystems;
-use tratabor\components\systems\states\plugins as StatesPlugins;
-use tratabor\components\systems\states\machines\plugins as MachinePlugins;
-use tratabor\components\systems\states\plugins\ExtensionMaxTry as EMaxTry;
-use tratabor\components\systems\states\plugins\PluginNextStateOnFailure as POnFail;
+use jeyroik\extas\interfaces\systems\states\IStateFactory as State;
+use jeyroik\extas\interfaces\systems\states\IStateMachine as Machine;
+use jeyroik\extas\interfaces\systems\states\machines\IMachineConfig;
+use jeyroik\extas\components\systems\states\machines\plugins\PluginInitConfigStatePlugins as PStatePlugins;
+use jeyroik\extas\interfaces\systems as ISystems;
+use jeyroik\extas\components\systems\states\plugins as StatesPlugins;
+use jeyroik\extas\components\systems\states\machines\plugins as MachinePlugins;
+use jeyroik\extas\components\systems\states\plugins\ExtensionMaxTry as EMaxTry;
+use jeyroik\extas\components\systems\states\plugins\PluginNextStateOnFailure as POnFail;
 
 /**
  * README
@@ -130,7 +130,7 @@ return [
             State::STATE__ID => 'app:run',
             EMaxTry::STATE__MAX_TRY => 1,
             State::STATE__DISPATCHERS => [
-                \tratabor\components\dispatchers\DispatcherSuccess::class
+                \jeyroik\extas\components\dispatchers\DispatcherSuccess::class
             ],
             POnFail::STATE__ON_SUCCESS => 'test:to_state',
             POnFail::STATE__ON_FAILURE => 'app:failure',
@@ -141,7 +141,7 @@ return [
             State::STATE__ID => 'test:to_state',
             EMaxTry::STATE__MAX_TRY => 1,
             State::STATE__DISPATCHERS => [
-                \tratabor\components\dispatchers\DispatcherSuccess::class
+                \jeyroik\extas\components\dispatchers\DispatcherSuccess::class
             ],
             POnFail::STATE__ON_SUCCESS => '',
             POnFail::STATE__ON_FAILURE => '',
@@ -153,7 +153,7 @@ return [
             State::STATE__DISPATCHERS => [
                 function ($currentState, $context) {
                     /**
-                     * @var $currentState \tratabor\interfaces\systems\IState
+                     * @var $currentState \jeyroik\extas\interfaces\systems\IState
                      */
                     echo 'App termination at ' . $currentState->getId() . ' ...<br/><pre>';
                     print_r($context);
@@ -172,7 +172,7 @@ return [
             State::STATE__DISPATCHERS => [
                 function ($currentState, $context) {
                     /**
-                     * @var $currentState \tratabor\interfaces\systems\IState
+                     * @var $currentState \jeyroik\extas\interfaces\systems\IState
                      */
                     echo 'App failure on "' . $currentState->getId() . '"...<br/><pre>';
                     print_r($context);

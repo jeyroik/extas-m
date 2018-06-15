@@ -1,13 +1,13 @@
 <?php
-namespace tratabor\components\systems\states;
+namespace jeyroik\extas\components\systems\states;
 
-use tratabor\interfaces\systems\IState;
-use tratabor\interfaces\systems\states\machines\IMachineAvailable;
+use jeyroik\extas\interfaces\systems\IState;
+use jeyroik\extas\interfaces\systems\states\machines\IMachineAvailable;
 
 /**
  * Trait TStateAvailable
  *
- * @package tratabor\components\systems\states
+ * @package jeyroik\extas\components\systems\states
  * @author Funcraft <me@funcraft.ru>
  */
 trait TStateAvailable
