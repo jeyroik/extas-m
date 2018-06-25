@@ -47,39 +47,13 @@ return [
         ]
     ],
 
-    MachinePlugins\PluginInitMachineStatesRoute::ROUTE__CONFIG => [
-        ISystems\IPluginsAcceptable::FIELD__PLUGINS_SUBJECT_ID => ISystems\states\IStatesRoute::class,
-        ISystems\IPluginsAcceptable::FIELD__PLUGINS => [
-            [
-                ISystems\IPlugin::FIELD__CLASS => StatesPlugins\PluginRouteFromStart::class,
-                ISystems\IPlugin::FIELD__VERSION => '1.0',
-                ISystems\IPlugin::FIELD__STAGE => ISystems\states\IStatesRoute::STAGE__FROM
-            ],
-            [
-                ISystems\IPlugin::FIELD__CLASS => StatesPlugins\PluginRouteToPath::class,
-                ISystems\IPlugin::FIELD__VERSION => '1.0',
-                ISystems\IPlugin::FIELD__STAGE => ISystems\states\IStatesRoute::STAGE__TO
-            ]
-        ]
-    ],
-
     ISystems\IPluginsAcceptable::FIELD__PLUGINS_SUBJECT_ID => 'default_machine',
     ISystems\IPluginsAcceptable::FIELD__PLUGINS => [
         /**
          * Plugins for the current machine.
          */
         [
-            ISystems\IPlugin::FIELD__CLASS => MachinePlugins\PluginInitMachineStatesRoute::class,
-            ISystems\IPlugin::FIELD__VERSION => '1.0',
-            ISystems\IPlugin::FIELD__STAGE => Machine::STAGE__INIT_STATE_MACHINE
-        ],
-        [
             ISystems\IPlugin::FIELD__CLASS => MachinePlugins\PluginInitContextSuccess::class,
-            ISystems\IPlugin::FIELD__VERSION => '1.0',
-            ISystems\IPlugin::FIELD__STAGE => Machine::STAGE__INIT_CONTEXT
-        ],
-        [
-            ISystems\IPlugin::FIELD__CLASS => MachinePlugins\PluginInitContextErrors::class,
             ISystems\IPlugin::FIELD__VERSION => '1.0',
             ISystems\IPlugin::FIELD__STAGE => Machine::STAGE__INIT_CONTEXT
         ],

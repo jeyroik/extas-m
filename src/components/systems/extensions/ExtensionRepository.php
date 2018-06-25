@@ -15,6 +15,9 @@ class ExtensionRepository implements IExtensionRepository
     const CONFIG__METHODS = 0;
     const CONFIG__IMPLEMENTATIONS = 1;
 
+    const CONFIG__CLASS = 0;
+    const CONFIG__ARGUMENTS = 1;
+
     /**
      * @var static
      */
@@ -116,6 +119,11 @@ class ExtensionRepository implements IExtensionRepository
 
         if (is_string($implementation)) {
             $this->config[static::CONFIG__IMPLEMENTATIONS][$interface] = new $implementation;
+        } elseif (is_array($implementation)) {
+            $implementationClass = $implementation[static::CONFIG__CLASS];
+            $implementationArgs = $implementation[static::CONFIG__ARGUMENTS];
+
+            $this->config[static::CONFIG__IMPLEMENTATIONS][$interface] = new $implementationClass($implementationArgs);
         }
 
         return $this->config[static::CONFIG__IMPLEMENTATIONS][$interface];
