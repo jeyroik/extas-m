@@ -2,6 +2,7 @@
 namespace jeyroik\extas\components\systems\states\machines\plugins;
 
 use jeyroik\extas\components\systems\Plugin;
+use jeyroik\extas\components\systems\states\machines\extensions\ExtensionContextErrors;
 use jeyroik\extas\interfaces\systems\IContext;
 use jeyroik\extas\interfaces\systems\states\IStateMachine;
 use jeyroik\extas\interfaces\systems\states\machines\plugins\IPluginInitContext;
@@ -22,16 +23,7 @@ class PluginInitContextErrors extends Plugin implements IPluginInitContext
      */
     public function __invoke(IStateMachine $machine, IContext $context = null)
     {
-        /**
-         * Try to get context_errors item.
-         * If this is sub-machine, than this item is already exists - so we don't need to do anything.
-         * If this is primary machine, than item is not exists, so exception will be thrown.
-         */
-        try {
-            $context->readItem(IStateMachine::CONTEXT__ERRORS);
-        } catch (\Exception $e) {
-            $context->pushItemByName(IStateMachine::CONTEXT__ERRORS, []);
-        }
+        $context->registerInterface(ExtensionContextErrors::class, new ExtensionContextErrors());
 
         return $context;
     }

@@ -5,6 +5,7 @@ use jeyroik\extas\components\systems\SystemContainer;
 use jeyroik\extas\interfaces\systems\IExtendable;
 use jeyroik\extas\interfaces\systems\plugins\IPluginRepository;
 use jeyroik\extas\interfaces\systems\IExtension;
+use tratabor\interfaces\systems\extensions\IExtensionRepository;
 
 /**
  * Trait TExtendable
@@ -33,29 +34,29 @@ trait TExtendable
      */
     public function __call($name, $arguments)
     {
-        if (isset($this->extendedMethodToInterface[$name])) {
+        /**
+         * @var $extRepo IExtensionRepository
+         */
+        $extRepo = SystemContainer::getItem(IExtensionRepository::class);
+        $extension = $extRepo::getExtension($this, $name);
 
-            /**
-             * @var $interfaceRealization IExtension
-             */
-            $interfaceRealization = $this->registeredInterfaces[$this->extendedMethodToInterface[$name]];
-
-            /**
-             * @var $pluginRepo IPluginRepository
-             */
-            $pluginRepo = SystemContainer::getItem(IPluginRepository::class);
-
-            foreach ($pluginRepo::getPluginsForStage(
-                static::class,
-                IExtendable::STAGE__EXTENDED_METHOD_CALL
-            ) as $plugin) {
-                $arguments = $plugin($this, $name, $arguments);
-            }
-
-            return $interfaceRealization->runMethod($this, $name, $arguments);
+        if (is_string($extension)) {
+            throw new \Exception($extension);
         }
 
-        throw new \Exception('Call unknown or unregistered method "' . $name . '".');
+        /**
+         * @var $pluginRepo IPluginRepository
+         */
+        $pluginRepo = SystemContainer::getItem(IPluginRepository::class);
+
+        foreach ($pluginRepo::getPluginsForStage(
+            static::class,
+            IExtendable::STAGE__EXTENDED_METHOD_CALL
+        ) as $plugin) {
+            $arguments = $plugin($this, $name, $arguments);
+        }
+
+        return $extension->runMethod($this, $name, $arguments);
     }
 
     /**
@@ -66,15 +67,17 @@ trait TExtendable
      */
     public function registerInterface(string $interface, IExtension $interfaceImplementation): bool
     {
-        if (!$this->isImplementsInterface($interface)) {
-            $this->registeredInterfaces[$interface] = $interfaceImplementation;
-            $methods = $interfaceImplementation->getMethodsNames();
-            $this->extendedMethodToInterface += $methods;
+        /**
+         * @var $extRepo IExtensionRepository
+         */
+        $extRepo = SystemContainer::getItem(IExtensionRepository::class);
 
-            return true;
-        } else {
-            return false;
-        }
+        return $extRepo::addExtension(
+            $this,
+            $interface,
+            $interfaceImplementation,
+            $interfaceImplementation->getMethodsNames()
+        );
     }
 
     /**
@@ -84,6 +87,11 @@ trait TExtendable
      */
     public function isImplementsInterface(string $interface): bool
     {
-        return isset($this->registeredInterfaces[$interface]);
+        /**
+         * @var $extRepo IExtensionRepository
+         */
+        $extRepo = SystemContainer::getItem(IExtensionRepository::class);
+
+        return $extRepo::hasInterfaceImplementation($interface);
     }
 }
