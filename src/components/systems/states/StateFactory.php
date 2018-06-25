@@ -129,4 +129,12 @@ class StateFactory implements IStateFactory
 
         return $state;
     }
+
+    /**
+     * @return string
+     */
+    protected function getSubjectForExtension(): string
+    {
+        return IStateFactory::class;
+    }
 }

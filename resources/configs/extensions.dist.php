@@ -2,17 +2,17 @@
 
 use jeyroik\extas\components\systems\extensions\ExtensionRepository as Config;
 
-use jeyroik\extas\components\systems\Context;
+use jeyroik\extas\interfaces\systems\IContext;
 use jeyroik\extas\components\systems\states\extensions\ExtensionContextOnFailure;
 use jeyroik\extas\components\systems\states\StatesRoute;
-use jeyroik\extas\components\systems\states\StateMachine;
+use jeyroik\extas\interfaces\systems\states\IStateMachine;
 use jeyroik\extas\components\systems\states\machines\extensions\ExtensionContextErrors;
 use jeyroik\extas\interfaces\systems as ISystems;
 use jeyroik\extas\components\systems\states\plugins as StatesPlugins;
 
 return [
     Config::CONFIG__METHODS => [
-        StateMachine::class => [
+        IStateMachine::class => [
             'from' => StatesRoute::class,
             'to' => StatesRoute::class,
             'getRoute' => StatesRoute::class,
@@ -20,7 +20,7 @@ return [
             'getCurrentFrom' => StatesRoute::class,
             'getCurrentTo' => StatesRoute::class
         ],
-        Context::class => [
+        IContext::class => [
             'setSuccess' => ExtensionContextOnFailure::class,
             'setFail' => ExtensionContextOnFailure::class,
             'addError' => ExtensionContextErrors::class

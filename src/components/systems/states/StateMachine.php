@@ -305,4 +305,12 @@ class StateMachine implements IStateMachine
 
         return $this;
     }
+
+    /**
+     * @return string
+     */
+    protected function getSubjectForExtension(): string
+    {
+        return IStateMachine::class;
+    }
 }

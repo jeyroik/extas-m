@@ -162,4 +162,12 @@ class Context extends Extension implements IContext
     {
         return $this->items[$name][static::ITEM__MODE] > 0;
     }
+
+    /**
+     * @return string
+     */
+    protected function getSubjectForExtension(): string
+    {
+        return IContext::class;
+    }
 }

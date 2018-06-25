@@ -267,4 +267,12 @@ class MachineConfig implements IMachineConfig
 
         return $this;
     }
+
+    /**
+     * @return string
+     */
+    protected function getSubjectForExtension(): string
+    {
+        return IMachineConfig::class;
+    }
 }

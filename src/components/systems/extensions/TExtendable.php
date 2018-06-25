@@ -38,7 +38,7 @@ trait TExtendable
          * @var $extRepo IExtensionRepository
          */
         $extRepo = SystemContainer::getItem(IExtensionRepository::class);
-        $extension = $extRepo::getExtension($this, $name);
+        $extension = $extRepo::getExtension($this->getSubjectForExtension(), $name);
 
         if (is_string($extension)) {
             throw new \Exception($extension);
@@ -94,4 +94,9 @@ trait TExtendable
 
         return $extRepo::hasInterfaceImplementation($interface);
     }
+
+    /**
+     * @return string
+     */
+    abstract protected function getSubjectForExtension(): string;
 }
