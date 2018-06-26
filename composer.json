@@ -10,7 +10,8 @@
     "jeyroik/sm-plugin-states-route": "*",
     "jeyroik/sm-plugin-route-path": "*",
     "jeyroik/sm-plugin-route-from-start": "*",
-    "symfony/console": "*"
+    "symfony/console": "*",
+    "symfony/finder": "*"
   },
   "autoload": {
     "psr-4": {
