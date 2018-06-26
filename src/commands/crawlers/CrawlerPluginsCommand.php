@@ -16,6 +16,7 @@ use Symfony\Component\Console\Output\OutputInterface;
 class CrawlerPluginsCommand extends Command
 {
     const ARGUMENT__PATH = 'path';
+    const ARGUMENT__PRINT = 'print';
 
     /**
      * Configure the current command.
@@ -36,6 +37,12 @@ class CrawlerPluginsCommand extends Command
                 static::ARGUMENT__PATH,
                 InputArgument::REQUIRED,
                 'Root path for plugins'
+            )
+            ->addArgument(
+                static::ARGUMENT__PRINT,
+                InputArgument::OPTIONAL,
+                'Print mode: 0 - hash, 1 - full',
+                0
             )
         ;
     }
@@ -69,8 +76,12 @@ class CrawlerPluginsCommand extends Command
 
             $plugins = $crawler->getPluginsInfo();
 
+            $printMode = $input->getArgument(static::ARGUMENT__PRINT);
+
             foreach ($plugins as $plugin) {
-                $output->writeln([$plugin->getName() . ': ' . $plugin->getInfoHash()]);
+                $printMode
+                    ? $output->writeln([$plugin->getName(), print_r($plugin, true)])
+                    : $output->writeln([$plugin->getName() . ': ' . $plugin->getInfoHash()]);
             }
 
             return 0;
