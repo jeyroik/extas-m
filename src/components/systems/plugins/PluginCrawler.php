@@ -55,7 +55,7 @@ class PluginCrawler implements IPluginCrawler
             $json = $file->getContents();
 
             try {
-                $jsonDecoded = json_decode($json);
+                $jsonDecoded = json_decode($json, true);
                 $pluginInfo = new CrawlerPluginInfo($jsonDecoded);
                 $this->plugins[$pluginInfo->getName()] = $pluginInfo;
             } catch (\Exception $e) {
