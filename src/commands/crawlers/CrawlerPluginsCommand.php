@@ -1,5 +1,5 @@
 <?php
-namespace jeyroik\commands\crawlers;
+namespace jeyroik\extas\commands\crawlers;
 
 use jeyroik\extas\components\systems\plugins\PluginCrawler;
 use Symfony\Component\Console\Command\Command;
