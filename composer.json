@@ -9,7 +9,8 @@
     "jeyroik/sm-plugin-on-failure": "*",
     "jeyroik/sm-plugin-states-route": "*",
     "jeyroik/sm-plugin-route-path": "*",
-    "jeyroik/sm-plugin-route-from-start": "*"
+    "jeyroik/sm-plugin-route-from-start": "*",
+    "symfony/console": "*"
   },
   "autoload": {
     "psr-4": {
