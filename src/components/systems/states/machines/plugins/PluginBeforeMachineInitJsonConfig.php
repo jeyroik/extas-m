@@ -2,8 +2,8 @@
 namespace jeyroik\extas\components\systems\states\machines\plugins;
 
 use jeyroik\extas\components\systems\Plugin;
+use jeyroik\extas\interfaces\systems\IPlugin;
 use jeyroik\extas\interfaces\systems\states\IStateMachine;
-use jeyroik\extas\interfaces\systems\states\machines\plugins\IPluginBeforeMachineInit;
 
 /**
  * Class PluginInitConfigJson
@@ -11,7 +11,7 @@ use jeyroik\extas\interfaces\systems\states\machines\plugins\IPluginBeforeMachin
  * @package jeyroik\extas\components\systems\states\machines\plugins
  * @author Funcraft <me@funcraft.ru>
  */
-class PluginBeforeMachineInitJsonConfig extends Plugin implements IPluginBeforeMachineInit
+class PluginBeforeMachineInitJsonConfig extends Plugin implements IPlugin
 {
     /**
      * @param IStateMachine $machine

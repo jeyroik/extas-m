@@ -1,7 +1,7 @@
 <?php
 namespace jeyroik\extas\interfaces\systems\plugins;
 
-use jeyroik\extas\interfaces\systems\plugins\crawlers\ICrawlerPluginInfo;
+use jeyroik\extas\interfaces\systems\plugins\crawlers\ICrawlerPackage;
 
 /**
  * Interface IPluginCrawler
@@ -11,12 +11,15 @@ use jeyroik\extas\interfaces\systems\plugins\crawlers\ICrawlerPluginInfo;
  */
 interface IPluginCrawler
 {
+    const CONFIG__PLUGIN_STORAGE__CLASS = 'plugin_storage_class';
+
     /**
      * IPluginCrawler constructor.
      *
      * @param string $rootPath
+     * @param array $config
      */
-    public function __construct($rootPath = '');
+    public function __construct($rootPath = '', $config = []);
 
     /**
      * @return int found plugins count
@@ -26,19 +29,19 @@ interface IPluginCrawler
     /**
      * @param $extasPluginConfigPath
      *
-     * @return ICrawlerPluginInfo
+     * @return ICrawlerPackage
      */
     public function registerPlugin($extasPluginConfigPath);
 
     /**
-     * @return ICrawlerPluginInfo[]
+     * @return ICrawlerPackage[]
      */
     public function getPluginsInfo();
 
     /**
      * @param string $pluginName
      *
-     * @return ICrawlerPluginInfo|null
+     * @return ICrawlerPackage|null
      */
     public function getPluginInfo($pluginName);
 }

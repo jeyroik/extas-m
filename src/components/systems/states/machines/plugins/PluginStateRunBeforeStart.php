@@ -3,7 +3,7 @@ namespace jeyroik\extas\components\systems\states\machines\plugins;
 
 use jeyroik\extas\components\systems\Plugin;
 use jeyroik\extas\interfaces\systems\states\IStateMachine;
-use jeyroik\extas\interfaces\systems\states\machines\plugins\IPluginBeforeStateRun;
+use jeyroik\extas\interfaces\systems\states\machines\plugins\IPluginStateRunBefore;
 
 /**
  * Class PluginBeforeStateRunStart
@@ -11,7 +11,7 @@ use jeyroik\extas\interfaces\systems\states\machines\plugins\IPluginBeforeStateR
  * @package jeyroik\extas\components\systems\states\machines\plugins
  * @author Funcraft <me@funcraft.ru>
  */
-class PluginBeforeStateRunStart extends Plugin implements IPluginBeforeStateRun
+class PluginStateRunBeforeStart extends Plugin implements IPluginStateRunBefore
 {
     const ENV__START_STATE = 'SM__STATE__START';
 

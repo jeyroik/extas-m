@@ -1,14 +1,18 @@
 <?php
 namespace jeyroik\extas\interfaces\systems\states\dispatchers;
 
+use jeyroik\extas\interfaces\systems\IItem;
+
 /**
  * Interface IDispatchersFactory
  *
  * @package jeyroik\extas\interfaces\systems\states\dispatchers
  * @author Funcraft <me@funcraft.ru>
  */
-interface IDispatchersFactory
+interface IDispatchersFactory extends IItem
 {
+    const SUBJECT = 'state.dispatcher.factory';
+
     /**
      * @param $dispatcherConfig
      * @param string $dispatcherId

@@ -1,6 +1,7 @@
 <?php
 namespace jeyroik\extas\components\systems\extensions;
 
+use jeyroik\extas\components\systems\plugins\TPluginAcceptable;
 use jeyroik\extas\components\systems\SystemContainer;
 use jeyroik\extas\interfaces\systems\IExtendable;
 use jeyroik\extas\interfaces\systems\plugins\IPluginRepository;
@@ -15,6 +16,8 @@ use tratabor\interfaces\systems\extensions\IExtensionRepository;
  */
 trait TExtendable
 {
+    use TPluginAcceptable;
+
     /**
      * @var array
      */
@@ -44,15 +47,7 @@ trait TExtendable
             throw new \Exception($extension);
         }
 
-        /**
-         * @var $pluginRepo IPluginRepository
-         */
-        $pluginRepo = SystemContainer::getItem(IPluginRepository::class);
-
-        foreach ($pluginRepo::getPluginsForStage(
-            static::class,
-            IExtendable::STAGE__EXTENDED_METHOD_CALL
-        ) as $plugin) {
+        foreach ($this->getPluginsByStage(IExtendable::STAGE__EXTENDED_METHOD_CALL) as $plugin) {
             $arguments = $plugin($this, $name, $arguments);
         }
 

@@ -1,127 +1,44 @@
 <?php
 namespace jeyroik\extas\components\systems\states;
 
-use jeyroik\extas\components\systems\plugins\TPluginAcceptable;
+use jeyroik\extas\components\systems\Item;
 use jeyroik\extas\components\systems\SystemContainer;
 use jeyroik\extas\interfaces\systems\IState;
-use jeyroik\extas\interfaces\systems\plugins\IPluginRepository;
 use jeyroik\extas\interfaces\systems\states\dispatchers\IDispatchersFactory;
-use jeyroik\extas\interfaces\systems\IExtension;
-use jeyroik\extas\interfaces\systems\states\IStateExtension;
 
 /**
  * Class StateBasic
  *
- * @sm-stage-interface state__created(IState &$state): void
- * @sm-stage-interface state__ext_method_call(IState $state, string $methodName, array $arguments): array $arguments
- * @sm-stage-interface state__destructed(IState &$state): void
+ * @property string $id
+ * @property string $fromState
+ * @property array $additional
+ * @property array $dispatchers
  *
  * @package jeyroik\extas\components\systems\states
  * @author Funcraft <me@funcraft.ru>
  */
-class StateBasic implements IState
+class StateBasic extends Item implements IState
 {
-    const STAGE__CREATED = 'state__created';
-    const STAGE__DESTRUCTED = 'state__destructed';
-
-    use TPluginAcceptable;
-
-    /**
-     * @var string
-     */
-    protected $id = '';
-
-    /**
-     * @var string
-     */
-    protected $fromState = '';
-
-    /**
-     * @var array
-     */
-    protected $dispatchers = [];
-
-    /**
-     * @var int
-     */
-    protected $createdAt = 0;
-
-    /**
-     * @var IStateExtension[]
-     */
-    protected $registeredInterfaces = [];
-
-    /**
-     * @var array
-     */
-    protected $extendedMethodToInterface = [];
-
-    /**
-     * @var array
-     */
-    protected $pluginsByStage = [];
-
-    /**
-     * @var array
-     */
-    protected $additional = [];
-
     /**
      * AState constructor.
      *
-     * @param $id
+     * @param array|string $id
      * @param $fromState
      * @param $dispatchers
      * @param $additional
      */
-    public function __construct($id, $fromState, $dispatchers = [], $additional = [])
+    public function __construct($id, $fromState = '', $dispatchers = [], $additional = [])
     {
-        $this->setId($id)
-            ->setFromState($fromState)
-            ->setCreatedAt()
-            ->setDispatchers($dispatchers)
-            ->registerAdditional($additional)
-            ->registerPlugins($this->getAdditional(static::FIELD__PLUGINS))
-            ->triggerCreated();
-    }
+        $config = is_array($id)
+            ? $id
+            : [
+                static::FIELD__ID => $id,
+                static::FIELD__FROM_STATE => $fromState,
+                static::FIELD__DISPATCHERS => $dispatchers,
+                static::FIELD__ADDITIONAL => $additional
+            ];
 
-    /**
-     * @param $name
-     * @param $arguments
-     *
-     * @return mixed|null
-     * @throws \Exception
-     */
-    public function __call($name, $arguments)
-    {
-        if (isset($this->extendedMethodToInterface[$name])) {
-            $interfaceRealization = $this->registeredInterfaces[$this->extendedMethodToInterface[$name]];
-
-            foreach ($this->getPluginsByStage(static::STAGE__EXTENDED_METHOD_CALL) as $plugin) {
-                $arguments = $plugin($this, $name, $arguments);
-            }
-
-            return $interfaceRealization->runMethod($this, $name, $arguments);
-        }
-
-        throw new \Exception('Call unknown or unregistered method "' . $name . '".');
-    }
-
-    /**
-     * @return array
-     */
-    public function __toArray(): array
-    {
-        $basic = [
-            'id' => $this->getId(),
-            'fromState' => $this->getFromState(),
-            'created_at' => $this->getCreatedAt(),
-            'dispatchers' => $this->getDispatchers(),
-        ];
-
-        $result = (array) ($basic + $this->getAdditional());
-
-        return $result;
+        parent::__construct($config);
     }
 
     /**
@@ -140,9 +57,11 @@ class StateBasic implements IState
      */
     public function getAdditional($name = '', $default = null)
     {
+        $additional = $this->additional;
+
         return $name
-            ? ($this->additional[$name] ?? $default)
-            : $this->additional;
+            ? ($additional[$name] ?? $default)
+            : $additional;
     }
 
     /**
@@ -153,7 +72,10 @@ class StateBasic implements IState
      */
     public function setAdditional($name, $value)
     {
-        $this->additional[$name] = $value;
+        $additional = $this->additional;
+        $additional[$name] = $value;
+
+        $this->additional = $additional;
 
         return $this;
     }
@@ -164,16 +86,6 @@ class StateBasic implements IState
     public function getFromState(): string
     {
         return $this->fromState;
-    }
-
-    /**
-     * @param string $format
-     *
-     * @return false|int|mixed|string
-     */
-    public function getCreatedAt($format = '')
-    {
-        return $format ? date($format, $this->createdAt) : $this->createdAt;
     }
 
     /**
@@ -196,47 +108,11 @@ class StateBasic implements IState
     }
 
     /**
-     * @param string $interface
-     * @param IExtension $interfaceImplementation
-     *
-     * @return bool
+     * @return string
      */
-    public function registerInterface(string $interface, IExtension $interfaceImplementation): bool
+    protected function getSubjectForExtension(): string
     {
-        if (!$this->isImplementsInterface($interface)) {
-            $this->registeredInterfaces[$interface] = $interfaceImplementation;
-            $methods = $interfaceImplementation->getMethodsNames();
-            $this->extendedMethodToInterface += $methods;
-
-            return true;
-        } else {
-            return false;
-        }
-    }
-
-    /**
-     * @param string $interface
-     *
-     * @return bool
-     */
-    public function isImplementsInterface(string $interface): bool
-    {
-        return isset($this->registeredInterfaces[$interface]);
-    }
-
-    /**
-     * @return void
-     */
-    public function __destruct()
-    {
-        /**
-         * @var $pluginRepo IPluginRepository
-         */
-        $pluginRepo = SystemContainer::getItem(IPluginRepository::class);
-
-        foreach ($pluginRepo::getPluginsForStage($this, static::STAGE__DESTRUCTED) as $plugin) {
-            $plugin($this);
-        }
+        return static::SUBJECT;
     }
 
     /**
@@ -250,69 +126,6 @@ class StateBasic implements IState
             foreach ($additional as $name => $value) {
                 $this->setAdditional($name, $value);
             }
-        }
-
-        return $this;
-    }
-
-    /**
-     * @param string $id
-     *
-     * @return $this
-     */
-    protected function setId($id)
-    {
-        $this->id = (string) $id;
-
-        return $this;
-    }
-
-    /**
-     * @param string $fromState
-     *
-     * @return $this
-     */
-    protected function setFromState($fromState)
-    {
-        $this->fromState = (string) $fromState;
-
-        return $this;
-    }
-
-    /**
-     * @param mixed[] $dispatchers
-     *
-     * @return $this
-     */
-    protected function setDispatchers($dispatchers)
-    {
-        $this->dispatchers = is_array($dispatchers) ? $dispatchers : [$dispatchers];
-
-        return $this;
-    }
-
-    /**
-     * @return $this
-     */
-    protected function setCreatedAt()
-    {
-        $this->createdAt = time();
-
-        return $this;
-    }
-
-    /**
-     * @return $this
-     */
-    protected function triggerCreated()
-    {
-        /**
-         * @var $pluginRepo IPluginRepository
-         */
-        $pluginRepo = SystemContainer::getItem(IPluginRepository::class);
-
-        foreach ($pluginRepo::getPluginsForStage($this, static::STAGE__CREATED) as $plugin) {
-            $plugin($this);
         }
 
         return $this;

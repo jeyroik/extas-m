@@ -1,12 +1,12 @@
 <?php
 namespace jeyroik\extas\components\dispatchers;
 
+use jeyroik\extas\components\systems\Item;
 use jeyroik\extas\components\systems\states\machines\extensions\ExtensionContextErrors;
 use jeyroik\extas\components\systems\states\machines\plugins\PluginInitContextSuccess;
 use jeyroik\extas\interfaces\systems\IContext;
 use jeyroik\extas\interfaces\systems\IState;
 use jeyroik\extas\interfaces\systems\states\IStateDispatcher;
-use jeyroik\extas\interfaces\systems\states\IStateMachine;
 
 /**
  * Class DispatcherAbstract
@@ -16,7 +16,7 @@ use jeyroik\extas\interfaces\systems\states\IStateMachine;
  * @package jeyroik\extas\components\dispatchers
  * @author Funcraft <me@funcraft.ru>
  */
-abstract class DispatcherAbstract implements IStateDispatcher
+abstract class DispatcherAbstract extends Item implements IStateDispatcher
 {
     /**
      * @var IState
@@ -26,7 +26,9 @@ abstract class DispatcherAbstract implements IStateDispatcher
     /**
      * @var string[]
      */
-    protected $requireInterfaces = [];
+    protected $requireInterfaces = [
+
+    ];
 
     /**
      * DispatcherAbstract constructor.
@@ -34,6 +36,8 @@ abstract class DispatcherAbstract implements IStateDispatcher
     public function __construct()
     {
         $this->initDefault();
+
+        parent::__construct();
     }
 
     /**
@@ -55,10 +59,11 @@ abstract class DispatcherAbstract implements IStateDispatcher
             $this->currentState = $currentState;
             $context = $this->dispatch($context);
         } catch (\Exception $e) {
-            $context->updateItem(PluginInitContextSuccess::CONTEXT__SUCCESS, false);
-            $errors = $context->readItem(IStateMachine::CONTEXT__ERRORS)->getValue();
-            $errors[] = ['state' => $currentState->getId(), 'error' => $e->getMessage()];
-            $context->updateItem(IStateMachine::CONTEXT__ERRORS, $errors);
+            $context[PluginInitContextSuccess::CONTEXT__SUCCESS] = false;
+            /**
+             * @var $context ExtensionContextErrors
+             */
+            $context->addError(['state' => $currentState->getId(), 'error' => $e->getMessage()]);
         }
 
         return $context;
@@ -90,6 +95,14 @@ abstract class DispatcherAbstract implements IStateDispatcher
         }
 
         return true;
+    }
+
+    /**
+     * @return string
+     */
+    protected function getSubjectForExtension(): string
+    {
+        return static::SUBJECT;
     }
 
     /**

@@ -1,98 +1,59 @@
 <?php
 namespace jeyroik\extas\components\systems;
 
+use jeyroik\extas\components\systems\extensions\TExtendable;
 use jeyroik\extas\components\systems\states\machines\TMachineAvailable;
-use jeyroik\extas\components\systems\states\TStateAvailable;
 use jeyroik\extas\interfaces\systems\IItem;
-use jeyroik\extas\interfaces\systems\states\IStateAvailable;
 use jeyroik\extas\interfaces\systems\states\machines\IMachineAvailable;
 
 /**
  * Class Item
  *
+ * @property $id
+ * @property int $created_at
+ * @property int $updated_at
+ *
  * @package jeyroik\extas\components\systems
  * @author Funcraft <me@funcraft.ru>
  */
-class Item implements IItem, IMachineAvailable, IStateAvailable
+class Item implements IItem, IMachineAvailable
 {
     use TMachineAvailable;
-    use TStateAvailable;
+    use TExtendable;
 
     /**
-     * @var string
+     * @var array
      */
-    protected $key = null;
-
-    /**
-     * @var string
-     */
-    protected $value = null;
-
-    /**
-     * @var string
-     */
-    protected $id = '';
+    protected $config = [];
 
     /**
      * @var int
      */
-    protected $createdAt = 0;
+    protected $currentKey = 0;
 
     /**
-     * @var int
+     * @var array
      */
-    protected $updatedAt = 0;
+    protected $keyMap = [];
 
     /**
      * Item constructor.
      *
-     * @param $key
-     * @param $value
-     * @param string $id
-     * @param string $state
-     * @param int $createdAt
-     * @param int $updatedAt
+     * @param array $config
      */
-    public function __construct($key, $value, $id = '', $state = 'created', $createdAt = 0, $updatedAt = 0)
+    public function __construct($config = [])
     {
-        $this->setKey($key)
-            ->setValue($value)
-            ->setId($id)
-            ->setState($state)
-            ->setCreatedAt($createdAt)
-            ->setUpdatedAt($updatedAt);
+        $this->setConfig($config)->triggerInit();
     }
 
     /**
-     * @return string
+     * @return void
      */
-    public function getKey(): string
+    public function __destruct()
     {
-        return (string) $this->key;
-    }
-
-    /**
-     * @return mixed
-     */
-    public function getValue()
-    {
-        return $this->value;
-    }
-
-    /**
-     * @return string
-     */
-    public function getState(): string
-    {
-        return $this->getCurrentStateId();
-    }
-
-    /**
-     * @return mixed|string
-     */
-    public function getId()
-    {
-        return $this->id;
+        foreach ($this->getPluginsByStage($this->getSubjectForExtension() . '.after') as $plugin) {
+            $plugin($this);
+        }
     }
 
     /**
@@ -102,7 +63,7 @@ class Item implements IItem, IMachineAvailable, IStateAvailable
      */
     public function getCreatedAt($format = '')
     {
-        return $format ? date($format, $this->createdAt) : $this->createdAt;
+        return $format ? date($format, $this->created_at) : $this->created_at;
     }
 
     /**
@@ -112,99 +73,163 @@ class Item implements IItem, IMachineAvailable, IStateAvailable
      */
     public function getUpdatedAt($format = '')
     {
-        return $format ? date($format, $this->updatedAt) : $this->updatedAt;
+        return $format ? date($format, $this->updated_at) : $this->updated_at;
     }
 
-    /**
-     * @param $value
-     *
-     * @return $this
-     */
-    public function setValue($value)
-    {
-        $this->value = $value;
-        $this->setState('updated')->setUpdatedAt();
-
-        return $this;
-    }
 
     /**
      * @return array
      */
     public function __toArray(): array
     {
-        $value = $this->getValue();
+        return $this->config;
+    }
 
-        if (is_object($value) && ($value instanceof IItem)) {
-            $value = $value->__toArray();
+    /**
+     * @param $name
+     *
+     * @return mixed|null
+     */
+    public function __get($name)
+    {
+        return $this->config[$name] ?? null;
+    }
+
+    /**
+     * @param $name
+     * @param $value
+     *
+     * @return void
+     */
+    public function __set($name, $value)
+    {
+        $this->config[$name] = $value;
+    }
+
+    /**
+     * @return string
+     */
+    public function __toString(): string
+    {
+        return (string) $this->id;
+    }
+
+    /**
+     * @return int
+     */
+    public function __toInt(): int
+    {
+        return (int) $this->id;
+    }
+
+    /**
+     * @param mixed $offset
+     *
+     * @return bool
+     */
+    public function offsetExists($offset)
+    {
+        return isset($this->config[$offset]);
+    }
+
+    /**
+     * @param mixed $offset
+     *
+     * @return mixed|null
+     */
+    public function offsetGet($offset)
+    {
+        return $this->config[$offset] ?? null;
+    }
+
+    /**
+     * @param mixed $offset
+     * @param mixed $value
+     */
+    public function offsetSet($offset, $value)
+    {
+        $this->config[$offset] = $value;
+    }
+
+    /**
+     * @param mixed $offset
+     */
+    public function offsetUnset($offset)
+    {
+        $this->config[$offset] = null;
+    }
+
+    /**
+     * @return bool
+     */
+    public function valid()
+    {
+        return isset($this->keyMap[$this->currentKey]);
+    }
+
+    /**
+     * @return int
+     */
+    public function key()
+    {
+        return $this->currentKey;
+    }
+
+    /**
+     * @return void
+     */
+    public function next()
+    {
+        $this->currentKey++;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function current()
+    {
+        return $this->config[$this->keyMap[$this->currentKey]];
+    }
+
+    /**
+     * @return void
+     */
+    public function rewind()
+    {
+        $this->currentKey = 0;
+    }
+
+    /**
+     * @param $config
+     *
+     * @return IItem|mixed
+     */
+    protected function setConfig($config)
+    {
+        !empty($config) && $this->config = $config;
+        $this->keyMap = array_keys($config);
+        $this->currentKey = 0;
+
+        return $this;
+    }
+
+    /**
+     * @return $this
+     */
+    protected function triggerInit()
+    {
+        foreach ($this->getPluginsByStage($this->getSubjectForExtension() . '.init') as $plugin) {
+            $plugin($this);
         }
 
-        return [
-            'id' => $this->getId(),
-            'key' => $this->getKey(),
-            'value' => $value,
-            'created_at' => $this->getCreatedAt(),
-            'updated_at' => $this->getUpdatedAt()
-        ];
-    }
-
-    /**
-     * @param $key
-     *
-     * @return $this
-     */
-    protected function setKey($key)
-    {
-        $this->key = $key;
-
         return $this;
     }
 
     /**
-     * @param $id
-     *
-     * @return $this
+     * @return string
      */
-    protected function setId($id)
+    protected function getSubjectForExtension(): string
     {
-        $this->id = $id;
-
-        return $this;
-    }
-
-    /**
-     * @param $state
-     *
-     * @return $this
-     */
-    protected function setState($state)
-    {
-        $this->setCurrentState($state);
-
-        return $this;
-    }
-
-    /**
-     * @param int $createdAt
-     *
-     * @return $this
-     */
-    protected function setCreatedAt($createdAt = 0)
-    {
-        $this->createdAt = $createdAt ?: time();
-
-        return $this;
-    }
-
-    /**
-     * @param int $updatedAt
-     *
-     * @return $this
-     */
-    protected function setUpdatedAt($updatedAt = 0)
-    {
-        $this->updatedAt = $updatedAt ?: time();
-
-        return $this;
+        return IItem::class;
     }
 }

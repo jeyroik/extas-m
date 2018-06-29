@@ -8,7 +8,7 @@ use jeyroik\extas\interfaces\systems as ISystems;
 use jeyroik\extas\components\systems\states\plugins as StatesPlugins;
 use jeyroik\extas\components\systems\states\machines\plugins as MachinePlugins;
 use jeyroik\extas\components\systems\states\plugins\ExtensionMaxTry as EMaxTry;
-use jeyroik\extas\components\systems\states\plugins\PluginNextStateOnFailure as POnFail;
+use jeyroik\extas\components\systems\states\plugins\PluginStateRunNextOnFailure as POnFail;
 
 /**
  * README
@@ -55,47 +55,47 @@ return [
         [
             ISystems\IPlugin::FIELD__CLASS => MachinePlugins\PluginInitContextSuccess::class,
             ISystems\IPlugin::FIELD__VERSION => '1.0',
-            ISystems\IPlugin::FIELD__STAGE => Machine::STAGE__INIT_CONTEXT
+            ISystems\IPlugin::FIELD__STAGE => Machine::STAGE__MACHINE_INIT_CONTEXT
         ],
         [
-            ISystems\IPlugin::FIELD__CLASS => MachinePlugins\PluginBeforeStateRunCycle::class,
+            ISystems\IPlugin::FIELD__CLASS => MachinePlugins\PluginStateRunBeforeCycle::class,
             ISystems\IPlugin::FIELD__VERSION => '1.0',
-            ISystems\IPlugin::FIELD__STAGE => Machine::STAGE__BEFORE_STATE_RUN
+            ISystems\IPlugin::FIELD__STAGE => Machine::STAGE__STATE_RUN_BEFORE
         ],
         [
-            ISystems\IPlugin::FIELD__CLASS => MachinePlugins\PluginBeforeStateRunExistingState::class,
+            ISystems\IPlugin::FIELD__CLASS => MachinePlugins\PluginStateRunExistingStateBefore::class,
             ISystems\IPlugin::FIELD__VERSION => '1.0',
-            ISystems\IPlugin::FIELD__STAGE => Machine::STAGE__BEFORE_STATE_RUN
+            ISystems\IPlugin::FIELD__STAGE => Machine::STAGE__STATE_RUN_BEFORE
         ],
         [
-            ISystems\IPlugin::FIELD__CLASS => MachinePlugins\PluginBeforeStateRunStart::class,
+            ISystems\IPlugin::FIELD__CLASS => MachinePlugins\PluginStateRunBeforeStart::class,
             ISystems\IPlugin::FIELD__VERSION => '1.0',
-            ISystems\IPlugin::FIELD__STAGE => Machine::STAGE__BEFORE_STATE_RUN
+            ISystems\IPlugin::FIELD__STAGE => Machine::STAGE__STATE_RUN_BEFORE
         ],
         [
-            ISystems\IPlugin::FIELD__CLASS => MachinePlugins\PluginBeforeStateRunTheEnd::class,
+            ISystems\IPlugin::FIELD__CLASS => MachinePlugins\PluginStateRunBeforeTheEnd::class,
             ISystems\IPlugin::FIELD__VERSION => '1.0',
-            ISystems\IPlugin::FIELD__STAGE => Machine::STAGE__BEFORE_STATE_RUN
+            ISystems\IPlugin::FIELD__STAGE => Machine::STAGE__STATE_RUN_BEFORE
         ],
         [
-            ISystems\IPlugin::FIELD__CLASS => StatesPlugins\PluginStateResultOnFailure::class,
+            ISystems\IPlugin::FIELD__CLASS => StatesPlugins\PluginStateRunAfterOnFailure::class,
             ISystems\IPlugin::FIELD__VERSION => '1.0',
-            ISystems\IPlugin::FIELD__STAGE => Machine::STAGE__STATE_RESULT
+            ISystems\IPlugin::FIELD__STAGE => Machine::STAGE__STATE_RUN_AFTER
         ],
         [
-            ISystems\IPlugin::FIELD__CLASS => StatesPlugins\PluginBeforeStateBuildGuaranteeStateId::class,
+            ISystems\IPlugin::FIELD__CLASS => StatesPlugins\PluginStateBuildGuaranteeStateIdBefore::class,
             ISystems\IPlugin::FIELD__VERSION => '1.0',
-            ISystems\IPlugin::FIELD__STAGE => Machine::STAGE__BEFORE_STATE_BUILD
+            ISystems\IPlugin::FIELD__STAGE => Machine::STAGE__STATE_BUILD_BEFORE
         ],
         [
-            ISystems\IPlugin::FIELD__CLASS => StatesPlugins\PluginBeforeStateBuildErrorState::class,
+            ISystems\IPlugin::FIELD__CLASS => StatesPlugins\PluginStateBuildErrorStateBefore::class,
             ISystems\IPlugin::FIELD__VERSION => '1.0',
-            ISystems\IPlugin::FIELD__STAGE => Machine::STAGE__BEFORE_STATE_BUILD
+            ISystems\IPlugin::FIELD__STAGE => Machine::STAGE__STATE_BUILD_BEFORE
         ],
         [
-            ISystems\IPlugin::FIELD__CLASS => StatesPlugins\PluginIsStateValidMaxTry::class,
+            ISystems\IPlugin::FIELD__CLASS => StatesPlugins\PluginStateRunValidMaxTry::class,
             ISystems\IPlugin::FIELD__VERSION => '1.0',
-            ISystems\IPlugin::FIELD__STAGE => Machine::STAGE__IS_STATE_VALID
+            ISystems\IPlugin::FIELD__STAGE => Machine::STAGE__STATE_RUN_IS_VALID
         ]
     ],
 

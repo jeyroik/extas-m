@@ -26,14 +26,14 @@ class ExtensionContextErrors extends Extension
      */
     public function addError($error, IContext &$context = null)
     {
-        if (!$context->hasItem(static::CONTEXT__ITEM__ERRORS)) {
-            $context->pushItemByName(static::CONTEXT__ITEM__ERRORS, []);
+        if (!isset($context[static::CONTEXT__ITEM__ERRORS])) {
+            $context[static::CONTEXT__ITEM__ERRORS] = [];
         }
 
-        $errors = $context->readItem(static::CONTEXT__ITEM__ERRORS);
+        $errors = $context[static::CONTEXT__ITEM__ERRORS];
         $errors[] = $error;
 
-        $context->updateItem(static::CONTEXT__ITEM__ERRORS, $errors);
+        $context[static::CONTEXT__ITEM__ERRORS] = $errors;
 
         return $context;
     }

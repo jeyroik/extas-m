@@ -6,33 +6,31 @@ use jeyroik\extas\interfaces\systems\IPlugin;
 /**
  * Class Plugin
  *
+ * @property string $class
+ * @property string $version
+ * @property string $stage
+ *
  * @package jeyroik\extas\components\systems
  * @author Funcraft <me@funcraft.ru>
  */
-class Plugin implements IPlugin
+class Plugin extends Item implements IPlugin
 {
-    /**
-     * @var string
-     */
-    protected $version = '';
+    protected $preDefinedVersion = '';
+    protected $preDefinedClass = '';
+    protected $preDefinedStage = '';
 
     /**
-     * @var string
-     */
-    protected $class = '';
-
-    /**
-     * @var string
-     */
-    protected $stage = '';
-
-    /**
-     * Plugin constructor.
      * @param $config
+     *
+     * @return IPlugin
      */
-    public function __construct($config = [])
+    protected function setConfig($config)
     {
-        $this->setConfig($config);
+        $this->preDefinedClass && $config[static::FIELD__CLASS] = $this->preDefinedClass;
+        $this->preDefinedVersion && $config[static::FIELD__VERSION] = $this->preDefinedVersion;
+        $this->preDefinedStage && $config[static::FIELD__STAGE] = $this->preDefinedStage;
+
+        return parent::setConfig($config);
     }
 
     /**
@@ -60,16 +58,10 @@ class Plugin implements IPlugin
     }
 
     /**
-     * @param $config
-     *
-     * @return $this
+     * @return string
      */
-    protected function setConfig($config)
+    protected function getSubjectForExtension(): string
     {
-        $this->version = $config['version'] ?? '';
-        $this->class = $config['class'] ?? '';
-        $this->stage = $config['stage'] ?? '';
-
-        return $this;
+        return static::SUBJECT;
     }
 }

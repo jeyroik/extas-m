@@ -1,13 +1,15 @@
 <?php
 namespace jeyroik\extas\interfaces\systems\states\machines;
 
+use jeyroik\extas\interfaces\systems\IItem;
+
 /**
  * Interface IMachineVersion
  *
  * @package jeyroik\extas\interfaces\systems\states\machines
  * @author Funcraft <me@funcraft.ru>
  */
-interface IMachineVersion
+interface IMachineVersion extends IItem
 {
     /**
      * @return string

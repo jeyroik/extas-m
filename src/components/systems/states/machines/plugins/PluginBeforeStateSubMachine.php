@@ -3,7 +3,7 @@ namespace jeyroik\extas\components\systems\states\machines\plugins;
 
 use jeyroik\extas\components\systems\Plugin;
 use jeyroik\extas\interfaces\systems\states\IStateMachine;
-use jeyroik\extas\interfaces\systems\states\machines\plugins\IPluginBeforeStateRun;
+use jeyroik\extas\interfaces\systems\states\machines\plugins\IPluginStateRunBefore;
 
 /**
  * Class PluginBeforeStateRunSubMachine
@@ -11,7 +11,7 @@ use jeyroik\extas\interfaces\systems\states\machines\plugins\IPluginBeforeStateR
  * @package jeyroik\extas\components\systems\states\machines\plugins
  * @author Funcraft <me@funcraft.ru>
  */
-class PluginBeforeStateRunSubMachine extends Plugin implements IPluginBeforeStateRun
+class PluginStateRunBeforeSubMachine extends Plugin implements IPluginStateRunBefore
 {
     /**
      * @param IStateMachine $machine

@@ -10,7 +10,7 @@ use jeyroik\extas\interfaces\systems\states\IStateMachine;
  * @package jeyroik\extas\interfaces\systems\states\machines\plugins
  * @author Funcraft <me@funcraft.ru>
  */
-interface IPluginBeforeStateBuild extends IPlugin
+interface IPluginStateBuildBefore extends IPlugin
 {
     /**
      * @param $machine

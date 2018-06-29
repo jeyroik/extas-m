@@ -8,8 +8,15 @@ use jeyroik\extas\interfaces\systems\states\IStateDispatcher;
  * @package jeyroik\extas\interfaces\system
  * @author Funcraft <me@funcraft.ru>
  */
-interface IState extends IExtendable, IPluginsAcceptable
+interface IState extends IItem
 {
+    const SUBJECT = 'state';
+
+    const FIELD__ID = 'id';
+    const FIELD__FROM_STATE = 'from_state';
+    const FIELD__DISPATCHERS = 'dispatchers';
+    const FIELD__ADDITIONAL = 'additional';
+
     /**
      * IState constructor.
      * @param $id
@@ -17,12 +24,7 @@ interface IState extends IExtendable, IPluginsAcceptable
      * @param $dispatchers
      * @param array $additional
      */
-    public function __construct($id, $fromState, $dispatchers = [], $additional = []);
-
-    /**
-     * @return array
-     */
-    public function __toArray(): array;
+    public function __construct($id, $fromState = '', $dispatchers = [], $additional = []);
 
     /**
      * @return string
@@ -33,12 +35,6 @@ interface IState extends IExtendable, IPluginsAcceptable
      * @return string
      */
     public function getFromState(): string;
-
-    /**
-     * @param string $format
-     * @return mixed
-     */
-    public function getCreatedAt($format = '');
 
     /**
      * @return IStateDispatcher[]

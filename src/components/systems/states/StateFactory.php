@@ -1,32 +1,18 @@
 <?php
 namespace jeyroik\extas\components\systems\states;
 
-use jeyroik\extas\components\systems\extensions\TExtendable;
-use jeyroik\extas\components\systems\plugins\TPluginAcceptable;
-use jeyroik\extas\components\systems\SystemContainer;
+use jeyroik\extas\components\systems\Item;
 use jeyroik\extas\interfaces\systems\IState;
-use jeyroik\extas\interfaces\systems\plugins\IPluginRepository;
 use jeyroik\extas\interfaces\systems\states\IStateFactory;
 
 /**
  * Class StateFactory
  *
- * State config:
- * [
- *      'id' => '',
- *      'dispatchers' => [...], // see DispatcherFactory for details
- * ]
- *
- * @sm-stage-interface after_state_build(IState $state): IState
- *
  * @package jeyroik\extas\components\systems\states
  * @author Funcraft <me@funcraft.ru>
  */
-class StateFactory implements IStateFactory
+class StateFactory extends Item implements IStateFactory
 {
-    use TPluginAcceptable;
-    use TExtendable;
-
     /**
      * @var static
      */
@@ -41,20 +27,6 @@ class StateFactory implements IStateFactory
      * @var string
      */
     protected $stateClass = StateBasic::class;
-
-    protected static $plugins = [];
-
-    /**
-     * @param $plugins
-     *
-     * @return bool
-     */
-    public static function injectPlugins($plugins)
-    {
-        static::$plugins += $plugins;
-
-        return true;
-    }
 
     /**
      * @param $stateConfig
@@ -74,14 +46,6 @@ class StateFactory implements IStateFactory
     protected static function getInstance()
     {
         return self::$instance ?: self::$instance = new static();
-    }
-
-    /**
-     * StateFactory constructor.
-     */
-    public function __construct()
-    {
-        $this->registerPlugins(static::$plugins);
     }
 
     /**
@@ -106,28 +70,14 @@ class StateFactory implements IStateFactory
     public function build($stateConfig, $fromState, $stateId)
     {
         $stateClass = $this->stateClass;
-        $stateDispatchers = $stateConfig['dispatchers'] ?? [];
+        $stateDispatchers = $stateConfig[IState::FIELD__DISPATCHERS] ?? [];
 
-        $state = new $stateClass(
+        return new $stateClass(
             $stateId,
             $fromState,
             $stateDispatchers,
             $stateConfig
         );
-
-        /**
-         * @var $pluginRepo IPluginRepository
-         */
-        $pluginRepo = SystemContainer::getItem(IPluginRepository::class);
-
-        foreach ($pluginRepo::getPluginsForStage(
-            static::class,
-            static::STAGE__AFTER_STATE_BUILD) as $plugin
-        ) {
-            $state = $plugin($state);
-        }
-
-        return $state;
     }
 
     /**
@@ -135,6 +85,6 @@ class StateFactory implements IStateFactory
      */
     protected function getSubjectForExtension(): string
     {
-        return IStateFactory::class;
+        return static::SUBJECT;
     }
 }

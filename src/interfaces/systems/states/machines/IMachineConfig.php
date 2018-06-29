@@ -2,6 +2,7 @@
 namespace jeyroik\extas\interfaces\systems\states\machines;
 
 use jeyroik\extas\interfaces\systems\IExtendable;
+use jeyroik\extas\interfaces\systems\IItem;
 use jeyroik\extas\interfaces\systems\IPluginsAcceptable;
 
 /**
@@ -10,8 +11,10 @@ use jeyroik\extas\interfaces\systems\IPluginsAcceptable;
  * @package jeyroik\extas\interfaces\systems\states\machines
  * @author Funcraft <me@funcraft.ru>
  */
-interface IMachineConfig extends \ArrayAccess, \Iterator, IPluginsAcceptable, IExtendable
+interface IMachineConfig extends IItem
 {
+    const SUBJECT = 'machine.config';
+
     const FIELD__ALIAS = 'alias';
     const FIELD__VERSION = 'version';
     const FIELD__START_STATE = 'start_state';
@@ -49,11 +52,6 @@ interface IMachineConfig extends \ArrayAccess, \Iterator, IPluginsAcceptable, IE
      * @return mixed
      */
     public function getStateConfig($stateId);
-
-    /**
-     * @return mixed
-     */
-    public function getMachinePluginsList();
 
     /**
      * @param $stateId

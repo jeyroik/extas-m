@@ -2,14 +2,11 @@
 namespace jeyroik\extas\components\systems\states;
 
 use jeyroik\extas\components\systems\Context;
-use jeyroik\extas\components\systems\extensions\TExtendable;
-use jeyroik\extas\components\systems\plugins\TPluginAcceptable;
+use jeyroik\extas\components\systems\Item;
 use jeyroik\extas\components\systems\states\machines\MachineConfig;
 use jeyroik\extas\components\systems\SystemContainer;
 use jeyroik\extas\interfaces\systems\IContext;
-use jeyroik\extas\interfaces\systems\IPlugin;
 use jeyroik\extas\interfaces\systems\IState;
-use jeyroik\extas\interfaces\systems\plugins\IPluginRepository;
 use jeyroik\extas\interfaces\systems\states\IStateFactory;
 use jeyroik\extas\interfaces\systems\states\IStateMachine;
 use jeyroik\extas\interfaces\systems\states\machines\IMachineConfig;
@@ -17,33 +14,11 @@ use jeyroik\extas\interfaces\systems\states\machines\IMachineConfig;
 /**
  * Class StateMachine
  *
- * @sm-stage-interface before_state_run(IStateMachine $machine, string $stateId): string stateId
- * @sm-stage-interface before_state_build(
- *      IStateMachine $machine,
- *      array $stateConfig,
- *      string $fromState,
- *      string $stateId
- *  ): array [array $stateConfig, string $fromState, string $stateId]
- * @sm-stage-interface is_state_valid(IStateMachine $machine, IState $state): bool
- * @sm-stage-interface next_state(IStateMachine $machine, IState $state, IContext $currentContext): string next state id
- * @sm-stage-interface state_result(
- *      IStateMachine $machine,
- *      IContext $currentContext
- * ): bool is valid result, continue dispatching?
- * @sm-stage-interface init_config(IStateMachine, IMachineConfig $config): IMachineConfig
- * @sm-stage-interface init_context(IStateMachine $machine, IContext $context): IContext
- * @sm-stage-interface init_state_factory(IStateMachine $machine, IStateFactory $factory): IStateFactory
- * @sm-stage-interface init_machine(IStateMachine &$machine): IStateMachine
- * @sm-stage-interface state_machine_destructed(IStateMachine &$machine)
- *
  * @package jeyroik\extas\components\systems\states
  * @author Funcraft <me@funcraft.ru>
  */
-class StateMachine implements IStateMachine
+class StateMachine extends Item implements IStateMachine
 {
-    use TPluginAcceptable;
-    use TExtendable;
-
     /**
      * key   = stateId
      * value = tries count
@@ -55,7 +30,7 @@ class StateMachine implements IStateMachine
     /**
      * @var IMachineConfig
      */
-    protected $config = [];
+    protected $machineConfig = [];
 
     /**
      * @var IContext
@@ -80,19 +55,11 @@ class StateMachine implements IStateMachine
      */
     public function __construct($machineConfig, $contextData = [])
     {
-        $this->setConfig($machineConfig)
-            ->registerPlugins($this->config->getMachinePluginsList())
-            ->initConfig()
+        $this->initConfig($machineConfig)
             ->initStateFactory()
-            ->initMachine()
             ->initContext($contextData);
-    }
 
-    public function __destruct()
-    {
-        foreach ($this->findPluginsByStage(IStateMachine::STAGE__STATE_MACHINE_DESTRUCTED) as $plugin) {
-            $plugin($this);
-        }
+        parent::__construct($machineConfig);
     }
 
     /**
@@ -103,7 +70,7 @@ class StateMachine implements IStateMachine
      */
     public function run($stateId = null)
     {
-        foreach ($this->findPluginsByStage(IStateMachine::STAGE__BEFORE_STATE_RUN) as $plugin) {
+        foreach ($this->getPluginsByStage(IStateMachine::STAGE__STATE_RUN_BEFORE) as $plugin) {
             $stateId = $plugin($this, $stateId);
         }
         $state = $this->buildState($stateId);
@@ -124,7 +91,7 @@ class StateMachine implements IStateMachine
      */
     public function getConfig(): IMachineConfig
     {
-        return $this->config;
+        return $this->machineConfig;
     }
 
     /**
@@ -142,14 +109,19 @@ class StateMachine implements IStateMachine
      */
     protected function buildState($stateId)
     {
-        $stateConfig = $this->config->getStateConfig($stateId);
+        $stateConfig = $this->machineConfig->getStateConfig($stateId);
         $fromState = $this->currentState ? $this->currentState->getId() : '';
 
-        foreach ($this->findPluginsByStage(IStateMachine::STAGE__BEFORE_STATE_BUILD) as $plugin) {
+        foreach ($this->getPluginsByStage(IStateMachine::STAGE__STATE_BUILD_BEFORE) as $plugin) {
             list($stateConfig, $fromState, $stateId) = $plugin($this, $stateConfig, $fromState, $stateId);
         }
 
         $state = $this->stateFactory::buildState($stateConfig, $fromState, $stateId);
+
+        foreach ($this->getPluginsByStage(IStateMachine::STAGE__STATE_BUILD_AFTER) as $plugin) {
+            $state = $plugin($state);
+        }
+
         $this->currentState = $state;
 
         return $state;
@@ -162,7 +134,7 @@ class StateMachine implements IStateMachine
      */
     protected function runState($state)
     {
-        foreach ($this->findPluginsByStage(IStateMachine::STAGE__IS_STATE_VALID) as $plugin) {
+        foreach ($this->getPluginsByStage(IStateMachine::STAGE__STATE_RUN_IS_VALID) as $plugin) {
             $isValidState = $plugin($this, $state);
 
             if ($isValidState) {
@@ -176,7 +148,7 @@ class StateMachine implements IStateMachine
 
         $this->runStateDispatchers($state);
 
-        foreach ($this->findPluginsByStage(IStateMachine::STAGE__NEXT_STATE) as $plugin) {
+        foreach ($this->getPluginsByStage(IStateMachine::STAGE__STATE_RUN_NEXT) as $plugin) {
             $nextStateId = $plugin($this, $state, $this->currentContext);
 
             if ($nextStateId) {
@@ -197,7 +169,7 @@ class StateMachine implements IStateMachine
         foreach ($state->getDispatchers() as $dispatcher) {
             $this->currentContext = $dispatcher($state, $this->currentContext);
 
-            foreach ($this->findPluginsByStage(IStateMachine::STAGE__STATE_RESULT) as $plugin) {
+            foreach ($this->getPluginsByStage(IStateMachine::STAGE__STATE_RUN_AFTER) as $plugin) {
                 if (!$plugin($this, $this->currentContext)) {
                     break 2;
                 }
@@ -208,58 +180,17 @@ class StateMachine implements IStateMachine
     }
 
     /**
-     * @param string $stage
-     *
-     * @return \Generator|IPlugin
-     */
-    protected function findPluginsByStage($stage)
-    {
-        /**
-         * @var $pluginRepo IPluginRepository
-         */
-        $pluginRepo = SystemContainer::getItem(IPluginRepository::class);
-
-        foreach ($pluginRepo::getPluginsForStage($this, $stage) as $plugin) {
-            yield $plugin;
-        }
-    }
-
-    /**
      * @param $config
      *
      * @return $this
      */
-    protected function setConfig($config)
+    protected function initConfig($config)
     {
-        /**
-         * Chicken or egg problem solving
-         */
-
-        $genericPluginsPath = getenv('SM__GENERIC_PLUGINS_PATH')
-            ?? EXTASM__ROOT_PATH . '/resources/configs/generic.plugins.php';
-
-        if (is_file($genericPluginsPath)) {
-            $genericPlugins = include $genericPluginsPath;
-            $this->registerPlugins($genericPlugins);
-        }
-
-        foreach ($this->findPluginsByStage(IStateMachine::STAGE__BEFORE_MACHINE_INIT) as $plugin) {
+        foreach ($this->getPluginsByStage(IStateMachine::STAGE__MACHINE_INIT_CONFIG) as $plugin) {
             $config = $plugin($this, $config);
         }
 
-        $this->config = new MachineConfig($config);
-
-        return $this;
-    }
-
-    /**
-     * @return $this
-     */
-    protected function initConfig()
-    {
-        foreach ($this->findPluginsByStage(IStateMachine::STAGE__INIT_CONFIG) as $plugin) {
-            $this->config = $plugin($this, $this->config);
-        }
+        $this->machineConfig = new MachineConfig($config);
 
         return $this;
     }
@@ -273,10 +204,6 @@ class StateMachine implements IStateMachine
     {
         $this->currentContext = new Context($contextData);
 
-        foreach ($this->findPluginsByStage(IStateMachine::STAGE__INIT_CONTEXT) as $plugin) {
-            $this->currentContext = $plugin($this, $this->currentContext);
-        }
-
         return $this;
     }
 
@@ -287,22 +214,6 @@ class StateMachine implements IStateMachine
     {
         $this->stateFactory = SystemContainer::getItem(IStateFactory::class);
 
-        foreach ($this->findPluginsByStage(IStateMachine::STAGE__INIT_STATE_FACTORY) as $plugin) {
-            $this->stateFactory = $plugin($this, $this->stateFactory);
-        }
-
-        return $this;
-    }
-
-    /**
-     * @return $this
-     */
-    protected function initMachine()
-    {
-        foreach ($this->findPluginsByStage(IStateMachine::STAGE__INIT_STATE_MACHINE) as $plugin) {
-            $plugin($this);
-        }
-
         return $this;
     }
 
@@ -311,6 +222,6 @@ class StateMachine implements IStateMachine
      */
     protected function getSubjectForExtension(): string
     {
-        return IStateMachine::class;
+        return static::SUBJECT;
     }
 }

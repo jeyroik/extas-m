@@ -3,21 +3,20 @@ namespace jeyroik\extas\interfaces\systems\states\machines\plugins;
 
 use jeyroik\extas\interfaces\systems\IPlugin;
 use jeyroik\extas\interfaces\systems\states\IStateMachine;
-use jeyroik\extas\interfaces\systems\states\machines\IMachineConfig;
 
 /**
- * Interface IPluginInitConfig
+ * Interface IPluginIsApplicableState
  *
  * @package jeyroik\extas\interfaces\systems\states\machines\plugins
  * @author Funcraft <me@funcraft.ru>
  */
-interface IPluginInitConfig extends IPlugin
+interface IPluginStateRunBefore extends IPlugin
 {
     /**
      * @param IStateMachine $machine
-     * @param mixed $config
+     * @param string $stateId
      *
-     * @return IMachineConfig|mixed
+     * @return string
      */
-    public function __invoke(IStateMachine $machine, $config = null);
+    public function __invoke(IStateMachine $machine, $stateId = '');
 }

@@ -2,8 +2,7 @@
 namespace jeyroik\extas\interfaces\systems\states;
 
 use jeyroik\extas\interfaces\systems\IContext;
-use jeyroik\extas\interfaces\systems\IExtendable;
-use jeyroik\extas\interfaces\systems\IPluginsAcceptable;
+use jeyroik\extas\interfaces\systems\IItem;
 use jeyroik\extas\interfaces\systems\IState;
 use jeyroik\extas\interfaces\systems\states\machines\IMachineConfig;
 
@@ -13,38 +12,37 @@ use jeyroik\extas\interfaces\systems\states\machines\IMachineConfig;
  * @package jeyroik\extas\interfaces\systems\states
  * @author Funcraft <me@funcraft.ru>
  */
-interface IStateMachine extends IPluginsAcceptable, IExtendable
+interface IStateMachine extends IItem
 {
-    const CONTEXT__STATES = '';
-
-    /**
-     * todo mv to plugin
-     */
-    const CONTEXT__ERRORS = '@directive.errors()';
+    const SUBJECT = 'machine';
 
     const MACHINE__CONFIG = '@directive.config()';
     const MACHINE__CONFIG__VERSION = 'version';
     const MACHINE__CONFIG__ALIAS = 'alias';
     const MACHINE__CONFIG__START_STATE = 'start';
-    const MACHINE__CONFIG__PLUGINS = 'machine_config__plugins';
-    /**
-     * For future purpose
-     */
     const MACHINE__CONFIG__END_STATE = 'terminate';
 
     const MACHINE__STATES = '@directive.states()';
 
+    /**
+     * @deprecated use INIT_MACHINE
+     */
     const STAGE__BEFORE_MACHINE_INIT = 'before_machine_init';
-    const STAGE__INIT_STATE_MACHINE = 'init_state_machine';
-    const STAGE__INIT_CONFIG = 'init_config';
-    const STAGE__INIT_CONTEXT = 'init_context';
-    const STAGE__INIT_STATE_FACTORY = 'init_state_factory';
-    const STAGE__BEFORE_STATE_BUILD = 'before_state_build';
-    const STAGE__BEFORE_STATE_RUN = 'before_state_run';
-    const STAGE__IS_STATE_VALID = 'is_state_valid';
-    const STAGE__STATE_RESULT = 'state_result';
-    const STAGE__NEXT_STATE = 'next_state';
-    const STAGE__STATE_MACHINE_DESTRUCTED = 'state_machine_destructed';
+
+    const STAGE__MACHINE_INIT_CONFIG = 'machine.init.config';
+    const STAGE__MACHINE_INIT_MACHINE = 'machine.init.machine';
+    const STAGE__MACHINE_INIT_CONTEXT = 'machine.init.context';
+    const STAGE__MACHINE_INIT_FACTORY_STATE = 'machine.init.factory.state';
+    const STAGE__MACHINE_AFTER = 'machine.after';
+
+    const STAGE__STATE_RUN_BEFORE = 'state.run.before';
+    const STAGE__STATE_BUILD_BEFORE = 'state.build.before';
+    const STAGE__STATE_INIT = 'state.init';
+    const STAGE__STATE_AFTER = 'state.after';
+    const STAGE__STATE_BUILD_AFTER = 'state.build.after';
+    const STAGE__STATE_RUN_IS_VALID = 'state.run.valid';
+    const STAGE__STATE_RUN_AFTER = 'state.run.after';
+    const STAGE__STATE_RUN_NEXT = 'state.run.next';
 
     /**
      * IStateMachine constructor.

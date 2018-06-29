@@ -1,6 +1,7 @@
 <?php
 namespace jeyroik\extas\components\systems\states\dispatchers;
 
+use jeyroik\extas\components\systems\Item;
 use jeyroik\extas\interfaces\systems\states\dispatchers\IDispatchersFactory;
 use jeyroik\extas\interfaces\systems\states\IStateDispatcher;
 
@@ -10,7 +11,7 @@ use jeyroik\extas\interfaces\systems\states\IStateDispatcher;
  * @package jeyroik\extas\components\systems\states\dispatchers
  * @author Funcraft <me@funcraft.ru>
  */
-class DispatcherFactory implements IDispatchersFactory
+class DispatcherFactory extends Item implements IDispatchersFactory
 {
     /**
      * @var static
@@ -108,5 +109,13 @@ class DispatcherFactory implements IDispatchersFactory
         }
 
         return $this->dispatchers[$dispatcherId];
+    }
+
+    /**
+     * @return string
+     */
+    protected function getSubjectForExtension(): string
+    {
+        return static::SUBJECT;
     }
 }

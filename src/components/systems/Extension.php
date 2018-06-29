@@ -9,12 +9,14 @@ use jeyroik\extas\interfaces\systems\IExtension;
  * @package jeyroik\extas\components\systems
  * @author Funcraft <me@funcraft.ru>
  */
-class Extension implements IExtension
+class Extension extends Item implements IExtension
 {
     /**
      * @var array
      */
     protected $methods = [];
+
+    protected $subject = '';
 
     /**
      * @param $subject
@@ -38,5 +40,13 @@ class Extension implements IExtension
     public function getMethodsNames()
     {
         return $this->methods;
+    }
+
+    /**
+     * @return string
+     */
+    protected function getSubjectForExtension(): string
+    {
+        return static::SUBJECT;
     }
 }

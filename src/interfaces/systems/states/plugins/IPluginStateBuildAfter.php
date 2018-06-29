@@ -5,12 +5,12 @@ use jeyroik\extas\interfaces\systems\IPlugin;
 use jeyroik\extas\interfaces\systems\IState;
 
 /**
- * Interface IPluginAfterStateBuild
+ * Interface IPluginStateBuildAfter
  *
  * @package jeyroik\extas\interfaces\systems\states\plugins
  * @author Funcraft <me@funcraft.ru>
  */
-interface IPluginAfterStateBuild extends IPlugin
+interface IPluginStateBuildAfter extends IPlugin
 {
     /**
      * @param IState $state

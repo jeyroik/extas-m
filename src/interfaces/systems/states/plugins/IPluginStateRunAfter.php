@@ -6,12 +6,12 @@ use jeyroik\extas\interfaces\systems\IPlugin;
 use jeyroik\extas\interfaces\systems\states\IStateMachine;
 
 /**
- * jeyroik\extas IPluginStateResult
+ * jeyroik\extas IPluginStateRunAfter
  *
  * @package jeyroik\extas\interfaces\systems\states\plugins
  * @author Funcraft <me@funcraft.ru>
  */
-interface IPluginStateResult extends IPlugin
+interface IPluginStateRunAfter extends IPlugin
 {
     /**
      * @param IStateMachine $machine

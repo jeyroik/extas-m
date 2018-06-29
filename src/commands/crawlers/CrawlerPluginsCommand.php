@@ -17,6 +17,7 @@ class CrawlerPluginsCommand extends Command
 {
     const ARGUMENT__PATH = 'path';
     const ARGUMENT__PRINT = 'print';
+    const ARGUMENT__CRAWLING_CONFIG = 'config';
 
     /**
      * Configure the current command.
@@ -37,6 +38,12 @@ class CrawlerPluginsCommand extends Command
                 static::ARGUMENT__PATH,
                 InputArgument::REQUIRED,
                 'Root path for plugins'
+            )
+            ->addArgument(
+                static::ARGUMENT__CRAWLING_CONFIG,
+                InputArgument::REQUIRED,
+                'Crawling configuration path',
+                ''
             )
             ->addArgument(
                 static::ARGUMENT__PRINT,
@@ -61,7 +68,8 @@ class CrawlerPluginsCommand extends Command
         ]);
 
         $rootPath = $input->getArgument(static::ARGUMENT__PATH);
-        $crawler = new PluginCrawler($rootPath);
+        $config = $this->getConfig($input->getArgument(static::ARGUMENT__CRAWLING_CONFIG));
+        $crawler = new PluginCrawler($rootPath, $config);
         try {
             $foundCount = $crawler->crawlPlugins();
 
@@ -70,11 +78,11 @@ class CrawlerPluginsCommand extends Command
                 '=============================='
             ]);
 
-            $output->writeln([
+            $plugins = $crawler->getPluginsInfo();
+
+            count($plugins) && $output->writeln([
                 'Plugins list:'
             ]);
-
-            $plugins = $crawler->getPluginsInfo();
 
             $printMode = $input->getArgument(static::ARGUMENT__PRINT);
 
@@ -89,5 +97,19 @@ class CrawlerPluginsCommand extends Command
             $output->writeln(['Crawling error: '. $e->getMessage()]);
             return $e->getCode();
         }
+    }
+
+    /**
+     * @param $configPath
+     *
+     * @return array|mixed
+     */
+    protected function getConfig($configPath)
+    {
+        if (is_file($configPath)) {
+            return include $configPath;
+        }
+
+        return [];
     }
 }

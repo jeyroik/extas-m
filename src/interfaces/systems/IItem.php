@@ -7,30 +7,8 @@ namespace jeyroik\extas\interfaces\systems;
  * @package jeyroik\extas\interfaces\system
  * @author Funcraft <me@funcraft.ru>
  */
-interface IItem
+interface IItem extends \ArrayAccess, \Iterator, IPluginsAcceptable, IExtendable
 {
-    /**
-     * @return string
-     */
-    public function getKey(): string;
-
-    /**
-     * @param $value
-     *
-     * @return IItem
-     */
-    public function setValue($value);
-
-    /**
-     * @return mixed
-     */
-    public function getValue();
-
-    /**
-     * @return string
-     */
-    public function getState(): string;
-
     /**
      * @param string $format
      *
@@ -46,12 +24,17 @@ interface IItem
     public function getUpdatedAt($format = '');
 
     /**
-     * @return mixed
-     */
-    public function getId();
-
-    /**
      * @return array
      */
     public function __toArray(): array;
+
+    /**
+     * @return string
+     */
+    public function __toString(): string;
+
+    /**
+     * @return int
+     */
+    public function __toInt(): int;
 }

@@ -1,10 +1,7 @@
 <?php
 namespace jeyroik\extas\components\systems;
 
-use jeyroik\extas\components\systems\extensions\TExtendable;
-use jeyroik\extas\components\systems\plugins\TPluginAcceptable;
 use jeyroik\extas\interfaces\systems\IContext;
-use jeyroik\extas\interfaces\systems\IItem;
 
 /**
  * Class Context
@@ -12,155 +9,76 @@ use jeyroik\extas\interfaces\systems\IItem;
  * @package jeyroik\extas\components\systems
  * @author Funcraft <me@funcraft.ru>
  */
-class Context extends Extension implements IContext
+class Context extends Item implements IContext
 {
-    use TPluginAcceptable;
-    use TExtendable;
-
-    protected const ITEM__SELF = 'item';
-    protected const ITEM__MODE = 'mode';
-
     /**
      * @var array
      */
-    protected $items = [];
+    private $readOnly = [];
 
     /**
      * Context constructor.
-     * @param $data
      *
-     * @throws \Exception
+     * @param array $data
      */
-    public function __construct($data)
+    public function __construct($data = [])
     {
         if (is_object($data) && ($data instanceof IContext)) {
-            $this->items = $data->readAllItems();
-        } else {
-            foreach ($data as $key => $value) {
-                $this->pushItemByName($key, $value);
-            }
+            $data = $data->__toArray();
         }
+
+        parent::__construct($data);
+    }
+
+    /**
+     * @param string $name
+     *
+     * @return $this
+     */
+    public function setReadOnly($name)
+    {
+        $this->readOnly[$name] = true;
+
+        return $this;
     }
 
     /**
      * @param $name
      *
      * @return bool
+     */
+    protected function isReadOnly($name)
+    {
+        return isset($this->readOnly[$name]);
+    }
+
+    /**
+     * @param mixed $name
+     *
      * @throws \Exception
      */
-    public function removeItem($name): bool
+    public function offsetUnset($name)
     {
-        if (!isset($this->items[$name])) {
-            throw new \Exception('Unknown item "' . $name . '".');
-        }
-
-        if ($this->isWritable($name)) {
-            unset($this->items[$name]);
-        } else {
+        if ($this->isReadOnly($name)) {
             throw new \Exception('Access restricted for the item "' . $name . '".');
         }
 
-        return true;
+        parent::offsetUnset($name);
     }
 
     /**
-     * @param $name
+     * @param mixed $offset
+     * @param mixed $value
      *
-     * @return bool
-     */
-    public function hasItem($name): bool
-    {
-        return isset($this->items[$name]);
-    }
-
-    /**
-     * @param $name
-     *
-     * @return IItem
      * @throws \Exception
      */
-    public function readItem($name): IItem
+    public function offsetSet($offset, $value)
     {
-        if (!isset($this->items[$name])) {
-            throw new \Exception('Unknown item "' . $name . '".');
+        if ($this->offsetExists($offset) && $this->isReadOnly($offset)) {
+            throw new \Exception('Access restricted for the item "' . $offset . '".');
         }
 
-        return $this->items[$name][static::ITEM__SELF];
-    }
-
-    /**
-     * @return array
-     */
-    public function readAllItems()
-    {
-        return $this->items;
-    }
-
-    /**
-     * @param $name
-     * @param $value
-     *
-     * @return IItem
-     * @throws \Exception
-     */
-    public function updateItem($name, $value): IItem
-    {
-        if (!isset($this->items[$name])) {
-            throw new \Exception('Unknown item "' . $name . '".');
-        }
-
-        if ($this->isWritable($name)) {
-            $this->items[$name][static::ITEM__SELF]->setValue($value);
-        } else {
-            throw new \Exception('Access restricted for the item "' . $name . '".');
-        }
-
-        return $this->items[$name][static::ITEM__SELF];
-    }
-
-    /**
-     * @param IItem $item
-     * @param int $mode
-     *
-     * @return mixed|IItem
-     * @throws \Exception
-     */
-    public function createItem(IItem $item, $mode = 1)
-    {
-        if (isset($this->items[$item->getKey()])) {
-            throw new \Exception('Item "' . $item->getKey() . '" is already exists');
-        }
-
-        $this->items[$item->getKey()] = [
-            static::ITEM__SELF => $item,
-            static::ITEM__MODE => $mode
-        ];
-
-        return $item;
-    }
-
-    /**
-     * @param $itemName
-     * @param $itemValue
-     *
-     * @return mixed|IItem
-     * @throws \Exception
-     */
-    public function pushItemByName($itemName, $itemValue)
-    {
-        $item = new Item($itemName, $itemValue);
-
-        return $this->createItem($item, static::MODE__READ_WRITE);
-    }
-
-    /**
-     * @param $name
-     *
-     * @return bool
-     */
-    protected function isWritable($name)
-    {
-        return $this->items[$name][static::ITEM__MODE] > 0;
+        parent::offsetSet($offset, $value);
     }
 
     /**
@@ -168,6 +86,6 @@ class Context extends Extension implements IContext
      */
     protected function getSubjectForExtension(): string
     {
-        return IContext::class;
+        return static::SUBJECT;
     }
 }

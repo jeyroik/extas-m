@@ -7,11 +7,13 @@ namespace jeyroik\extas\interfaces\systems;
  * @package jeyroik\extas\interfaces\systems
  * @author Funcraft <me@funcraft.ru>
  */
-interface IPlugin
+interface IPlugin extends IItem
 {
     const FIELD__CLASS = 'class';
     const FIELD__VERSION = 'version';
     const FIELD__STAGE = 'stage';
+
+    const SUBJECT = 'plugin';
 
     /**
      * @return string

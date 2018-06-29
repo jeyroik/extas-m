@@ -7,8 +7,10 @@ namespace jeyroik\extas\interfaces\systems;
  * @package jeyroik\extas\interfaces\systems\states
  * @author Funcraft <me@funcraft.ru>
  */
-interface IExtension
+interface IExtension extends IItem
 {
+    const SUBJECT = 'extension';
+
     /**
      * @return string[]
      */
