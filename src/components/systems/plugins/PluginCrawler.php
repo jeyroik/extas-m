@@ -2,11 +2,18 @@
 namespace jeyroik\extas\components\systems\plugins;
 
 use jeyroik\extas\components\systems\plugins\crawlers\CrawlerPackage;
+use jeyroik\extas\components\systems\SystemContainer;
+use jeyroik\extas\interfaces\systems\IExtension;
+use jeyroik\extas\interfaces\systems\IPackage;
+use jeyroik\extas\interfaces\systems\IPlugin;
 use jeyroik\extas\interfaces\systems\IRepository;
+use jeyroik\extas\interfaces\systems\packages\IPackageExtractor;
+use jeyroik\extas\interfaces\systems\packages\IPackageRepository;
+use jeyroik\extas\interfaces\systems\packages\IPackageRoot;
 use jeyroik\extas\interfaces\systems\plugins\crawlers\ICrawlerPackage;
 use jeyroik\extas\interfaces\systems\plugins\IPluginCrawler;
-use Symfony\Component\Finder\Finder;
-use Symfony\Component\Finder\SplFileInfo;
+use jeyroik\extas\interfaces\systems\plugins\IPluginRepository;
+use tratabor\interfaces\systems\extensions\IExtensionRepository;
 
 /**
  * Class PluginCrawler
@@ -20,6 +27,7 @@ class PluginCrawler implements IPluginCrawler
      * @var string
      */
     protected $rootPath = '';
+    protected $rootPackagePath = '';
 
     /**
      * @var array
@@ -29,7 +37,7 @@ class PluginCrawler implements IPluginCrawler
     /**
      * @var ICrawlerPackage[]
      */
-    protected $plugins = [];
+    protected $packages = [];
 
     /**
      * PluginCrawler constructor.
@@ -52,152 +60,245 @@ class PluginCrawler implements IPluginCrawler
             throw new \Exception('Missed root path for Extas plugins crawling.');
         }
 
-        list($packages, $packagesHash) = $this->grabComposer();
+        $this->loadPackages();
 
-        $finder = new Finder();
-        $finder->name('extas.json');
-
-        $this->grabPlugins($finder, $packages, $packagesHash);
-
-        return count($this->plugins);
-    }
-
-    /**
-     * @param $extasPluginConfigPath
-     *
-     * @return CrawlerPackage
-     * @throws \Exception
-     */
-    public function registerPlugin($extasPluginConfigPath)
-    {
-        if (is_file($extasPluginConfigPath)) {
-            $infoConfig = json_decode(file_get_contents($extasPluginConfigPath), true);
-            $info = new CrawlerPackage($infoConfig);
-            $this->plugins[$info->getName()] = $info;
-        } else {
-            throw new \Exception('Missed or restricted plugin config path "' . $extasPluginConfigPath . '".');
-        }
-
-        return $info;
-    }
-
-    /**
-     * @param string $pluginName
-     *
-     * @return ICrawlerPackage|null
-     */
-    public function getPluginInfo($pluginName)
-    {
-        return $this->plugins[$pluginName] ?? null;
+        return count($this->packages);
     }
 
     /**
      * @return ICrawlerPackage[]
      */
-    public function getPluginsInfo()
+    public function getPackagesInfo()
     {
-        return $this->plugins;
+        return $this->packages;
     }
 
     /**
-     * @return array
+     * @return $this
      * @throws \Exception
      */
-    protected function grabComposer()
+    protected function loadPackages()
     {
-        $finder = new Finder();
-        $finder->name('composer.lock');
-        $composer = [];
-        $packages = [];
-        $packagesHash = '';
+        $rootPackage = $this->getRootPackage();
 
-        foreach ($finder->in($this->rootPath . '/*') as $file) {
-            /**
-             * @var $file SplFileInfo
-             */
-            $composer = json_decode($file->getContents(), true);
+        if ($rootPackage->isEmpty()) {
+            throw new \Exception('Empty root package "' . $this->rootPackagePath . '".');
         }
-
-        if (!empty($composer)) {
-            $packages = array_column($composer['packages'], null, 'name');
-            $packagesHash = $composer['content-hash'];
-        }
-
-        if ($storage = $this->getPluginStorage()) {
-            /**
-             * @var $plugin ICrawlerPackage
-             */
-            $plugin = $storage->find([CrawlerPackage::CONFIG__NAME => 'package.composer'])->one();
-            if ($plugin) {
-                if ($packagesHash == $plugin->getDescription()) {
-                    throw new \Exception('Plugins is already crawled.');
-                }
-            }
-            $plugin = new CrawlerPackage([
-                CrawlerPackage::CONFIG__NAME => 'package.composer',
-                CrawlerPackage::CONFIG__DESCRIPTION => $packagesHash
-            ]);
-            $storage->create($plugin);
-            $storage->commit();
-        }
-
-        return [$packages, $packagesHash];
-    }
-
-    /**
-     * @param Finder $finder
-     * @param array $packages
-     * @param string $packagesHash
-     *
-     * @return $this
-     */
-    protected function grabPlugins($finder, $packages, $packagesHash)
-    {
-        $storage = $this->getPluginStorage();
 
         /**
-         * @var $file SplFileInfo
+         * @var $packageStorage IRepository
          */
-        foreach ($finder->in($this->rootPath . '/*/')->files() as $file) {
-            $json = $file->getContents();
+        $packageStorage = SystemContainer::getItem(IPackageRepository::class);
 
-            try {
-                $jsonDecoded = json_decode($json, true);
-                $pluginInfo = new CrawlerPackage($jsonDecoded);
-                $jsonDecoded[CrawlerPackage::CONFIG__PACKAGE] = isset($packages[$pluginInfo->getName()])
-                    ? [
-                        'version' => $packages[$pluginInfo->getName()]['version'],
-                        'hash' => $packagesHash,
-                        'source' => $packages[$pluginInfo->getName()]['source']
-                    ] : [
-                        'version' => 'unknown',
-                        'hash' => $packagesHash,
-                        'source' => []
-                    ];
-                $pluginInfo = new CrawlerPackage($jsonDecoded);
-                $storage && $storage->create($pluginInfo);
+        /**
+         * @var $package IPackage
+         */
+        $package = $this->validateRootPackage($packageStorage, $rootPackage);
 
-                $this->plugins[$pluginInfo->getName()] = $pluginInfo;
-            } catch (\Exception $e) {
-                continue;
-            }
-        }
+        $this->grabPackages($rootPackage->getPackages());
+        $package->setState(IPackage::STATE__COMMITTED);
+        $packageStorage->update($package);
+        $packageStorage->commit();
 
         return $this;
     }
 
     /**
-     * @return null|IRepository
+     * @return IPackageRoot
      */
-    protected function getPluginStorage()
+    protected function getRootPackage()
     {
-        $storageClass = $this->config[static::CONFIG__PLUGIN_STORAGE__CLASS] ?? '';
+        $rootPackageName = $this->config[static::CONFIG__PACKAGE__ROOT_NAME];
+        $rootPackageExtractor = $this->config[static::CONFIG__PACKAGE__ROOT_EXTRACTOR];
 
-        if($storageClass) {
-            return new $storageClass();
+        if (!is_callable($rootPackageExtractor)) {
+            $rootPackageExtractor = new $rootPackageExtractor();
         }
 
-        return null;
+        $this->rootPackagePath = $this->rootPath . '/' . $rootPackageName;
+
+        return $rootPackageExtractor($this->rootPackagePath);
+    }
+
+    /**
+     * @param IRepository $packageStorage
+     * @param IPackageRoot $packageRoot
+     *
+     * @return CrawlerPackage|IPackage
+     * @throws \Exception
+     */
+    protected function validateRootPackage($packageStorage, $packageRoot)
+    {
+        /**
+         * @var $package IPackage
+         */
+        $package = $packageStorage->find([ICrawlerPackage::FIELD__NAME => $packageRoot->getName()])->one();
+
+        if ($package->getVersion() == $packageRoot->getVersion()) {
+            if ($package->getState() == IPackage::STATE__COMMITTED) {
+                throw new \Exception('Packages are already crawled.');
+            }
+        } else {
+            $package = new CrawlerPackage([
+                IPackage::FIELD__ID => $packageRoot->getVersion(),
+                IPackage::FIELD__NAME => $packageRoot->getName(),
+                IPackage::FIELD__VERSION => $packageRoot->getVersion(),
+                IPackage::FIELD__STATE => IPackage::STATE__OPERATING
+            ]);
+            $packageStorage->create($package);
+            $packageStorage->commit();
+        }
+
+        return $package;
+    }
+
+    protected function grabPackages($packages)
+    {
+        /**
+         * @var $storage IRepository
+         */
+        $storage = SystemContainer::getItem(IPluginRepository::class);
+        $packageExtractor = $this->getPackageExtractor();
+
+        foreach ($packages as $packageName => $packageInfo) {
+            /**
+             * @var $packageDb ICrawlerPackage
+             */
+            $packageDb = $storage->find([ICrawlerPackage::FIELD__NAME => $packageName])->one();
+
+            if ($packageDb->getVersion() == $packageInfo[ICrawlerPackage::FIELD__VERSION]) {
+                continue;
+            }
+
+            $packageConfigPath = $this->rootPath
+                . '/*/' . $packageName
+                . '/' . $this->config[static::CONFIG__PACKAGE__NAME];
+
+            /**
+             * @var $package ICrawlerPackage
+             */
+            $package = $packageExtractor($packageInfo, $packageConfigPath);
+
+            if ($package) {
+                $this->packages[] = $package;
+                $storage->create($packageDb);
+                $this->savePlugins($package->getPlugins())->saveExtensions($package->getExtensions());
+            } else {
+                throw new \Exception('Can not read package info "' . $packageConfigPath . '".');
+            }
+        }
+
+        $storage->commit();
+
+        return $this;
+    }
+
+    /**
+     * @return IPackageExtractor
+     */
+    protected function getPackageExtractor()
+    {
+        $packageExtractor = $this->config[static::CONFIG__PACKAGE__EXTRACTOR];
+
+        if (!is_callable($packageExtractor)) {
+            $packageExtractor = new $packageExtractor();
+        }
+
+        return $packageExtractor;
+    }
+
+    /**
+     * @param $extensions
+     *
+     * @return $this
+     */
+    protected function saveExtensions($extensions)
+    {
+        /**
+         * @var $storage IExtensionRepository
+         */
+        $storage = SystemContainer::getItem(IExtensionRepository::class);
+
+        foreach ($extensions as $extension) {
+            $extensionId = $this->prepareExtensionId($extension);
+
+            /**
+             * @var $extension IExtension
+             */
+            $extensionDb = $storage->find([IExtension::FIELD__ID => $extensionId])->one();
+
+            if ($extensionDb->getId() == $extensionId) {
+                continue;
+            }
+
+            $extensionDb->setId($extensionId)
+                ->setSubject($extension[IExtension::FIELD__SUBJECT])
+                ->setClass($extension[IExtension::FIELD__CLASS])
+                ->setInterface($extension[IExtension::FIELD__INTERFACE])
+                ->setMethods($extension[IExtension::FIELD__METHODS]);
+
+            $storage->create($extensionDb);
+        }
+
+        $storage->commit();
+
+        return $this;
+    }
+
+    /**
+     * @param array $extension
+     *
+     * @return string
+     */
+    protected function prepareExtensionId($extension)
+    {
+        return sha1(json_encode($extension));
+    }
+
+    /**
+     * @param $plugins
+     *
+     * @return $this
+     */
+    protected function savePlugins($plugins)
+    {
+        /**
+         * @var $storage IPluginRepository
+         */
+        $storage = SystemContainer::getItem(IPluginRepository::class);
+
+        foreach ($plugins as $plugin) {
+            $pluginId = $this->preparePluginId($plugin);
+
+            /**
+             * @var $pluginDb IPlugin
+             */
+            $pluginDb = $storage->find([IPlugin::FIELD__ID => $pluginId])->one();
+
+            if ($pluginDb->getId() == $pluginId) {
+                continue;
+            }
+
+            $pluginDb->setId($pluginId)
+                ->setClass($plugin[IPlugin::FIELD__CLASS])
+                ->setStage($plugin[IPlugin::FIELD__STAGE]);
+
+            $storage->create($pluginDb);
+        }
+
+        $storage->commit();
+
+        return $this;
+    }
+
+    /**
+     * @param array $plugin
+     *
+     * @return string
+     */
+    protected function preparePluginId($plugin)
+    {
+        return sha1(json_encode($plugin));
     }
 
     /**

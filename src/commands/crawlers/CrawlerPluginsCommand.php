@@ -78,7 +78,7 @@ class CrawlerPluginsCommand extends Command
                 '=============================='
             ]);
 
-            $plugins = $crawler->getPluginsInfo();
+            $plugins = $crawler->getPackagesInfo();
 
             count($plugins) && $output->writeln([
                 'Plugins list:'
@@ -89,7 +89,7 @@ class CrawlerPluginsCommand extends Command
             foreach ($plugins as $plugin) {
                 $printMode
                     ? $output->writeln([$plugin->getName(), print_r($plugin, true)])
-                    : $output->writeln([$plugin->getName() . ': ' . $plugin->getInfoHash()]);
+                    : $output->writeln([$plugin->getName() . ': ' . $plugin->getVersion()]);
             }
 
             return 0;

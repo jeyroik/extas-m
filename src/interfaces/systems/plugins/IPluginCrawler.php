@@ -11,7 +11,11 @@ use jeyroik\extas\interfaces\systems\plugins\crawlers\ICrawlerPackage;
  */
 interface IPluginCrawler
 {
-    const CONFIG__PLUGIN_STORAGE__CLASS = 'plugin_storage_class';
+    const CONFIG__PACKAGE__ROOT_NAME = 'package.root.name';
+    const CONFIG__PACKAGE__ROOT_EXTRACTOR = 'package.root.extractor';
+
+    const CONFIG__PACKAGE__NAME = 'package';
+    const CONFIG__PACKAGE__EXTRACTOR = 'package.extractor';
 
     /**
      * IPluginCrawler constructor.
@@ -27,21 +31,7 @@ interface IPluginCrawler
     public function crawlPlugins(): int;
 
     /**
-     * @param $extasPluginConfigPath
-     *
-     * @return ICrawlerPackage
-     */
-    public function registerPlugin($extasPluginConfigPath);
-
-    /**
      * @return ICrawlerPackage[]
      */
-    public function getPluginsInfo();
-
-    /**
-     * @param string $pluginName
-     *
-     * @return ICrawlerPackage|null
-     */
-    public function getPluginInfo($pluginName);
+    public function getPackagesInfo();
 }

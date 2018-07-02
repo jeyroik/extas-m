@@ -9,6 +9,20 @@ namespace jeyroik\extas\interfaces\systems;
  */
 interface IPackage extends IItem
 {
+    const FIELD__NAME = 'name';
+    const FIELD__DESCRIPTION = 'description';
+    const FIELD__VERSION = 'version';
+    const FIELD__STATE = 'state';
+    const FIELD__ID = 'id';
+
+    const STATE__OPERATING = 'operating';
+    const STATE__COMMITTED = 'committed';
+
+    /**
+     * @return string
+     */
+    public function getId(): string;
+
     /**
      * @return string
      */
@@ -20,23 +34,40 @@ interface IPackage extends IItem
     public function getDescription(): string;
 
     /**
-     * @param string $name
-     *
-     * @return array
+     * @return string
      */
-    public function getRequire($name = '');
+    public function getVersion(): string;
 
     /**
-     * @param string $name
-     *
-     * @return array
+     * @return string
      */
-    public function getProduce($name = '');
+    public function getState(): string;
 
     /**
-     * @param string $field
+     * @param $state
      *
-     * @return mixed
+     * @return $this
      */
-    public function getCodePackage($field = '');
+    public function setState($state);
+
+    /**
+     * @param $name
+     *
+     * @return $this
+     */
+    public function setName($name);
+
+    /**
+     * @param $description
+     *
+     * @return $this
+     */
+    public function setDescription($description);
+
+    /**
+     * @param $version
+     *
+     * @return $this
+     */
+    public function setVersion($version);
 }

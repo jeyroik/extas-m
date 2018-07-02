@@ -2,6 +2,7 @@
 namespace tratabor\interfaces\systems\extensions;
 
 use jeyroik\extas\interfaces\systems\IExtension;
+use jeyroik\extas\interfaces\systems\IRepository;
 
 /**
  * Interface IExtensionRepository
@@ -9,7 +10,7 @@ use jeyroik\extas\interfaces\systems\IExtension;
  * @package tratabor\interfaces\systems\states\extensions
  * @author Funcraft <me@funcraft.ru>
  */
-interface IExtensionRepository
+interface IExtensionRepository extends IRepository
 {
     /**
      * @param $subject

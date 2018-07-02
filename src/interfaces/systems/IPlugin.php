@@ -10,8 +10,8 @@ namespace jeyroik\extas\interfaces\systems;
 interface IPlugin extends IItem
 {
     const FIELD__CLASS = 'class';
-    const FIELD__VERSION = 'version';
     const FIELD__STAGE = 'stage';
+    const FIELD__ID = 'id';
 
     const SUBJECT = 'plugin';
 
@@ -21,12 +21,33 @@ interface IPlugin extends IItem
     public function getClass(): string;
 
     /**
-     * @return mixed
+     * @return string
      */
-    public function getVersion();
+    public function getId(): string;
 
     /**
      * @return string
      */
     public function getStage(): string;
+
+    /**
+     * @param $id
+     *
+     * @return $this
+     */
+    public function setId($id);
+
+    /**
+     * @param $class
+     *
+     * @return $this
+     */
+    public function setClass($class);
+
+    /**
+     * @param $stage
+     *
+     * @return $this
+     */
+    public function setStage($stage);
 }
