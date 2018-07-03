@@ -170,21 +170,21 @@ class PluginCrawler implements IPluginCrawler
                 continue;
             }
 
-            $packageConfigPath = $this->rootPath
-                . '/*/' . $packageName
-                . '/' . $this->config[static::CONFIG__PACKAGE__NAME];
-
             /**
              * @var $package ICrawlerPackage
              */
-            $package = $packageExtractor($packageInfo, $packageConfigPath);
+            $package = $packageExtractor(
+                $this->rootPath,
+                $packageInfo,
+                $this->config[static::CONFIG__PACKAGE__CONFIG_NAME]
+            );
 
             if ($package) {
                 $this->packages[] = $package;
                 $storage->create($packageDb);
                 $this->savePlugins($package->getPlugins())->saveExtensions($package->getExtensions());
             } else {
-                throw new \Exception('Can not read package info "' . $packageConfigPath . '".');
+                throw new \Exception('Can not read package info for "' . $packageName . '".');
             }
         }
 

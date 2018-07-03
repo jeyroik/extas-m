@@ -11,8 +11,10 @@ use jeyroik\extas\interfaces\systems\states\machines\plugins\IPluginStateRunBefo
  * @package jeyroik\extas\components\systems\states\machines\plugins
  * @author Funcraft <me@funcraft.ru>
  */
-class PluginStateRunExistingStateBefore extends Plugin implements IPluginStateRunBefore
+class PluginStateRunBeforeExistingState extends Plugin implements IPluginStateRunBefore
 {
+    protected $preDefinedStage = IStateMachine::STAGE__STATE_RUN_BEFORE;
+
     /**
      * @param IStateMachine $machine
      * @param string $stateId

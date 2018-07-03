@@ -14,7 +14,7 @@ interface IPluginCrawler
     const CONFIG__PACKAGE__ROOT_NAME = 'package.root.name';
     const CONFIG__PACKAGE__ROOT_EXTRACTOR = 'package.root.extractor';
 
-    const CONFIG__PACKAGE__NAME = 'package';
+    const CONFIG__PACKAGE__CONFIG_NAME = 'package';
     const CONFIG__PACKAGE__EXTRACTOR = 'package.extractor';
 
     /**

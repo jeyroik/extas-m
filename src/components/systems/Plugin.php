@@ -15,7 +15,6 @@ use jeyroik\extas\interfaces\systems\IPlugin;
  */
 class Plugin extends Item implements IPlugin
 {
-    protected $preDefinedVersion = '';
     protected $preDefinedClass = '';
     protected $preDefinedStage = '';
 
@@ -27,10 +26,53 @@ class Plugin extends Item implements IPlugin
     protected function setConfig($config)
     {
         $this->preDefinedClass && $config[static::FIELD__CLASS] = $this->preDefinedClass;
-        $this->preDefinedVersion && $config[static::FIELD__VERSION] = $this->preDefinedVersion;
         $this->preDefinedStage && $config[static::FIELD__STAGE] = $this->preDefinedStage;
 
         return parent::setConfig($config);
+    }
+
+    /**
+     * @param $stage
+     *
+     * @return $this
+     */
+    public function setStage($stage)
+    {
+        $this->stage = $stage;
+
+        return $this;
+    }
+
+    /**
+     * @param $class
+     *
+     * @return $this
+     */
+    public function setClass($class)
+    {
+        $this->class = $class;
+
+        return $this;
+    }
+
+    /**
+     * @param $id
+     *
+     * @return $this
+     */
+    public function setId($id)
+    {
+        $this->id = $id;
+
+        return $this;
+    }
+
+    /**
+     * @return string
+     */
+    public function getId(): string
+    {
+        return $this->id;
     }
 
     /**

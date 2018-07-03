@@ -39,6 +39,11 @@ interface IExtension extends IItem
     /**
      * @return string
      */
+    public function getClass(): string;
+
+    /**
+     * @return string
+     */
     public function getInterface(): string;
 
     /**

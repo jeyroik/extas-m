@@ -16,15 +16,17 @@ use Symfony\Component\Finder\SplFileInfo;
 class PackageExtractorJson implements IPackageExtractor
 {
     /**
+     * @param string $rootPath
      * @param array $packageInfo
-     * @param string $packageConfigPath
+     * @param string $packageConfigName
      *
      * @return ICrawlerPackage
      */
-    public function __invoke($packageInfo, $packageConfigPath): ICrawlerPackage
+    public function __invoke($rootPath, $packageInfo, $packageConfigName): ICrawlerPackage
     {
+        $fullPath = $rootPath . '/*/' . $packageInfo[ICrawlerPackage::FIELD__NAME] . '/' . $packageConfigName;
         $finder = new Finder();
-        $finder->name($packageConfigPath);
+        $finder->name($fullPath);
 
         foreach ($finder->files() as $file) {
             /**

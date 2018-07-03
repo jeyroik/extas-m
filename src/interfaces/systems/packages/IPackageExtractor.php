@@ -12,10 +12,11 @@ use jeyroik\extas\interfaces\systems\plugins\crawlers\ICrawlerPackage;
 interface IPackageExtractor
 {
     /**
+     * @param string $rootPath
      * @param array $packageInfo
-     * @param string $packageConfigPath
+     * @param string $packageConfigName
      *
      * @return ICrawlerPackage|null
      */
-    public function __invoke($packageInfo, $packageConfigPath): ICrawlerPackage;
+    public function __invoke($rootPath, $packageInfo, $packageConfigName): ICrawlerPackage;
 }
