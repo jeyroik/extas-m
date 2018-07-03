@@ -1,15 +1,8 @@
 {
-  "title": "On failure",
+  "title": "Default plugins & extensions",
+  "description": "This is pack of default (core) plugins and extensions",
   "schema": "1.0",
   "plugins": [
-    {
-      "class": "jeyroik\\extas\\components\\systems\\states\\machines\\plugins\\PluginBeforeMachineInitJsonConfig",
-      "stage": "machine.init.config"
-    },
-    {
-      "class": "jeyroik\\extas\\components\\systems\\states\\machines\\plugins\\PluginBeforeMachineInitPhpConfig",
-      "stage": "machine.init.config"
-    },
     {
       "class": "jeyroik\\extas\\components\\systems\\states\\machines\\plugins\\PluginStateRunBeforeSubMachine",
       "stage": "state.run.before"
@@ -19,28 +12,38 @@
       "stage": "context.init"
     },
     {
-      "class": "jeyroik\\extas\\components\\systems\\states\\machines\\plugins\\PluginStateRunBeforeCycle",
-      "stage": "state.run.before"
+      "class": "jeyroik\\extas\\components\\systems\\states\\machines\\plugins\\PluginBeforeMachineInitJsonConfig",
+      "stage": "machine.init.config"
+    },
+    {
+      "class": "jeyroik\\extas\\components\\systems\\states\\machines\\plugins\\PluginBeforeMachineInitPhpConfig",
+      "stage": "machine.init.config"
     },
     {
       "class": "jeyroik\\extas\\components\\systems\\states\\machines\\plugins\\PluginStateRunBeforeStart",
       "stage": "state.run.before"
     },
     {
-      "class": "jeyroik\\extas\\components\\systems\\states\\machines\\plugins\\PluginStateRunBeforeTheEnd",
+      "class": "jeyroik\\extas\\components\\systems\\states\\machines\\plugins\\PluginStateRunBeforeExistingState",
       "stage": "state.run.before"
     },
     {
-      "class": "jeyroik\\extas\\components\\systems\\states\\machines\\plugins\\PluginStateRunBeforeExistingState",
+      "class": "jeyroik\\extas\\components\\systems\\states\\machines\\plugins\\PluginStateRunBeforeCycle",
+      "stage": "state.run.before"
+    },
+    {
+      "class": "jeyroik\\extas\\components\\systems\\states\\machines\\plugins\\PluginStateRunBeforeTheEnd",
       "stage": "state.run.before"
     }
   ],
   "extensions": [
     {
-      "class": "jeyroik\\extas\\components\\systems\\states\\extensions\\ExtensionContextOnFailure",
-      "interface": "jeyroik\\extas\\components\\systems\\states\\extensions\\ExtensionContextOnFailure",
-      "subject": "jeyroik\\extas\\interfaces\\systems\\IContext",
-      "methods": ["setSuccess", "setFail"]
+      "class": "jeyroik\\extas\\components\\systems\\states\\machines\\extensions\\ExtensionContextErrors",
+      "interface": "jeyroik\\extas\\interfaces\\systems\\contexts\\IContextErrors",
+      "subject": "context",
+      "methods": [
+        "addError"
+      ]
     }
   ]
 }
