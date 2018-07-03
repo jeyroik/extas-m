@@ -1,6 +1,5 @@
 <?php
-
-require __DIR__ . '/../autoload.php';
+require getcwd() . '/vendor/autoload.php';
 
 use Symfony\Component\Console\Application;
 
