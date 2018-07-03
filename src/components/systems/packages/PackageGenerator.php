@@ -60,7 +60,7 @@ class PackageGenerator implements IPackageGenerator
         $finder = new Finder();
         $finder->name('Extension*.php');
 
-        foreach ($finder->files() as $file) {
+        foreach ($finder->in($this->whereToSearch)->files() as $file) {
             /**
              * @var $file SplFileInfo
              */
@@ -107,7 +107,7 @@ class PackageGenerator implements IPackageGenerator
         $finder = new Finder();
         $finder->name('Plugin*.php');
 
-        foreach ($finder->files() as $file) {
+        foreach ($finder->in($this->whereToSearch)->files() as $file) {
             /**
              * @var $file SplFileInfo
              */
