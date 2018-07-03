@@ -15,6 +15,8 @@ class PluginStateRunBeforeStart extends Plugin implements IPluginStateRunBefore
 {
     const ENV__START_STATE = 'SM__STATE__START';
 
+    public $preDefinedStage = IStateMachine::STAGE__STATE_RUN_BEFORE;
+
     /**
      * @param IStateMachine $machine
      * @param string $stateId

@@ -13,6 +13,8 @@ use jeyroik\extas\interfaces\systems\states\IStateMachine;
  */
 class PluginBeforeMachineInitJsonConfig extends Plugin implements IPlugin
 {
+    public $preDefinedStage = IStateMachine::STAGE__MACHINE_INIT_CONFIG;
+
     /**
      * @param IStateMachine $machine
      * @param string $config

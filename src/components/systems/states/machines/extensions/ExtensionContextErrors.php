@@ -2,6 +2,7 @@
 namespace jeyroik\extas\components\systems\states\machines\extensions;
 
 use jeyroik\extas\components\systems\Extension;
+use jeyroik\extas\interfaces\systems\contexts\IContextErrors;
 use jeyroik\extas\interfaces\systems\IContext;
 
 /**
@@ -10,7 +11,7 @@ use jeyroik\extas\interfaces\systems\IContext;
  * @package jeyroik\extas\components\systems\states\machines\extensions
  * @author Funcraft <me@funcraft.ru>
  */
-class ExtensionContextErrors extends Extension
+class ExtensionContextErrors extends Extension implements IContextErrors
 {
     const CONTEXT__ITEM__ERRORS = '@directive.errors()';
 

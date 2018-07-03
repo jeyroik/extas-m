@@ -1,6 +1,11 @@
 <?php
 namespace jeyroik\extas\components\systems\packages;
 
+use jeyroik\extas\components\systems\Extension;
+use jeyroik\extas\components\systems\extensions\ExtensionRepository;
+use jeyroik\extas\components\systems\Plugin;
+use jeyroik\extas\components\systems\plugins\PluginCrawler;
+use jeyroik\extas\components\systems\plugins\PluginRepository;
 use jeyroik\extas\interfaces\systems\packages\IPackageGenerator;
 use Symfony\Component\Finder\Finder;
 use Symfony\Component\Finder\SplFileInfo;
@@ -47,7 +52,7 @@ class PackageGenerator implements IPackageGenerator
         $config = $this->extractPlugins($config);
         $config = $this->extractExtensions($config);
 
-        return file_put_contents($this->configName, json_encode($config));
+        return file_put_contents($this->configName, json_encode($config, JSON_PRETTY_PRINT));
     }
 
     /**
@@ -60,6 +65,11 @@ class PackageGenerator implements IPackageGenerator
         $finder = new Finder();
         $finder->name('Extension*.php');
 
+        $skipClasses = [
+            Extension::class => true,
+            ExtensionRepository::class => true
+        ];
+
         foreach ($finder->in($this->whereToSearch)->files() as $file) {
             /**
              * @var $file SplFileInfo
@@ -68,6 +78,11 @@ class PackageGenerator implements IPackageGenerator
             if (isset($match[1])) {
                 $namespace = array_pop($match);
                 $className = $namespace . '\\' . $file->getBasename('.php');
+
+                if (isset($skipClasses[$className])) {
+                    continue;
+                }
+
                 $classReflection = new \ReflectionClass($className);
 
                 $config['extensions'][] = [
@@ -146,6 +161,12 @@ class PackageGenerator implements IPackageGenerator
         $finder = new Finder();
         $finder->name('Plugin*.php');
 
+        $skipClasses = [
+            Plugin::class => true,
+            PluginRepository::class => true,
+            PluginCrawler::class => true
+        ];
+
         foreach ($finder->in($this->whereToSearch)->files() as $file) {
             /**
              * @var $file SplFileInfo
@@ -154,8 +175,12 @@ class PackageGenerator implements IPackageGenerator
             if (isset($match[1])) {
                 $namespace = array_pop($match);
                 $className = $namespace . '\\' . $file->getBasename('.php');
-                $classReflection = new \ReflectionClass($className);
 
+                if (isset($skipClasses[$className])) {
+                    continue;
+                }
+
+                $classReflection = new \ReflectionClass($className);
                 $properties = $classReflection->getDefaultProperties();
 
                 if (isset($properties['preDefinedStage'])) {

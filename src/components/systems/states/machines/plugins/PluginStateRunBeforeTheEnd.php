@@ -13,6 +13,8 @@ use jeyroik\extas\interfaces\systems\states\machines\plugins\IPluginStateRunBefo
  */
 class PluginStateRunBeforeTheEnd extends Plugin implements IPluginStateRunBefore
 {
+    public $preDefinedStage = IStateMachine::STAGE__STATE_RUN_BEFORE;
+
     /**
      * @param IStateMachine $machine
      * @param string $stateId
