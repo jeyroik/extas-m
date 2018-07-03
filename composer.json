@@ -19,6 +19,6 @@
     }
   },
   "bin": [
-    "resources/bin/console.php"
+    "resources/bin/extas"
   ]
 }
