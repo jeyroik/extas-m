@@ -1,8 +1,9 @@
 <?php
 namespace jeyroik\extas\components\systems\extensions;
 
+use jeyroik\extas\components\systems\repositories\RepositoryMongo;
 use jeyroik\extas\interfaces\systems\IExtension;
-use tratabor\interfaces\systems\extensions\IExtensionRepository;
+use jeyroik\extas\interfaces\systems\IRepository;
 
 /**
  * Class ExtensionRepository
@@ -10,7 +11,7 @@ use tratabor\interfaces\systems\extensions\IExtensionRepository;
  * @package jeyroik\extas\components\systems\extensions
  * @author Funcraft <me@funcraft.ru>
  */
-class ExtensionRepository implements IExtensionRepository
+class ExtensionRepository extends RepositoryMongo implements IRepository
 {
     const CONFIG__METHODS = 0;
     const CONFIG__IMPLEMENTATIONS = 1;
