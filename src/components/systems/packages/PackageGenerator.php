@@ -69,32 +69,71 @@ class PackageGenerator implements IPackageGenerator
                 $namespace = array_pop($match);
                 $className = $namespace . '\\' . $file->getBasename('.php');
                 $classReflection = new \ReflectionClass($className);
-                $methodsProperty = $classReflection->getProperty('methods');
-                $methods = ($preDefinedMethods = $methodsProperty->getValue())
-                    ? array_keys($preDefinedMethods)
-                    : ['Missed, please, define $methods property in an extension class'];
-
-                $subjectProperty = $classReflection->getProperty('subject');
-                $subject = ($preDefinedSubject = $subjectProperty->getValue())
-                    ? $preDefinedSubject
-                    : 'Missed, please, define $subject property in an extension class';
-
-                $interfaces = $classReflection->getInterfaceNames();
-
-                $interface = empty($interfaces)
-                    ? 'Missed, please, define interface in an extension class'
-                    : array_pop($interfaces);
 
                 $config['extensions'][] = [
                     'class' => $className,
-                    'interface' => $interface,
-                    'subject' => $subject,
-                    'methods' => $methods
+                    'interface' => $this->extractExtensionInterface($classReflection),
+                    'subject' => $this->extractExtensionSubject($classReflection),
+                    'methods' => $this->extractExtensionMethods($classReflection)
                 ];
             }
         }
 
         return $config;
+    }
+
+    /**
+     * @param \ReflectionClass $classReflection
+     *
+     * @return array
+     */
+    protected function extractExtensionMethods($classReflection)
+    {
+        $methods = ['Missed, please, define $methods property in an extension class'];
+
+        if ($classReflection->hasProperty('methods')) {
+            $methodsProperty = $classReflection->getProperty('methods');
+            $methods = ($preDefinedMethods = $methodsProperty->getValue())
+                ? array_keys($preDefinedMethods)
+                : $methods;
+        }
+
+        return $methods;
+    }
+
+    /**
+     * @param \ReflectionClass $classReflection
+     *
+     * @return string
+     */
+    protected function extractExtensionSubject($classReflection)
+    {
+        $subject = 'Missed, please, define $subject property in an extension class';
+
+        if ($classReflection->hasProperty('subject')) {
+            $subjectProperty = $classReflection->getProperty('subject');
+            $subject = ($preDefinedSubject = $subjectProperty->getValue())
+                ? $preDefinedSubject
+                : $subject;
+        }
+
+        return $subject;
+    }
+
+    /**
+     * @param \ReflectionClass $classReflection
+     *
+     * @return string
+     */
+    protected function extractExtensionInterface($classReflection)
+    {
+        $interfaces = $classReflection->getInterfaceNames();
+
+        $interface = empty($interfaces)
+            ? 'Missed, please, define interface in an extension class'
+            : array_pop($interfaces);
+
+        return $interface;
     }
 
     /**
@@ -116,11 +155,16 @@ class PackageGenerator implements IPackageGenerator
                 $namespace = array_pop($match);
                 $className = $namespace . '\\' . $file->getBasename('.php');
                 $classReflection = new \ReflectionClass($className);
-                $stageProperty = $classReflection->getProperty('preDefinedStage');
 
-                $stage = ($preDefinedStage = $stageProperty->getValue())
-                    ? $preDefinedStage
-                    : 'Missed: please, define $preDefinedStage property in a plugin class';
+                if ($classReflection->hasProperty('preDefinedStage')) {
+                    $stageProperty = $classReflection->getProperty('preDefinedStage');
+                    $stage = ($preDefinedStage = $stageProperty->getValue())
+                        ? $preDefinedStage
+                        : 'Missed: please, define $preDefinedStage property in a plugin class';
+                } else {
+                    $stage = 'Missed: please, define $preDefinedStage property in a plugin class';
+                }
+
 
                 $config['plugins'][] = [
                     'class' => $className,
