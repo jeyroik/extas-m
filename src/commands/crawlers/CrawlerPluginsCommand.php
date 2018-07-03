@@ -42,8 +42,7 @@ class CrawlerPluginsCommand extends Command
             ->addArgument(
                 static::ARGUMENT__CRAWLING_CONFIG,
                 InputArgument::REQUIRED,
-                'Crawling configuration path',
-                ''
+                'Crawling configuration path'
             )
             ->addArgument(
                 static::ARGUMENT__PRINT,
