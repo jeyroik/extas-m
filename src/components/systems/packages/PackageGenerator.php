@@ -82,7 +82,7 @@ class PackageGenerator implements IPackageGenerator
                 if (isset($skipClasses[$className])) {
                     continue;
                 }
-
+                require_once $file->getRealPath();
                 $classReflection = new \ReflectionClass($className);
 
                 $config['extensions'][] = [
@@ -179,6 +179,8 @@ class PackageGenerator implements IPackageGenerator
                 if (isset($skipClasses[$className])) {
                     continue;
                 }
+
+                require_once $file->getRealPath();
 
                 $classReflection = new \ReflectionClass($className);
                 $properties = $classReflection->getDefaultProperties();
