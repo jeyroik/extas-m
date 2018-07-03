@@ -13,7 +13,7 @@ use jeyroik\extas\interfaces\systems\states\machines\plugins\IPluginStateRunBefo
  */
 class PluginStateRunBeforeExistingState extends Plugin implements IPluginStateRunBefore
 {
-    protected $preDefinedStage = IStateMachine::STAGE__STATE_RUN_BEFORE;
+    public $preDefinedStage = IStateMachine::STAGE__STATE_RUN_BEFORE;
 
     /**
      * @param IStateMachine $machine

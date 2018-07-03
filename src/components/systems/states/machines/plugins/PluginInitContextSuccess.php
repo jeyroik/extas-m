@@ -2,11 +2,8 @@
 namespace jeyroik\extas\components\systems\states\machines\plugins;
 
 use jeyroik\extas\components\systems\Plugin;
-use jeyroik\extas\components\systems\states\StateMachine;
 use jeyroik\extas\interfaces\systems\IContext;
 use jeyroik\extas\interfaces\systems\IPlugin;
-use jeyroik\extas\interfaces\systems\states\IStateMachine;
-use jeyroik\extas\interfaces\systems\states\machines\plugins\IPluginInitContext;
 
 /**
  * Class PluginInitContextSuccess
@@ -18,8 +15,7 @@ class PluginInitContextSuccess extends Plugin implements IPlugin
 {
     const CONTEXT__SUCCESS = '@directive.success()';
 
-    protected $preDefinedStage = IContext::SUBJECT . '.init';
-    protected $preDefinedVersion = '1.0';
+    public $preDefinedStage = IContext::SUBJECT . '.init';
 
     /**
      * @param IContext $context

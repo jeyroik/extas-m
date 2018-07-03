@@ -15,8 +15,8 @@ use jeyroik\extas\interfaces\systems\IPlugin;
  */
 class Plugin extends Item implements IPlugin
 {
-    protected $preDefinedClass = '';
-    protected $preDefinedStage = '';
+    public $preDefinedClass = '';
+    public $preDefinedStage = '';
 
     /**
      * @param $config

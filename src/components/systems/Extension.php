@@ -14,7 +14,8 @@ class Extension extends Item implements IExtension
     /**
      * @var array
      */
-    protected $methods = [];
+    public $methods = [];
+    public $subject = '';
 
     /**
      * @param $subject
