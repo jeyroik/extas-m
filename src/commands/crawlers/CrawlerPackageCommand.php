@@ -42,8 +42,7 @@ class CrawlerPackageCommand extends Command
             ->addArgument(
                 static::ARGUMENT__PATH_TO_PUT,
                 InputArgument::REQUIRED,
-                'Path where to put result config',
-                ''
+                'Path where to put result config'
             )
             ->addArgument(
                 static::ARGUMENT__CONFIG_NAME,
