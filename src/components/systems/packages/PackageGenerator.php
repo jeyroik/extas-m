@@ -65,11 +65,6 @@ class PackageGenerator implements IPackageGenerator
         $finder = new Finder();
         $finder->name('Extension*.php');
 
-        $skipClasses = [
-            Extension::class => true,
-            ExtensionRepository::class => true
-        ];
-
         foreach ($finder->in($this->whereToSearch)->files() as $file) {
             /**
              * @var $file SplFileInfo
@@ -79,9 +74,10 @@ class PackageGenerator implements IPackageGenerator
                 $namespace = array_pop($match);
                 $className = $namespace . '\\' . $file->getBasename('.php');
 
-                if (isset($skipClasses[$className])) {
+                if (!$this->isValidPath($className) || !$this->isValidPath($file->getRealPath())) {
                     continue;
                 }
+
                 require_once $file->getRealPath();
                 $classReflection = new \ReflectionClass($className);
 
@@ -161,12 +157,6 @@ class PackageGenerator implements IPackageGenerator
         $finder = new Finder();
         $finder->name('Plugin*.php');
 
-        $skipClasses = [
-            Plugin::class => true,
-            PluginRepository::class => true,
-            PluginCrawler::class => true
-        ];
-
         foreach ($finder->in($this->whereToSearch)->files() as $file) {
             /**
              * @var $file SplFileInfo
@@ -176,31 +166,74 @@ class PackageGenerator implements IPackageGenerator
                 $namespace = array_pop($match);
                 $className = $namespace . '\\' . $file->getBasename('.php');
 
-                if (isset($skipClasses[$className])) {
+                if (!$this->isValidPath($className) || !$this->isValidPath($file->getRealPath())) {
                     continue;
                 }
 
                 require_once $file->getRealPath();
 
                 $classReflection = new \ReflectionClass($className);
-                $properties = $classReflection->getDefaultProperties();
-
-                if (isset($properties['preDefinedStage'])) {
-                    $stage = ($preDefinedStage = $properties['preDefinedStage'])
-                        ? $preDefinedStage
-                        : 'Missed: please, define $preDefinedStage property in a plugin class';
-                } else {
-                    $stage = 'Missed: please, define $preDefinedStage property in a plugin class';
-                }
 
                 $config['plugins'][] = [
                     'class' => $className,
-                    'stage' => $stage
+                    'stage' => $this->extractPluginStage($classReflection)
                 ];
             }
         }
 
         return $config;
+    }
+
+    /**
+     * @param $path
+     *
+     * @return bool
+     */
+    protected function isValidPath($path)
+    {
+        $skip = [
+            Plugin::class => true,
+            PluginRepository::class => true,
+            PluginCrawler::class => true,
+            Extension::class => true,
+            ExtensionRepository::class => true
+        ];
+
+        $restrictedArea = [
+            'vendor/'
+        ];
+
+        if (isset($skip[$path])) {
+            return false;
+        }
+
+        foreach ($restrictedArea as $area) {
+            if (strpos($path, $area) !== false) {
+                return false;
+            }
+        }
+
+        return true;
+    }
+
+    /**
+     * @param \ReflectionClass $classReflection
+     *
+     * @return string
+     */
+    protected function extractPluginStage($classReflection)
+    {
+        $properties = $classReflection->getDefaultProperties();
+
+        if (isset($properties['preDefinedStage'])) {
+            $stage = ($preDefinedStage = $properties['preDefinedStage'])
+                ? $preDefinedStage
+                : 'Missed: please, define $preDefinedStage property in a plugin class';
+        } else {
+            $stage = 'Missed: please, define $preDefinedStage property in a plugin class';
+        }
+
+        return $stage;
     }
 
     /**
