@@ -14,9 +14,11 @@ class ExtensionContextErrors extends Extension
 {
     const CONTEXT__ITEM__ERRORS = '@directive.errors()';
 
-    protected $methods = [
+    public $methods = [
         'addError' => ExtensionContextErrors::class
     ];
+
+    public $subject = IContext::SUBJECT;
 
     /**
      * @param mixed $error
