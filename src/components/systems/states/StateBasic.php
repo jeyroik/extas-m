@@ -46,7 +46,7 @@ class StateBasic extends Item implements IState
      */
     public function getId(): string
     {
-        return $this->id;
+        return (string) $this->id;
     }
 
     /**
