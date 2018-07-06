@@ -44,10 +44,9 @@ This is reached by extensions.
 ## plugins
 
 - create you plugin
-- put it on machine config
+- require it to you project
 
 ## extensions
 
 - create extension
-- create plugin (for now) for init-stage of object you want to extend: register you interface in this plugin
-- see plugins description
+- require it to your project
