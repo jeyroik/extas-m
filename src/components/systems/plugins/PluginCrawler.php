@@ -133,12 +133,11 @@ class PluginCrawler implements IPluginCrawler
     {
         $rootPackageName = $this->config[static::CONFIG__PACKAGE__ROOT_NAME];
         $rootPackageExtractor = $this->config[static::CONFIG__PACKAGE__ROOT_EXTRACTOR];
+        $this->rootPackagePath = $this->rootPath . '/' . $rootPackageName;
 
         if (!is_callable($rootPackageExtractor)) {
             $rootPackageExtractor = new $rootPackageExtractor();
         }
-
-        $this->rootPackagePath = $this->rootPath . '/' . $rootPackageName;
 
         return $rootPackageExtractor($this->rootPackagePath);
     }

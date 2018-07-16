@@ -14,13 +14,18 @@ class PackageRootComposer implements IPackageRoot
     protected $packageContent = [];
 
     /**
-     * PackageRootComposer constructor.
+     * @param $packagePath
      *
-     * @param $packageContent
+     * @return $this
      */
-    public function __construct($packageContent)
+    public function __invoke($packagePath)
     {
-        $this->setPackageContent($packageContent);
+        if (is_file($packagePath)) {
+            $packageContent = json_decode(file_get_contents($packagePath), true);
+            $this->setPackageContent($packageContent);
+        }
+
+        return $this;
     }
 
     /**

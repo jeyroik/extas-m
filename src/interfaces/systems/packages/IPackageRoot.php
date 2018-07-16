@@ -12,9 +12,9 @@ interface IPackageRoot
     /**
      * IPackageRoot constructor.
      *
-     * @param $packageContent
+     * @param $packagePackagePath
      */
-    public function __construct($packageContent);
+    public function __invoke($packagePackagePath);
 
     /**
      * @return bool
