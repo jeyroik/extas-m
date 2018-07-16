@@ -4,12 +4,28 @@ namespace jeyroik\extas\interfaces\systems;
 /**
  * Interface IExtension
  *
+ * @stage.expand.type IExtension
+ * @stage.expand.name jeyroik\extas\interfaces\systems\IExtension
+ *
+ * @stage.name extension.init
+ * @stage.description Extension initialization finish
+ * @stage.input IExtension
+ * @stage.output void
+ *
+ * @stage.name extension.after
+ * @stage.description Extension destructing
+ * @stage.input IExtension
+ * @stage.output void
+ *
  * @package jeyroik\extas\interfaces\systems\states
  * @author Funcraft <me@funcraft.ru>
  */
 interface IExtension extends IItem
 {
     const SUBJECT = 'extension';
+
+    const STAGE__EXTENSION_INIT = 'extension.init';
+    const STAGE__EXTENSION_AFTER = 'extension.after';
 
     const FIELD__CLASS = 'class';
     const FIELD__INTERFACE = 'interface';

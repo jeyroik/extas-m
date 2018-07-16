@@ -4,6 +4,7 @@ namespace jeyroik\extas\components\dispatchers;
 use jeyroik\extas\components\systems\Item;
 use jeyroik\extas\components\systems\states\machines\extensions\ExtensionContextErrors;
 use jeyroik\extas\components\systems\states\machines\plugins\PluginInitContextSuccess;
+use jeyroik\extas\interfaces\systems\contexts\IContextErrors;
 use jeyroik\extas\interfaces\systems\IContext;
 use jeyroik\extas\interfaces\systems\IState;
 use jeyroik\extas\interfaces\systems\states\IStateDispatcher;
@@ -75,7 +76,7 @@ abstract class DispatcherAbstract extends Item implements IStateDispatcher
     protected function initDefault()
     {
         if (!in_array(ExtensionContextErrors::class, $this->requireInterfaces)) {
-            $this->requireInterfaces[] = ExtensionContextErrors::class;
+            $this->requireInterfaces[] = IContextErrors::class;
         }
 
         return $this;

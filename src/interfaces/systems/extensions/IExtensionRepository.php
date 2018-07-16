@@ -1,39 +1,14 @@
 <?php
-namespace tratabor\interfaces\systems\extensions;
+namespace jeyroik\extas\interfaces\systems\extensions;
 
-use jeyroik\extas\interfaces\systems\IExtension;
 use jeyroik\extas\interfaces\systems\IRepository;
 
 /**
  * Interface IExtensionRepository
  *
- * @package tratabor\interfaces\systems\states\extensions
+ * @package jeyroik\extas\interfaces\systems\extensions
  * @author Funcraft <me@funcraft.ru>
  */
 interface IExtensionRepository extends IRepository
 {
-    /**
-     * @param $subject
-     * @param $interface
-     * @param $interfaceImplementation
-     * @param array $methods
-     *
-     * @return bool
-     */
-    public static function addExtension($subject, $interface, $interfaceImplementation, $methods = []): bool;
-
-    /**
-     * @param $subject
-     * @param $method
-     *
-     * @return IExtension|string
-     */
-    public static function getExtension($subject, $method);
-
-    /**
-     * @param $interface
-     *
-     * @return bool
-     */
-    public static function hasInterfaceImplementation($interface): bool;
 }

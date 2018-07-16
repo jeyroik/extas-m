@@ -77,6 +77,13 @@ class CrawlerPluginsCommand extends Command
                 '=============================='
             ]);
 
+            if ($crawler->hasWarnings()) {
+                $output->writeln([
+                    'There are some warnings:',
+                    implode(PHP_EOL, $crawler->getWarnings())
+                ]);
+            }
+
             $plugins = $crawler->getPackagesInfo();
 
             count($plugins) && $output->writeln([

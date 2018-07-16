@@ -5,12 +5,29 @@ use jeyroik\extas\interfaces\systems\states\IStateDispatcher;
 
 /**
  * Interface IState
+ *
+ * @stage.expand.type IState
+ * @stage.expand.name jeyroik\extas\interfaces\systems\IState
+ *
+ * @stage.name state.init
+ * @stage.description State initialization finish
+ * @stage.input IState $state
+ * @stage.output void
+ *
+ * @stage.name state.after
+ * @stage.description State destructing
+ * @stage.input IState $state
+ * @stage.output void
+ *
  * @package jeyroik\extas\interfaces\system
  * @author Funcraft <me@funcraft.ru>
  */
 interface IState extends IItem
 {
     const SUBJECT = 'state';
+
+    const STAGE__STATE_INIT = 'state.init';
+    const STAGE__STATE_AFTER = 'state.after';
 
     const FIELD__ID = 'id';
     const FIELD__FROM_STATE = 'from_state';

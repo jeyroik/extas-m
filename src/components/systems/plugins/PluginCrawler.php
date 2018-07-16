@@ -13,7 +13,9 @@ use jeyroik\extas\interfaces\systems\packages\IPackageRoot;
 use jeyroik\extas\interfaces\systems\plugins\crawlers\ICrawlerPackage;
 use jeyroik\extas\interfaces\systems\plugins\IPluginCrawler;
 use jeyroik\extas\interfaces\systems\plugins\IPluginRepository;
-use tratabor\interfaces\systems\extensions\IExtensionRepository;
+use jeyroik\extas\interfaces\systems\extensions\IExtensionRepository;
+use jeyroik\extas\interfaces\systems\plugins\IPluginStage;
+use jeyroik\extas\interfaces\systems\plugins\stages\IStageRepository;
 
 /**
  * Class PluginCrawler
@@ -38,6 +40,11 @@ class PluginCrawler implements IPluginCrawler
      * @var ICrawlerPackage[]
      */
     protected $packages = [];
+
+    /**
+     * @var array
+     */
+    protected $warnings = [];
 
     /**
      * PluginCrawler constructor.
@@ -71,6 +78,22 @@ class PluginCrawler implements IPluginCrawler
     public function getPackagesInfo()
     {
         return $this->packages;
+    }
+
+    /**
+     * @return bool
+     */
+    public function hasWarnings(): bool
+    {
+        return !empty($this->warnings);
+    }
+
+    /**
+     * @return array
+     */
+    public function getWarnings(): array
+    {
+        return $this->warnings;
     }
 
     /**
@@ -152,12 +175,18 @@ class PluginCrawler implements IPluginCrawler
         return $package;
     }
 
+    /**
+     * @param $packages
+     *
+     * @return $this
+     * @throws \Exception
+     */
     protected function grabPackages($packages)
     {
         /**
          * @var $storage IRepository
          */
-        $storage = SystemContainer::getItem(IPluginRepository::class);
+        $storage = SystemContainer::getItem(IPackageRepository::class);
         $packageExtractor = $this->getPackageExtractor();
 
         foreach ($packages as $packageName => $packageInfo) {
@@ -181,8 +210,9 @@ class PluginCrawler implements IPluginCrawler
 
             if ($package) {
                 $this->packages[] = $package;
-                $storage->create($packageDb);
-                $this->savePlugins($package->getPlugins())->saveExtensions($package->getExtensions());
+                $storage->create($package);
+                $this->savePlugins($package->getPlugins())
+                    ->saveExtensions($package->getExtensions());
             } else {
                 throw new \Exception('Can not read package info for "' . $packageName . '".');
             }
@@ -211,6 +241,7 @@ class PluginCrawler implements IPluginCrawler
      * @param $extensions
      *
      * @return $this
+     * @throws \Exception
      */
     protected function saveExtensions($extensions)
     {
@@ -227,9 +258,15 @@ class PluginCrawler implements IPluginCrawler
              */
             $extensionDb = $storage->find([IExtension::FIELD__ID => $extensionId])->one();
 
-            if ($extensionDb->getId() == $extensionId) {
+            if ($extensionDb) {
                 continue;
             }
+
+            $this->checkMethodsForDuplicating(
+                $extension[IExtension::FIELD__SUBJECT],
+                $extension[IExtension::FIELD__METHODS],
+                $storage
+            );
 
             $extensionDb->setId($extensionId)
                 ->setSubject($extension[IExtension::FIELD__SUBJECT])
@@ -241,6 +278,38 @@ class PluginCrawler implements IPluginCrawler
         }
 
         $storage->commit();
+
+        return $this;
+    }
+
+    /**
+     * @param string $subject
+     * @param array $methods
+     * @param IExtensionRepository $storage
+     *
+     * @return $this
+     * @throws \Exception
+     */
+    protected function checkMethodsForDuplicating($subject, $methods, $storage)
+    {
+        foreach ($methods as $method) {
+            /**
+             * @var $extensionWithTheSameMethod IExtension
+             */
+            $extensionWithTheSameMethod = $storage->find([
+                IExtension::FIELD__SUBJECT => $subject,
+                IExtension::FIELD__METHODS => $method
+            ])->one();
+
+            if ($extensionWithTheSameMethod) {
+                throw new \Exception(
+                    'Method "' . $method . '" is already reserved for the subject "'
+                    . $subject . '" with the extension #'
+                    . $extensionWithTheSameMethod->getId() . ' '
+                    . $extensionWithTheSameMethod->getClass()
+                );
+            }
+        }
 
         return $this;
     }
@@ -267,6 +336,11 @@ class PluginCrawler implements IPluginCrawler
          */
         $storage = SystemContainer::getItem(IPluginRepository::class);
 
+        /**
+         * @var $stagesRepo IStageRepository
+         */
+        $stagesRepo = SystemContainer::getItem(IStageRepository::class);
+
         foreach ($plugins as $plugin) {
             $pluginId = $this->preparePluginId($plugin);
 
@@ -283,10 +357,31 @@ class PluginCrawler implements IPluginCrawler
                 ->setClass($plugin[IPlugin::FIELD__CLASS])
                 ->setStage($plugin[IPlugin::FIELD__STAGE]);
 
+            /**
+             * @var $stage IPluginStage
+             */
+            $stage = $stagesRepo->find([IPluginStage::FIELD__NAME => $pluginDb->getStage()])->one();
+
+            if ($stage->getName() != $pluginDb->getStage()) {
+                $this->addWarning('Unknown stage "' . $pluginDb->getStage() . '"');
+            }
+
             $storage->create($pluginDb);
         }
 
         $storage->commit();
+
+        return $this;
+    }
+
+    /**
+     * @param $message
+     *
+     * @return $this
+     */
+    protected function addWarning($message)
+    {
+        $this->warnings[] = $message;
 
         return $this;
     }

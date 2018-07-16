@@ -34,4 +34,14 @@ interface IPluginCrawler
      * @return ICrawlerPackage[]
      */
     public function getPackagesInfo();
+
+    /**
+     * @return bool
+     */
+    public function hasWarnings(): bool;
+
+    /**
+     * @return array
+     */
+    public function getWarnings(): array;
 }

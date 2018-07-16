@@ -3,7 +3,7 @@
 use jeyroik\extas\interfaces\systems\IState as State;
 use jeyroik\extas\interfaces\systems\states\IStateMachine as Machine;
 use jeyroik\extas\interfaces\systems\states\machines\IMachineConfig;
-use jeyroik\extas\components\systems\states\plugins\ExtensionMaxTry as EMaxTry;
+use jeyroik\extas\components\systems\states\extensions\ExtensionMaxTry as EMaxTry;
 use jeyroik\extas\components\systems\states\plugins\PluginStateRunNextOnFailure as POnFail;
 
 return [

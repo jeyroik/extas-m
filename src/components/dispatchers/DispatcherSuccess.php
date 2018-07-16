@@ -1,12 +1,8 @@
 <?php
 namespace jeyroik\extas\components\dispatchers;
 
-use jeyroik\extas\components\systems\states\machines\plugins\PluginInitContextSuccess;
+use jeyroik\extas\interfaces\systems\contexts\IContextOnFailure;
 use jeyroik\extas\interfaces\systems\IContext;
-use jeyroik\extas\interfaces\systems\IState;
-use jeyroik\extas\interfaces\systems\states\IStateDispatcher;
-use jeyroik\extas\interfaces\systems\states\IStateMachine;
-
 
 /**
  * Class DispatcherTest
@@ -14,20 +10,23 @@ use jeyroik\extas\interfaces\systems\states\IStateMachine;
  * @package jeyroik\extas\components\dispatchers
  * @author Funcraft <me@funcraft.ru>
  */
-class DispatcherSuccess implements IStateDispatcher
+class DispatcherSuccess extends DispatcherAbstract
 {
     protected static $counter = 0;
 
+    protected $requireInterfaces = [
+        IContextOnFailure::class
+    ];
+
     /**
-     * @param IState $currentState
-     * @param IContext $context
-     * 
+     * @param IContext|IContextOnFailure $context
+     *
      * @return IContext
      */
-    public function __invoke(IState $currentState, IContext $context): IContext
+    protected function dispatch(IContext $context): IContext
     {
-        $context->pushItemByName(static::class . '.' . static::$counter, 'worked');
-        $context->updateItem(PluginInitContextSuccess::CONTEXT__SUCCESS, true);
+        $context[static::class . '.' . static::$counter] = 'worked';
+        $context->setSuccess();
 
         static::$counter++;
 

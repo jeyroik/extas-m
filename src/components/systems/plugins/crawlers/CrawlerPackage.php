@@ -1,6 +1,7 @@
 <?php
 namespace jeyroik\extas\components\systems\plugins\crawlers;
 
+use jeyroik\extas\components\systems\Item;
 use jeyroik\extas\interfaces\systems\plugins\crawlers\ICrawlerPackage;
 
 /**
@@ -9,7 +10,7 @@ use jeyroik\extas\interfaces\systems\plugins\crawlers\ICrawlerPackage;
  * @package jeyroik\extas\components\systems\plugins\crawlers
  * @author Funcraft <me@funcraft.ru>
  */
-class CrawlerPackage implements ICrawlerPackage
+class CrawlerPackage extends Item implements ICrawlerPackage
 {
     const CONFIG__NAME = 'name';
     const CONFIG__DESCRIPTION = 'description';
@@ -27,16 +28,6 @@ class CrawlerPackage implements ICrawlerPackage
     const CONFIG__PACKAGE = 'package';
 
     protected $config = [];
-
-    /**
-     * CrawlerPluginInfo constructor.
-     *
-     * @param array $config
-     */
-    public function __construct($config = [])
-    {
-        $this->setConfig($config);
-    }
 
     /**
      * @return array|mixed
@@ -60,34 +51,6 @@ class CrawlerPackage implements ICrawlerPackage
     public function getDescription(): string
     {
         return $this->config[static::CONFIG__DESCRIPTION] ?? '';
-    }
-
-    /**
-     * @param $name
-     *
-     * @return array|mixed
-     */
-    public function getRequire($name = '')
-    {
-        if ($name && isset($this->config[static::CONFIG__REQUIRE])) {
-            return $this->config[static::CONFIG__REQUIRE][$name] ?? [];
-        }
-
-        return $this->config[static::CONFIG__REQUIRE] ?? [];
-    }
-
-    /**
-     * @param $name
-     *
-     * @return array
-     */
-    public function getProduce($name = '')
-    {
-        if ($name && isset($this->config[static::CONFIG__PRODUCE])) {
-            return $this->config[static::CONFIG__PRODUCE][$name] ?? [];
-        }
-
-        return $this->config[static::CONFIG__PRODUCE] ?? [];
     }
 
     /**

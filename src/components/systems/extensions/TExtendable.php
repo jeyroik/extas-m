@@ -4,9 +4,8 @@ namespace jeyroik\extas\components\systems\extensions;
 use jeyroik\extas\components\systems\plugins\TPluginAcceptable;
 use jeyroik\extas\components\systems\SystemContainer;
 use jeyroik\extas\interfaces\systems\IExtendable;
-use jeyroik\extas\interfaces\systems\plugins\IPluginRepository;
 use jeyroik\extas\interfaces\systems\IExtension;
-use tratabor\interfaces\systems\extensions\IExtensionRepository;
+use jeyroik\extas\interfaces\systems\extensions\IExtensionRepository;
 
 /**
  * Trait TExtendable
@@ -41,10 +40,17 @@ trait TExtendable
          * @var $extRepo IExtensionRepository
          */
         $extRepo = SystemContainer::getItem(IExtensionRepository::class);
-        $extension = $extRepo::getExtension($this->getSubjectForExtension(), $name);
 
-        if (is_string($extension)) {
-            throw new \Exception($extension);
+        /**
+         * @var $extension IExtension
+         */
+        $extension = $extRepo->find([
+            IExtension::FIELD__SUBJECT => $this->getSubjectForExtension(),
+            IExtension::FIELD__METHODS => $name
+        ])->one();
+
+        if (!$extension) {
+            throw new \Exception('Unknown method "' . $name . '".');
         }
 
         foreach ($this->getPluginsByStage(IExtendable::STAGE__EXTENDED_METHOD_CALL) as $plugin) {
@@ -66,13 +72,14 @@ trait TExtendable
          * @var $extRepo IExtensionRepository
          */
         $extRepo = SystemContainer::getItem(IExtensionRepository::class);
+        $extRepo->create([
+            IExtension::FIELD__SUBJECT => $this->getSubjectForExtension(),
+            IExtension::FIELD__INTERFACE => $interface,
+            IExtension::FIELD__CLASS => get_class($interfaceImplementation),
+            IExtension::FIELD__METHODS => $interfaceImplementation->getMethodsNames()
+        ]);
 
-        return $extRepo::addExtension(
-            $this,
-            $interface,
-            $interfaceImplementation,
-            $interfaceImplementation->getMethodsNames()
-        );
+        return true;
     }
 
     /**
@@ -87,7 +94,7 @@ trait TExtendable
          */
         $extRepo = SystemContainer::getItem(IExtensionRepository::class);
 
-        return $extRepo::hasInterfaceImplementation($interface);
+        return $extRepo->find([IExtension::FIELD__INTERFACE => $interface])->one() ? true : false;
     }
 
     /**

@@ -8,6 +8,19 @@ use jeyroik\extas\interfaces\systems\IPluginsAcceptable;
 /**
  * Interface IMachineConfig
  *
+ * @stage.expand.type IConfig
+ * @stage.expand.name jeyroik\extas\interfaces\systems\states\machines\IMachineConfig
+ *
+ * @stage.name machine.config.init
+ * @stage.description Machine config initialization finish
+ * @stage.input IConfig $config
+ * @stage.output void
+ *
+ * @stage.name machine.config.after
+ * @stage.description Machine config destructing
+ * @stage.input IConfig $config
+ * @stage.output void
+ *
  * @package jeyroik\extas\interfaces\systems\states\machines
  * @author Funcraft <me@funcraft.ru>
  */
@@ -15,16 +28,17 @@ interface IMachineConfig extends IItem
 {
     const SUBJECT = 'machine.config';
 
+    const STAGE__MACHINE_CONFIG_INIT = 'machine.config.init';
+    const STAGE__MACHINE_CONFIG_AFTER = 'machine.config.after';
+
     const FIELD__ALIAS = 'alias';
     const FIELD__VERSION = 'version';
     const FIELD__START_STATE = 'start_state';
     const FIELD__END_STATE = 'end_state';
     const FIELD__STATES = 'states';
 
-    const STAGE__ON_PROPERTY_SET = 'machine_config__on_property_set';
-    const STAGE__ON_PROPERTY_GET = 'machine_config__on_property_get';
-    const STAGE__CREATED = 'machine_config__created';
-    const STAGE__DESTRUCTED = 'machine_config__destructed';
+    const STAGE__ON_PROPERTY_SET = 'machine.config.property.set';
+    const STAGE__ON_PROPERTY_GET = 'machine.config.property.get';
 
     /**
      * @return IMachineVersion

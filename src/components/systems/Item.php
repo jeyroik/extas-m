@@ -16,7 +16,7 @@ use jeyroik\extas\interfaces\systems\states\machines\IMachineAvailable;
  * @package jeyroik\extas\components\systems
  * @author Funcraft <me@funcraft.ru>
  */
-class Item implements IItem, IMachineAvailable
+abstract class Item implements IItem, IMachineAvailable
 {
     use TMachineAvailable;
     use TExtendable;
@@ -223,13 +223,5 @@ class Item implements IItem, IMachineAvailable
         }
 
         return $this;
-    }
-
-    /**
-     * @return string
-     */
-    protected function getSubjectForExtension(): string
-    {
-        return IItem::class;
     }
 }
