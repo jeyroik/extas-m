@@ -40,6 +40,14 @@ class CrawlerPackage extends Item implements ICrawlerPackage
     /**
      * @return string
      */
+    public function getId(): string
+    {
+        return $this->config[static::FIELD__ID] ?? '';
+    }
+
+    /**
+     * @return string
+     */
     public function getName(): string
     {
         return $this->config[static::CONFIG__NAME] ?? '';
@@ -62,6 +70,134 @@ class CrawlerPackage extends Item implements ICrawlerPackage
     }
 
     /**
+     * @param string $name
+     *
+     * @return mixed
+     */
+    public function getExtensions($name = '')
+    {
+        return $this->config[static::FIELD__EXTENSIONS] ?? [];
+    }
+
+    /**
+     * @param $extensions
+     *
+     * @return $this
+     */
+    public function setExtensions($extensions)
+    {
+        $this->config[static::FIELD__EXTENSIONS] = $extensions;
+
+        return $this;
+    }
+
+    /**
+     * @param string $name
+     *
+     * @return mixed
+     */
+    public function getPlugins($name = '')
+    {
+        return $this->config[static::FIELD__PLUGINS] ?? [];
+    }
+
+    /**
+     * @param $plugins
+     *
+     * @return $this
+     */
+    public function setPlugins($plugins)
+    {
+        $this->config[static::FIELD__PLUGINS] = $plugins;
+
+        return $this;
+    }
+
+    /**
+     * @param $description
+     *
+     * @return $this
+     */
+    public function setDescription($description)
+    {
+        $this->config[static::FIELD__DESCRIPTION] = $description;
+
+        return $this;
+    }
+
+    /**
+     * @param $name
+     *
+     * @return $this
+     */
+    public function setName($name)
+    {
+        $this->config[static::FIELD__NAME] = $name;
+
+        return $this;
+    }
+
+    /**
+     * @return string
+     */
+    public function getTitle(): string
+    {
+        return $this->config[static::FIELD__TITLE] ?? '';
+    }
+
+    /**
+     * @param $title
+     *
+     * @return $this
+     */
+    public function setTitle($title)
+    {
+        $this->config[static::FIELD__TITLE] = $title;
+
+        return $this;
+    }
+
+    /**
+     * @return string
+     */
+    public function getVersion(): string
+    {
+        return $this->config[static::FIELD__VERSION] ?? '';
+    }
+
+    /**
+     * @param $version
+     *
+     * @return $this
+     */
+    public function setVersion($version)
+    {
+        $this->config[static::FIELD__VERSION] = $version;
+
+        return $this;
+    }
+
+    /**
+     * @return string
+     */
+    public function getState(): string
+    {
+        return $this->config[static::FIELD__STATE] ?? '';
+    }
+
+    /**
+     * @param $state
+     *
+     * @return $this
+     */
+    public function setState($state)
+    {
+        $this->config[static::FIELD__STATE] = $state;
+
+        return $this;
+    }
+
+    /**
      * @param $config
      *
      * @return $this
@@ -71,5 +207,13 @@ class CrawlerPackage extends Item implements ICrawlerPackage
         $this->config = $config;
 
         return $this;
+    }
+
+    /**
+     * @return string
+     */
+    protected function getSubjectForExtension(): string
+    {
+        return 'crawler.package';
     }
 }
