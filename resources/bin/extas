@@ -2,6 +2,8 @@
 <?php
 require getcwd() . '/vendor/autoload.php';
 
+define('EXTAS__APPLICATION_PATH', getcwd());
+
 use Symfony\Component\Console\Application;
 
 $application = new Application();

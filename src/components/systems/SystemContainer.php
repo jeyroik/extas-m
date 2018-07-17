@@ -47,8 +47,8 @@ class SystemContainer implements IContainer
      */
     protected function __construct()
     {
-        $containerConfigPath = getenv('G5__CONTAINER_PATH')
-            ?: G5__ROOT_PATH . '/resources/configs/container.php';
+        $containerConfigPath = getenv('EXTAS__CONTAINER_PATH')
+            ?: EXTAS__APPLICATION_PATH . '/resources/configs/container.php';
 
         if (is_file($containerConfigPath)) {
             $this->container = new Container();
