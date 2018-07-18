@@ -22,10 +22,9 @@ class PackageRootComposerExtractor implements IPackageRootExtractor
     public function __invoke($rootPackagePath): IPackageRoot
     {
         $finder = new Finder();
-        $finder->name($rootPackagePath);
         $rootPackage = [];
 
-        foreach ($finder->files() as $file) {
+        foreach ($finder->files()->in($rootPackagePath) as $file) {
             /**
              * @var $file SplFileInfo
              */
@@ -33,6 +32,8 @@ class PackageRootComposerExtractor implements IPackageRootExtractor
             break;
         }
 
-        return new PackageRootComposer($rootPackage);
+        $package = new PackageRootComposer();
+
+        return $package($rootPackage);
     }
 }
