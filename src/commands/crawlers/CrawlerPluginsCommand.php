@@ -100,7 +100,9 @@ class CrawlerPluginsCommand extends Command
 
             return 0;
         } catch (\Exception $e) {
-            $output->writeln(['Crawling error: '. $e->getMessage()]);
+            $output->writeln([
+                'Crawling error: '. $e->getMessage() . ' (' . $e->getFile() . ': ' , $e->getLine() . ')'
+            ]);
             return $e->getCode();
         }
     }
