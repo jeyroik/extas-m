@@ -72,7 +72,7 @@ class Plugin extends Item implements IPlugin
      */
     public function getId(): string
     {
-        return $this->id;
+        return (string) $this->id;
     }
 
     /**
