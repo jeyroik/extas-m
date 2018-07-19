@@ -1,6 +1,7 @@
 <?php
 namespace jeyroik\extas\components\systems\plugins;
 
+use jeyroik\extas\components\systems\Extension;
 use jeyroik\extas\components\systems\plugins\crawlers\CrawlerPackage;
 use jeyroik\extas\components\systems\SystemContainer;
 use jeyroik\extas\interfaces\systems\IExtension;
@@ -265,6 +266,7 @@ class PluginCrawler implements IPluginCrawler
                 $storage
             );
 
+            $extensionDb = new Extension();
             $extensionDb->setId($extensionId)
                 ->setSubject($extension[IExtension::FIELD__SUBJECT])
                 ->setClass($extension[IExtension::FIELD__CLASS])
