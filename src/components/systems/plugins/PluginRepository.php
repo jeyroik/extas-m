@@ -1,6 +1,7 @@
 <?php
 namespace jeyroik\extas\components\systems\plugins;
 
+use jeyroik\extas\components\systems\Plugin;
 use jeyroik\extas\components\systems\repositories\RepositoryMongo;
 use jeyroik\extas\interfaces\systems\plugins\IPluginRepository;
 
@@ -12,5 +13,6 @@ use jeyroik\extas\interfaces\systems\plugins\IPluginRepository;
  */
 class PluginRepository extends RepositoryMongo implements IPluginRepository
 {
-
+    protected $itemClass = Plugin::class;
+    protected $collectionName = 'extas__plugins';
 }

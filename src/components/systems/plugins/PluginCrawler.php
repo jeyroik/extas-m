@@ -212,8 +212,6 @@ class PluginCrawler implements IPluginCrawler
                 $storage->create($package);
                 $this->savePlugins($package->getPlugins())
                     ->saveExtensions($package->getExtensions());
-            } else {
-                throw new \Exception('Can not read package info for "' . $packageName . '".');
             }
         }
 
