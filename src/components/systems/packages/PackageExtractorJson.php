@@ -22,7 +22,7 @@ class PackageExtractorJson implements IPackageExtractor
      *
      * @return ICrawlerPackage
      */
-    public function __invoke($rootPath, $packageInfo, $packageConfigName): ICrawlerPackage
+    public function __invoke($rootPath, $packageInfo, $packageConfigName)
     {
         $fullPath = $rootPath . '/*/' . $packageInfo[ICrawlerPackage::FIELD__NAME] . '/';
         $finder = new Finder();
