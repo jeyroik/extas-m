@@ -84,7 +84,7 @@ class PluginStageProducer
         $finder->name('*.php');
         $this->stages = [];
 
-        foreach ($finder->files() as $file) {
+        foreach ($finder->files()->in($this->rootPath) as $file) {
             /**
              * @var $file SplFileInfo
              */
