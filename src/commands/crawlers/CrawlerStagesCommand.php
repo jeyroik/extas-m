@@ -58,8 +58,8 @@ class CrawlerStagesCommand extends Command
     protected function execute(InputInterface $input, OutputInterface $output)
     {
         $output->writeln([
-            '<fg=black;bg=white>Extas stages crawler </><fg=blue;bg=white>v1.0</>',
-            '<fg=black;bg=white>==========================</>'
+            '<fg=black;bg=white> Extas stages crawler </><fg=blue;bg=white>v1.0</><fg=black;bg=white> </>',
+            '<fg=black;bg=white> ========================== </>'
         ]);
 
         $rootPath = $input->getArgument(static::ARGUMENT__PATH);
@@ -70,7 +70,7 @@ class CrawlerStagesCommand extends Command
         try {
             $stagesCount = $crawler->findStages();
 
-            $output->writeln(['<info>Found ' . $stagesCount . ' stages.</info>']);
+            $output->writeln(['<info> Found ' . $stagesCount . ' stages. </info>']);
 
             /**
              * @var $helper QuestionHelper
@@ -97,8 +97,8 @@ class CrawlerStagesCommand extends Command
             if ($helper->ask($input, $output, $question)) {
                 $saved = $crawler->saveStages(new StageRepository(), $crawler->getStages());
                 $output->writeln([
-                    '<info>Saved ' . $saved . ' new stages.</info>',
-                    '<info>Already saved ' . $crawler->getAlreadySavedStages() . ' stages.</info>'
+                    '<info> Saved ' . $saved . ' new stages. </info>',
+                    '<info> Already saved ' . $crawler->getAlreadySavedStages() . ' stages. </info>'
                 ]);
             }
 
