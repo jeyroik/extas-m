@@ -7,6 +7,8 @@ define('EXTAS__APPLICATION_PATH', getcwd());
 use Symfony\Component\Console\Application;
 
 $application = new Application();
+$application->setName(PHP_EOL . ' Extas console tool ');
+$application->setVersion('1.0');
 $application->add(new \jeyroik\extas\commands\crawlers\CrawlerPluginsCommand());
 $application->add(new \jeyroik\extas\commands\crawlers\CrawlerPackageCommand());
 $application->add(new \jeyroik\extas\commands\crawlers\CrawlerStagesCommand());
