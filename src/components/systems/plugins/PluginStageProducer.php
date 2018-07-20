@@ -77,8 +77,8 @@ class PluginStageProducer
             /**
              * @var $stage IPluginStage
              */
-            $stage = $repository->find([IPluginStage::FIELD__NAME => $stage[IPluginStage::FIELD__NAME]])->one();
-            if ($stage->getName() == $stage[IPluginStage::FIELD__NAME]) {
+            $stageDb = $repository->find([IPluginStage::FIELD__NAME => $stage[IPluginStage::FIELD__NAME]])->one();
+            if ($stageDb->getName() == $stage[IPluginStage::FIELD__NAME]) {
                 continue;
             }
             $repository->create($stage);
