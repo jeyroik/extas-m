@@ -17,6 +17,7 @@ class PluginStageProducer
     protected $rootPath = '';
     protected $stages = [];
     protected $masks = [];
+    protected $alreadySavedStagesCount = 0;
 
     /**
      * PluginStageProducer constructor.
@@ -64,6 +65,14 @@ class PluginStageProducer
     }
 
     /**
+     * @return int
+     */
+    public function getAlreadySavedStages()
+    {
+        return $this->alreadySavedStagesCount;
+    }
+
+    /**
      * @param IRepository $repository
      * @param array $stages
      *
@@ -79,6 +88,7 @@ class PluginStageProducer
              */
             $stageDb = $repository->find([IPluginStage::FIELD__NAME => $stage[IPluginStage::FIELD__NAME]])->one();
             if ($stageDb->getName() == $stage[IPluginStage::FIELD__NAME]) {
+                $this->alreadySavedStagesCount++;
                 continue;
             }
             $repository->create($stage);

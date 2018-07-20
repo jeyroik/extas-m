@@ -76,7 +76,7 @@ class CrawlerStagesCommand extends Command
              * @var $helper QuestionHelper
              */
             $helper = $this->getHelper('question');
-            $question = new ConfirmationQuestion('Show found stages?', false);
+            $question = new ConfirmationQuestion('<question>Show found stages?</question>', false);
 
             if ($helper->ask($input, $output, $question)) {
                 $output->writeln([print_r($crawler->getStages(), true)]);
@@ -86,16 +86,19 @@ class CrawlerStagesCommand extends Command
              * @var $helper QuestionHelper
              */
             $helper = $this->getHelper('question');
-            $question = new ConfirmationQuestion('Save found stages?', false);
+            $question = new ConfirmationQuestion('<question>Save found stages?</question>', false);
 
             if ($helper->ask($input, $output, $question)) {
                 $saved = $crawler->saveStages(new StageRepository(), $crawler->getStages());
-                $output->writeln(['Saved ' . $saved . ' stages.']);
+                $output->writeln([
+                    '<info>Saved ' . $saved . ' new stages.</info>',
+                    '<info>Already saved ' . $crawler->getAlreadySavedStages() . ' stages.</info>'
+                ]);
             }
 
             return 0;
         } catch (\Exception $e) {
-            $output->writeln(['Crawling error: '. $e->getMessage()]);
+            $output->writeln(['<error>Crawling error: '. $e->getMessage() . '</error>']);
             return $e->getCode();
         }
     }
