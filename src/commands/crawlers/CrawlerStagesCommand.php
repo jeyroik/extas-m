@@ -66,7 +66,7 @@ class CrawlerStagesCommand extends Command
         $crawler = new PluginStageProducer($rootPath);
         $maskList = $input->getArgument(static::ARGUMENT__MASK);
         $crawler->setMasks(explode(',', $maskList));
-        
+
         try {
             $stagesCount = $crawler->findStages();
 

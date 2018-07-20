@@ -4,7 +4,6 @@
   "require": {
     "jeyroik/sm-plugin-error-state": "*",
     "jeyroik/sm-plugin-guarantee-state-id": "*",
-    "jeyroik/sm-plugin-init-config-state-plugins": "*",
     "jeyroik/sm-plugin-max-try": "*",
     "jeyroik/sm-plugin-on-failure": "*",
     "jeyroik/sm-plugin-states-route": "*",
