@@ -19,8 +19,7 @@ use Symfony\Component\Console\Question\ConfirmationQuestion;
 class CrawlerStagesCommand extends Command
 {
     const ARGUMENT__PATH = 'path';
-    const ARGUMENT__PRINT = 'print';
-    const ARGUMENT__CRAWLING_CONFIG = 'config';
+    const ARGUMENT__MASK = 'mask';
 
     /**
      * Configure the current command.
@@ -41,6 +40,11 @@ class CrawlerStagesCommand extends Command
                 static::ARGUMENT__PATH,
                 InputArgument::REQUIRED,
                 'Root path for packages with stages'
+            )
+            ->addArgument(
+                static::ARGUMENT__MASK,
+                InputArgument::REQUIRED,
+                'Mask for packages with stages'
             )
         ;
     }

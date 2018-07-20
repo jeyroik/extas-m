@@ -16,6 +16,7 @@ class PluginStageProducer
 {
     protected $rootPath = '';
     protected $stages = [];
+    protected $masks = [];
 
     /**
      * PluginStageProducer constructor.
@@ -25,6 +26,18 @@ class PluginStageProducer
     public function __construct($rootPath)
     {
         $this->setRootPath($rootPath);
+    }
+
+    /**
+     * @param $masks
+     *
+     * @return $this
+     */
+    public function setMasks($masks)
+    {
+        $this->masks = $masks;
+
+        return $this;
     }
 
     /**
@@ -174,6 +187,15 @@ class PluginStageProducer
             if (strpos($path, $area) !== false) {
                 return false;
             }
+        }
+
+        if (!empty($this->masks)) {
+            foreach ($this->masks as $mask) {
+                if (strpos($path, $mask) !== false) {
+                    return true;
+                }
+            }
+            return false;
         }
 
         return true;
