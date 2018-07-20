@@ -58,8 +58,8 @@ class CrawlerStagesCommand extends Command
     protected function execute(InputInterface $input, OutputInterface $output)
     {
         $output->writeln([
-            'Extas stages crawler v1.0',
-            '=========================='
+            '<fg=black;bg=white>Extas stages crawler </><fg=blue;bg=white>v1.0</>',
+            '<fg=black;bg=white>==========================</>'
         ]);
 
         $rootPath = $input->getArgument(static::ARGUMENT__PATH);
@@ -70,13 +70,16 @@ class CrawlerStagesCommand extends Command
         try {
             $stagesCount = $crawler->findStages();
 
-            $output->writeln(['Found ' . $stagesCount . ' stages.']);
+            $output->writeln(['<info>Found ' . $stagesCount . ' stages.</info>']);
 
             /**
              * @var $helper QuestionHelper
              */
             $helper = $this->getHelper('question');
-            $question = new ConfirmationQuestion('<question>Show found stages?</question>', false);
+            $question = new ConfirmationQuestion(
+                '<question> - Show found stages? (y/n)</question>' . PHP_EOL . ' - ',
+                false
+            );
 
             if ($helper->ask($input, $output, $question)) {
                 $output->writeln([print_r($crawler->getStages(), true)]);
@@ -86,7 +89,10 @@ class CrawlerStagesCommand extends Command
              * @var $helper QuestionHelper
              */
             $helper = $this->getHelper('question');
-            $question = new ConfirmationQuestion('<question>Save found stages?</question>', false);
+            $question = new ConfirmationQuestion(
+                '<question> - Save found stages?</question>' . PHP_EOL . ' - ',
+                false
+            );
 
             if ($helper->ask($input, $output, $question)) {
                 $saved = $crawler->saveStages(new StageRepository(), $crawler->getStages());
