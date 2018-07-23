@@ -32,7 +32,16 @@ class PluginCrawler implements IPluginCrawler
      */
     protected $rootPath = '';
     protected $rootPackagePath = '';
+
+    protected $plugins = ['Plugin class'];
+    protected $pluginsLoaded = 0;
     protected $pluginsAlreadyLoaded = 0;
+
+    protected $extensions = ['Interface : Extension class'];
+    protected $extensionsLoaded = 0;
+    protected $extensionsAlreadyLoaded = 0;
+
+    protected $rewrite = 0;
 
     /**
      * @var array
@@ -61,24 +70,75 @@ class PluginCrawler implements IPluginCrawler
     }
 
     /**
+     * @param $rewrite
+     *
      * @return int
      * @throws \Exception
      */
-    public function crawlPlugins(): int
+    public function crawlPlugins($rewrite = 0): int
     {
         if (empty($this->rootPath)) {
             throw new \Exception('Missed root path for Extas plugins crawling.');
         }
 
+        $this->rewrite = $rewrite;
         $this->loadPackages();
 
         return count($this->packages);
     }
 
     /**
+     * @return array
+     */
+    public function getPlugins(): array
+    {
+        return $this->plugins;
+    }
+
+    /**
+     * @return int
+     */
+    public function getPluginsLoaded(): int
+    {
+        return $this->pluginsLoaded;
+    }
+
+    /**
+     * @return int
+     */
+    public function getPluginsAlreadyLoaded(): int
+    {
+        return $this->pluginsAlreadyLoaded;
+    }
+
+    /**
+     * @return array
+     */
+    public function getExtensions(): array
+    {
+        return $this->extensions;
+    }
+
+    /**
+     * @return int
+     */
+    public function getExtensionsLoaded(): int
+    {
+        return $this->extensionsLoaded;
+    }
+
+    /**
+     * @return int
+     */
+    public function getExtensionsAlreadyLoaded(): int
+    {
+        return $this->extensionsAlreadyLoaded;
+    }
+
+    /**
      * @return ICrawlerPackage[]
      */
-    public function getPackagesInfo()
+    public function getPackages()
     {
         return $this->packages;
     }
@@ -97,14 +157,6 @@ class PluginCrawler implements IPluginCrawler
     public function getWarnings(): array
     {
         return $this->warnings;
-    }
-
-    /**
-     * @return int
-     */
-    public function getAlreadyLoadedPluginsCount()
-    {
-        return $this->pluginsAlreadyLoaded;
     }
 
     /**
@@ -202,30 +254,34 @@ class PluginCrawler implements IPluginCrawler
         foreach ($packages as $packageName => $packageInfo) {
             /**
              * @var $packageDb ICrawlerPackage
-             */
-            $packageDb = $storage->find([ICrawlerPackage::FIELD__NAME => $packageName])->one();
-
-            if ($packageDb) {
-                $this->savePlugins($packageDb->getPlugins())
-                    ->saveExtensions($packageDb->getExtensions());
-                continue;
-            }
-
-            /**
              * @var $package ICrawlerPackage
              */
+            $packageDb = $storage->find([ICrawlerPackage::FIELD__NAME => $packageName])->one();
             $package = $packageExtractor(
                 $this->rootPath,
                 $packageInfo,
                 $this->config[static::CONFIG__PACKAGE__CONFIG_NAME]
             );
 
+            if ($this->rewriteIsOn()) {
+                if ($package && $packageDb) {
+                    $package->id = $packageDb->getId();
+                }
+                $storageMethod = $packageDb ? 'update' : 'create';
+            } else {
+                if ($packageDb) {
+                    $package = $packageDb;
+                    $storageMethod = 'update';
+                } else {
+                    $storageMethod = 'create';
+                }
+            }
+
             if ($package) {
                 $this->packages[] = $package;
                 $this->savePlugins($package->getPlugins())
                     ->saveExtensions($package->getExtensions());
-
-                $storage->create($package);
+                $storage->$storageMethod($package);
             }
         }
 
@@ -265,33 +321,58 @@ class PluginCrawler implements IPluginCrawler
             $extensionId = $this->prepareExtensionId($extension);
 
             /**
-             * @var $extension IExtension
+             * @var $extensionDb IExtension
              */
-            $extensionDb = $storage->find([IExtension::FIELD__ID => $extensionId])->one();
+            $extensionDb = $storage->find([IExtension::FIELD__INTERFACE => $extension[IExtension::FIELD__INTERFACE]])
+                ->one();
 
-            if ($extensionDb) {
-                continue;
+            if ($this->rewriteIsOn()) {
+                $extension[IExtension::FIELD__ID] = $extensionDb ? $extensionDb->getId() : $extensionId;
+                list($extensionDb, $storageMethod) = $extensionDb
+                    ? [$extensionDb, 'update']
+                    : [new Extension(), 'create'];
+            } else {
+                if ($extensionDb) {
+                    $this->extensionsAlreadyLoaded++;
+                    continue;
+                }
+
+                $this->checkMethodsForDuplicating(
+                    $extension[IExtension::FIELD__SUBJECT],
+                    $extension[IExtension::FIELD__METHODS],
+                    $storage
+                );
+
+                $extensionDb = new Extension();
+                $extension[IExtension::FIELD__ID] = $extensionId;
+                $storageMethod = 'create';
             }
-
-            $this->checkMethodsForDuplicating(
-                $extension[IExtension::FIELD__SUBJECT],
-                $extension[IExtension::FIELD__METHODS],
-                $storage
-            );
-
-            $extensionDb = new Extension();
-            $extensionDb->setId($extensionId)
-                ->setSubject($extension[IExtension::FIELD__SUBJECT])
-                ->setClass($extension[IExtension::FIELD__CLASS])
-                ->setInterface($extension[IExtension::FIELD__INTERFACE])
-                ->setMethods($extension[IExtension::FIELD__METHODS]);
-
-            $storage->create($extensionDb);
+            $extensionDb = $this->fillInExtensionObject($extensionDb, $extension);
+            $this->extensions[] = $extensionDb->getInterface() . ' : ' . $extensionDb->getClass();
+            $this->extensionsLoaded++;
+            $storage->$storageMethod($extensionDb);
         }
 
         $storage->commit();
 
         return $this;
+    }
+
+    /**
+     * @param IExtension $extensionObject
+     * @param array $extensionData
+     *
+     * @return IExtension
+     */
+    protected function fillInExtensionObject($extensionObject, $extensionData)
+    {
+        $extensionObject->setId($extensionData[IExtension::FIELD__ID])
+            ->setSubject($extensionData[IExtension::FIELD__SUBJECT])
+            ->setClass($extensionData[IExtension::FIELD__CLASS])
+            ->setInterface($extensionData[IExtension::FIELD__INTERFACE])
+            ->setMethods($extensionData[IExtension::FIELD__METHODS]);
+
+        return $extensionObject;
     }
 
     /**
@@ -327,19 +408,26 @@ class PluginCrawler implements IPluginCrawler
     }
 
     /**
-     * @param array $extension
-     *
-     * @return string
+     * @return bool
      */
-    protected function prepareExtensionId($extension)
+    protected function rewriteIsOff(): bool
     {
-        return sha1(json_encode($extension));
+        return !$this->rewriteIsOn();
+    }
+
+    /**
+     * @return bool
+     */
+    protected function rewriteIsOn(): bool
+    {
+        return $this->rewrite == static::REWRITE__ON;
     }
 
     /**
      * @param $plugins
      *
      * @return $this
+     * @throws \Exception
      */
     protected function savePlugins($plugins)
     {
@@ -361,9 +449,17 @@ class PluginCrawler implements IPluginCrawler
              */
             $pluginDb = $storage->find([IPlugin::FIELD__ID => $pluginId])->one();
 
-            if ($pluginDb) {
-                $this->pluginsAlreadyLoaded++;
-                continue;
+            if ($this->rewriteIsOn()) {
+                list($pluginId, $storageMethod) = $pluginDb
+                    ? [$pluginDb->getId(), 'update']
+                    : [$pluginId, 'create'];
+
+            } else {
+                if ($pluginDb) {
+                    $this->pluginsAlreadyLoaded++;
+                    continue;
+                }
+                $storageMethod = 'create';
             }
 
             $pluginDb = new Plugin();
@@ -377,10 +473,14 @@ class PluginCrawler implements IPluginCrawler
             $stage = $stagesRepo->find([IPluginStage::FIELD__NAME => $pluginDb->getStage()])->one();
 
             if (!$stage) {
-                $this->addWarning('Unknown stage "' . $pluginDb->getStage() . '"');
+                throw new \Exception(
+                    'Unknown stage "' . $pluginDb->getStage() . '" for plugin "' . $pluginDb->getClass() . '".'
+                );
             }
 
-            $storage->create($pluginDb);
+            $this->plugins[] = $pluginDb->getClass();
+            $this->pluginsLoaded++;
+            $storage->$storageMethod($pluginDb);
         }
 
         $storage->commit();
@@ -408,6 +508,26 @@ class PluginCrawler implements IPluginCrawler
     protected function preparePluginId($plugin)
     {
         return sha1(json_encode($plugin));
+    }
+
+    /**
+     * @param array $extension
+     *
+     * @return string
+     */
+    protected function prepareExtensionId($extension)
+    {
+        return sha1(json_encode($extension));
+    }
+
+    /**
+     * @param $package ICrawlerPackage
+     *
+     * @return string
+     */
+    protected function preparePackageId($package)
+    {
+        return sha1(json_encode($package->__toArray()));
     }
 
     /**

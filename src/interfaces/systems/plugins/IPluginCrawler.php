@@ -11,6 +11,9 @@ use jeyroik\extas\interfaces\systems\plugins\crawlers\ICrawlerPackage;
  */
 interface IPluginCrawler
 {
+    const REWRITE__ON = 1;
+    const REWRITE__OFF = 0;
+
     const CONFIG__PACKAGE__ROOT_NAME = 'package.root.name';
     const CONFIG__PACKAGE__ROOT_EXTRACTOR = 'package.root.extractor';
 
@@ -26,14 +29,46 @@ interface IPluginCrawler
     public function __construct($rootPath = '', $config = []);
 
     /**
-     * @return int found plugins count
+     * @param $rewrite
+     *
+     * @return int found packages count
      */
-    public function crawlPlugins(): int;
+    public function crawlPlugins($rewrite = 0): int;
+
+    /**
+     * @return array
+     */
+    public function getPlugins(): array;
+
+    /**
+     * @return int
+     */
+    public function getPluginsLoaded(): int;
+
+    /**
+     * @return int
+     */
+    public function getPluginsAlreadyLoaded(): int;
+
+    /**
+     * @return array
+     */
+    public function getExtensions(): array;
+
+    /**
+     * @return int
+     */
+    public function getExtensionsLoaded(): int;
+
+    /**
+     * @return int
+     */
+    public function getExtensionsAlreadyLoaded(): int;
 
     /**
      * @return ICrawlerPackage[]
      */
-    public function getPackagesInfo();
+    public function getPackages();
 
     /**
      * @return bool
