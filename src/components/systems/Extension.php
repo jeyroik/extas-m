@@ -26,7 +26,7 @@ class Extension extends Item implements IExtension
      */
     public function runMethod(&$subject, $methodName, $args)
     {
-        array_push($args, $subject);
+        $args[] = &$subject;
 
         return isset($this->methods[$methodName])
             ? call_user_func_array([$this, $methodName], $args)
