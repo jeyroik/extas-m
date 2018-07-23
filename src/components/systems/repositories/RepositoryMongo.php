@@ -23,6 +23,7 @@ class RepositoryMongo extends RepositoryAbstract implements IRepository
     protected $collectionName = 'system';
 
     protected $collectionUID = 'id';
+    protected $driverUID = '_id';
 
     /**
      * @var \MongoDB\Client
@@ -118,6 +119,9 @@ class RepositoryMongo extends RepositoryAbstract implements IRepository
             return $updated->getModifiedCount();
         } else {
             $uid = $data[static::FLAG__UPDATE][$this->collectionUID] ?? '';
+            if (isset($data[static::FLAG__UPDATE][$this->driverUID])) {
+                unset($data[static::FLAG__UPDATE][$this->driverUID]);
+            }
             $this->collection->updateOne([$this->collectionUID => $uid], $data);
             return 1;
         }

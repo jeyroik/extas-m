@@ -219,20 +219,23 @@ class PluginCrawler implements IPluginCrawler
          */
         $package = $packageStorage->find([ICrawlerPackage::FIELD__NAME => $packageRoot->getName()])->one();
 
-        if ($package && ($package->getVersion() == $packageRoot->getVersion())) {
+        if ($this->rewriteIsOn() && $package) {
+                return $package;
+        } elseif ($package) {
             if ($package->getState() == IPackage::STATE__COMMITTED) {
                 throw new \Exception('Packages are already crawled.');
             }
-        } else {
-            $package = new CrawlerPackage([
-                IPackage::FIELD__ID => $packageRoot->getVersion(),
-                IPackage::FIELD__NAME => $packageRoot->getName(),
-                IPackage::FIELD__VERSION => $packageRoot->getVersion(),
-                IPackage::FIELD__STATE => IPackage::STATE__OPERATING
-            ]);
-            $packageStorage->create($package);
-            $packageStorage->commit();
+            return $package;
         }
+
+        $package = new CrawlerPackage([
+            IPackage::FIELD__ID => $packageRoot->getVersion(),
+            IPackage::FIELD__NAME => $packageRoot->getName(),
+            IPackage::FIELD__VERSION => $packageRoot->getVersion(),
+            IPackage::FIELD__STATE => IPackage::STATE__OPERATING
+        ]);
+        $packageStorage->create($package);
+        $packageStorage->commit();
 
         return $package;
     }
