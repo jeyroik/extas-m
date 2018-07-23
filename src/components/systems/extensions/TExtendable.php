@@ -50,7 +50,7 @@ trait TExtendable
         ])->one();
 
         if (!$extension) {
-            throw new \Exception('Unknown method "' . $name . '".');
+            throw new \Exception('Unknown method "' . get_class($this) . ':' . $name . '".');
         }
 
         foreach ($this->getPluginsByStage(IExtendable::STAGE__EXTENDED_METHOD_CALL) as $plugin) {

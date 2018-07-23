@@ -205,7 +205,8 @@ class PluginCrawler implements IPluginCrawler
             $packageDb = $storage->find([ICrawlerPackage::FIELD__NAME => $packageName])->one();
 
             if ($packageDb->getVersion() != $packageInfo[ICrawlerPackage::FIELD__VERSION]) {
-                $this->savePlugins($packageDb->getPlugins());
+                $this->savePlugins($packageDb->getPlugins())
+                    ->saveExtensions($packageDb->getExtensions());
                 continue;
             }
 
