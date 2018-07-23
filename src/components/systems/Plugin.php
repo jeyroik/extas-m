@@ -2,6 +2,7 @@
 namespace jeyroik\extas\components\systems;
 
 use jeyroik\extas\interfaces\systems\IPlugin;
+use jeyroik\extas\interfaces\systems\items\IItemClassObject;
 
 /**
  * Class Plugin
@@ -13,7 +14,7 @@ use jeyroik\extas\interfaces\systems\IPlugin;
  * @package jeyroik\extas\components\systems
  * @author Funcraft <me@funcraft.ru>
  */
-class Plugin extends Item implements IPlugin
+class Plugin extends Item implements IPlugin, IItemClassObject
 {
     public $preDefinedClass = '';
     public $preDefinedStage = '';
