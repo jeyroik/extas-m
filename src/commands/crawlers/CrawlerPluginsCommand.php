@@ -73,8 +73,9 @@ class CrawlerPluginsCommand extends Command
             $foundCount = $crawler->crawlPlugins();
 
             $output->writeln([
-                'Found plugins: ' . $foundCount,
-                '=============================='
+                '<info> Found plugins: ' . $foundCount . ' </info>',
+                '<info> Already loaded plugins: ' . $crawler->getAlreadyLoadedPluginsCount() . ' </info>',
+                ' ============================== '
             ]);
 
             if ($crawler->hasWarnings()) {

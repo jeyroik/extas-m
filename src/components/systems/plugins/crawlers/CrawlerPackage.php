@@ -27,8 +27,6 @@ class CrawlerPackage extends Item implements ICrawlerPackage
 
     const CONFIG__PACKAGE = 'package';
 
-    protected $config = [];
-
     /**
      * @return array|mixed
      */

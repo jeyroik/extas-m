@@ -31,6 +31,7 @@ class PluginCrawler implements IPluginCrawler
      */
     protected $rootPath = '';
     protected $rootPackagePath = '';
+    protected $pluginsAlreadyLoaded = 0;
 
     /**
      * @var array
@@ -95,6 +96,14 @@ class PluginCrawler implements IPluginCrawler
     public function getWarnings(): array
     {
         return $this->warnings;
+    }
+
+    /**
+     * @return int
+     */
+    public function getAlreadyLoadedPluginsCount()
+    {
+        return $this->pluginsAlreadyLoaded;
     }
 
     /**
@@ -195,7 +204,8 @@ class PluginCrawler implements IPluginCrawler
              */
             $packageDb = $storage->find([ICrawlerPackage::FIELD__NAME => $packageName])->one();
 
-            if ($packageDb->getVersion() == $packageInfo[ICrawlerPackage::FIELD__VERSION]) {
+            if ($packageDb->getVersion() != $packageInfo[ICrawlerPackage::FIELD__VERSION]) {
+                $this->savePlugins($packageDb->getPlugins());
                 continue;
             }
 
@@ -349,6 +359,7 @@ class PluginCrawler implements IPluginCrawler
             $pluginDb = $storage->find([IPlugin::FIELD__ID => $pluginId])->one();
 
             if ($pluginDb->getId() == $pluginId) {
+                $this->pluginsAlreadyLoaded++;
                 continue;
             }
 
