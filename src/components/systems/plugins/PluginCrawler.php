@@ -241,6 +241,20 @@ class PluginCrawler implements IPluginCrawler
     }
 
     /**
+     * @return array
+     */
+    protected function grabRootPackage()
+    {
+        $package = [
+            ICrawlerPackage::FIELD__NAME => 'resources',// todo get from command input argument
+            ICrawlerPackage::FIELD__VERSION => '',
+            ICrawlerPackage::FIELD__DESCRIPTION => ''
+        ];
+
+        return $package;
+    }
+
+    /**
      * @param $packages
      *
      * @return $this
@@ -253,6 +267,7 @@ class PluginCrawler implements IPluginCrawler
          */
         $storage = SystemContainer::getItem(IPackageRepository::class);
         $packageExtractor = $this->getPackageExtractor();
+        $packages['resources'] = $this->grabRootPackage(); // todo get from command input argument
 
         foreach ($packages as $packageName => $packageInfo) {
             /**
