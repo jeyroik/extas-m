@@ -106,7 +106,7 @@ class CrawlerPluginsCommand extends Command
         $config = $this->getConfig($input->getArgument(static::ARGUMENT__CRAWLING_CONFIG));
         $crawler = new PluginCrawler($rootPath, $config);
         try {
-            $foundCount = $crawler->crawlPlugins();
+            $foundCount = $crawler->crawlPlugins($input->getArgument(static::ARGUMENT__REWRITE));
 
             $this->printResults($crawler, $foundCount, $input, $output)
                 ->printWarnings($crawler, $input, $output)

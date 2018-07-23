@@ -220,7 +220,7 @@ class PluginCrawler implements IPluginCrawler
         $package = $packageStorage->find([ICrawlerPackage::FIELD__NAME => $packageRoot->getName()])->one();
 
         if ($this->rewriteIsOn() && $package) {
-                return $package;
+            return $package;
         } elseif ($package) {
             if ($package->getState() == IPackage::STATE__COMMITTED) {
                 throw new \Exception('Packages are already crawled.');
