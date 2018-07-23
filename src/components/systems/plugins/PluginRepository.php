@@ -48,7 +48,7 @@ class PluginRepository extends RepositoryMongo implements IPluginRepository
          */
         $pluginModel = parent::one();
 
-        if ($pluginModel->getClass()) {
+        if ($pluginModel) {
             $className = $pluginModel->getClass();
 
             return new $className();

@@ -166,7 +166,7 @@ class PluginCrawler implements IPluginCrawler
          */
         $package = $packageStorage->find([ICrawlerPackage::FIELD__NAME => $packageRoot->getName()])->one();
 
-        if ($package->getVersion() == $packageRoot->getVersion()) {
+        if ($package && ($package->getVersion() == $packageRoot->getVersion())) {
             if ($package->getState() == IPackage::STATE__COMMITTED) {
                 throw new \Exception('Packages are already crawled.');
             }
@@ -204,7 +204,7 @@ class PluginCrawler implements IPluginCrawler
              */
             $packageDb = $storage->find([ICrawlerPackage::FIELD__NAME => $packageName])->one();
 
-            if ($packageDb->getVersion() != $packageInfo[ICrawlerPackage::FIELD__VERSION]) {
+            if ($packageDb) {
                 $this->savePlugins($packageDb->getPlugins())
                     ->saveExtensions($packageDb->getExtensions());
                 continue;
@@ -359,7 +359,7 @@ class PluginCrawler implements IPluginCrawler
              */
             $pluginDb = $storage->find([IPlugin::FIELD__ID => $pluginId])->one();
 
-            if ($pluginDb->getId() == $pluginId) {
+            if ($pluginDb) {
                 $this->pluginsAlreadyLoaded++;
                 continue;
             }
@@ -373,7 +373,7 @@ class PluginCrawler implements IPluginCrawler
              */
             $stage = $stagesRepo->find([IPluginStage::FIELD__NAME => $pluginDb->getStage()])->one();
 
-            if ($stage->getName() != $pluginDb->getStage()) {
+            if (!$stage) {
                 $this->addWarning('Unknown stage "' . $pluginDb->getStage() . '"');
             }
 

@@ -87,7 +87,7 @@ class PluginStageProducer
              * @var $stage IPluginStage
              */
             $stageDb = $repository->find([IPluginStage::FIELD__NAME => $stage[IPluginStage::FIELD__NAME]])->one();
-            if ($stageDb->getName() == $stage[IPluginStage::FIELD__NAME]) {
+            if ($stageDb) {
                 $this->alreadySavedStagesCount++;
                 continue;
             }

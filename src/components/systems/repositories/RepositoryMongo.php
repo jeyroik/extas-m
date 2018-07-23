@@ -129,7 +129,7 @@ class RepositoryMongo extends RepositoryAbstract implements IRepository
         $itemClass = $this->getItemClass();
         $this->reset();
 
-        return new $itemClass($this->unSerializeItem($item));
+        return empty($item) ? null : new $itemClass($this->unSerializeItem($item));
     }
 
     /**
