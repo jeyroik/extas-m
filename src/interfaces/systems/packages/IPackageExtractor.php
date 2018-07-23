@@ -19,6 +19,4 @@ interface IPackageExtractor
      * @return ICrawlerPackage|null
      */
     public function __invoke($rootPath, $packageInfo, $packageConfigName);
-
-    public function extract
 }
