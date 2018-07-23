@@ -60,28 +60,33 @@ class CrawlerPluginsCommand extends Command
                 InputArgument::OPTIONAL,
                 'Rewrite packages: 0 - no, 1 - yes',
                 0
-            )->addArgument(
+            )->addOption(
                 static::ARGUMENT__PRINT__WARNINGS,
+                null,
                 InputArgument::OPTIONAL,
                 'Print warnings: 0 - no, 1 - yes, 2 - ask',
                 0
-            )->addArgument(
+            )->addOption(
                 static::ARGUMENT__PRINT__RESULTS,
+                null,
                 InputArgument::OPTIONAL,
                 'Print results: 0 - no, 1 - yes, 2 - ask',
                 0
-            )->addArgument(
+            )->addOption(
                 static::ARGUMENT__PRINT__PACKAGES,
+                null,
                 InputArgument::OPTIONAL,
                 'Print operated packages: 0 - no, 1 - yes, 2 - ask',
                 0
-            )->addArgument(
+            )->addOption(
                 static::ARGUMENT__PRINT__PLUGINS,
+                null,
                 InputArgument::OPTIONAL,
                 'Print loaded plugins: 0 - no, 1 - yes, 2 - ask',
                 0
-            )->addArgument(
+            )->addOption(
                 static::ARGUMENT__PRINT__EXTENSIONS,
+                null,
                 InputArgument::OPTIONAL,
                 'Print loaded extensions: 0 - no, 1 - yes, 2 - ask',
                 0
@@ -133,7 +138,7 @@ class CrawlerPluginsCommand extends Command
      */
     protected function printResults($crawler, $foundPackagesCount, $input, $output)
     {
-        if ($print = $input->getArgument(static::ARGUMENT__PRINT__RESULTS)) {
+        if ($print = $input->getOption(static::ARGUMENT__PRINT__RESULTS)) {
             if ($print == static::PRINT__ASK) {
                 /**
                  * @var $helper QuestionHelper
@@ -145,7 +150,7 @@ class CrawlerPluginsCommand extends Command
                 );
 
                 if ($helper->ask($input, $output, $question)) {
-                    $input->setArgument(static::ARGUMENT__PRINT__RESULTS, static::PRINT__YES);
+                    $input->setOption(static::ARGUMENT__PRINT__RESULTS, static::PRINT__YES);
                     $this->printResults($crawler, $foundPackagesCount, $input, $output);
                 }
             } else {
@@ -177,7 +182,7 @@ class CrawlerPluginsCommand extends Command
      */
     protected function printWarnings($crawler, $input, $output)
     {
-        if ($print = $input->getArgument(static::ARGUMENT__PRINT__WARNINGS)) {
+        if ($print = $input->getOption(static::ARGUMENT__PRINT__WARNINGS)) {
             if ($print == static::PRINT__ASK) {
                 /**
                  * @var $helper QuestionHelper
@@ -189,7 +194,7 @@ class CrawlerPluginsCommand extends Command
                 );
 
                 if ($helper->ask($input, $output, $question)) {
-                    $input->setArgument(static::ARGUMENT__PRINT__WARNINGS, static::PRINT__YES);
+                    $input->setOption(static::ARGUMENT__PRINT__WARNINGS, static::PRINT__YES);
                     $this->printWarnings($crawler, $input, $output);
                 }
             } else {
@@ -214,7 +219,7 @@ class CrawlerPluginsCommand extends Command
      */
     protected function askPrintPackages($crawler, $input, $output)
     {
-        if ($print = $input->getArgument(static::ARGUMENT__PRINT__PACKAGES)) {
+        if ($print = $input->getOption(static::ARGUMENT__PRINT__PACKAGES)) {
             if ($print == static::PRINT__ASK) {
                 /**
                  * @var $helper QuestionHelper
@@ -226,7 +231,7 @@ class CrawlerPluginsCommand extends Command
                 );
 
                 if ($helper->ask($input, $output, $question)) {
-                    $input->setArgument(static::ARGUMENT__PRINT__PACKAGES, static::PRINT__YES);
+                    $input->setOption(static::ARGUMENT__PRINT__PACKAGES, static::PRINT__YES);
                     $this->askPrintPackages($crawler, $input, $output);
                 }
             } else {
@@ -246,7 +251,7 @@ class CrawlerPluginsCommand extends Command
      */
     protected function askPrintPlugins($crawler, $input, $output)
     {
-        if ($print = $input->getArgument(static::ARGUMENT__PRINT__PLUGINS)) {
+        if ($print = $input->getOption(static::ARGUMENT__PRINT__PLUGINS)) {
             if ($print == static::PRINT__ASK) {
                 /**
                  * @var $helper QuestionHelper
@@ -258,7 +263,7 @@ class CrawlerPluginsCommand extends Command
                 );
 
                 if ($helper->ask($input, $output, $question)) {
-                    $input->setArgument(static::ARGUMENT__PRINT__PLUGINS, static::PRINT__YES);
+                    $input->setOption(static::ARGUMENT__PRINT__PLUGINS, static::PRINT__YES);
                     $this->askPrintPlugins($crawler, $input, $output);
                 }
             } else {
@@ -279,7 +284,7 @@ class CrawlerPluginsCommand extends Command
      */
     protected function askPrintExtensions($crawler, $input, $output)
     {
-        if ($print = $input->getArgument(static::ARGUMENT__PRINT__EXTENSIONS)) {
+        if ($print = $input->getOption(static::ARGUMENT__PRINT__EXTENSIONS)) {
             if ($print == static::PRINT__ASK) {
                 /**
                  * @var $helper QuestionHelper
@@ -291,7 +296,7 @@ class CrawlerPluginsCommand extends Command
                 );
 
                 if ($helper->ask($input, $output, $question)) {
-                    $input->setArgument(static::ARGUMENT__PRINT__EXTENSIONS, static::PRINT__YES);
+                    $input->setOption(static::ARGUMENT__PRINT__EXTENSIONS, static::PRINT__YES);
                     $this->askPrintExtensions($crawler, $input, $output);
                 }
             } else {
