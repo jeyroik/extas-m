@@ -19,7 +19,6 @@ use Symfony\Component\Console\Question\ConfirmationQuestion;
 class CrawlerPluginsCommand extends Command
 {
     const ARGUMENT__PATH = 'path';
-    const ARGUMENT__PRINT = 'print';
     const ARGUMENT__CRAWLING_CONFIG = 'config';
     const ARGUMENT__REWRITE = 'rw';
 
@@ -30,7 +29,7 @@ class CrawlerPluginsCommand extends Command
     {
         $this
             // the name of the command (the part after "bin/console")
-            ->setName('jeyroik:crawler-plugins')
+            ->setName('crawler:plugins')
 
             // the short description shown while running "php bin/console list"
             ->setDescription('Crawl plugins for Extas.')
@@ -47,12 +46,6 @@ class CrawlerPluginsCommand extends Command
                 static::ARGUMENT__CRAWLING_CONFIG,
                 InputArgument::REQUIRED,
                 'Crawling configuration path'
-            )
-            ->addArgument(
-                static::ARGUMENT__PRINT,
-                InputArgument::OPTIONAL,
-                'Print mode: 0 - hash, 1 - full',
-                0
             )->addArgument(
                 static::ARGUMENT__REWRITE,
                 InputArgument::OPTIONAL,

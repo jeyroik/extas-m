@@ -28,7 +28,7 @@ class CrawlerStagesCommand extends Command
     {
         $this
             // the name of the command (the part after "bin/console")
-            ->setName('jeyroik:crawler-stages')
+            ->setName('crawler:stages')
 
             // the short description shown while running "php bin/console list"
             ->setDescription('Crawl stages for Extas.')
