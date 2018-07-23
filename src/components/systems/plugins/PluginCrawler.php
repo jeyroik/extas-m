@@ -2,6 +2,7 @@
 namespace jeyroik\extas\components\systems\plugins;
 
 use jeyroik\extas\components\systems\Extension;
+use jeyroik\extas\components\systems\Plugin;
 use jeyroik\extas\components\systems\plugins\crawlers\CrawlerPackage;
 use jeyroik\extas\components\systems\SystemContainer;
 use jeyroik\extas\interfaces\systems\IExtension;
@@ -221,9 +222,10 @@ class PluginCrawler implements IPluginCrawler
 
             if ($package) {
                 $this->packages[] = $package;
-                $storage->create($package);
                 $this->savePlugins($package->getPlugins())
                     ->saveExtensions($package->getExtensions());
+
+                $storage->create($package);
             }
         }
 
@@ -364,6 +366,7 @@ class PluginCrawler implements IPluginCrawler
                 continue;
             }
 
+            $pluginDb = new Plugin();
             $pluginDb->setId($pluginId)
                 ->setClass($plugin[IPlugin::FIELD__CLASS])
                 ->setStage($plugin[IPlugin::FIELD__STAGE]);
