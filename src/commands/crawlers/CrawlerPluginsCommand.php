@@ -21,6 +21,15 @@ class CrawlerPluginsCommand extends Command
     const ARGUMENT__PATH = 'path';
     const ARGUMENT__CRAWLING_CONFIG = 'config';
     const ARGUMENT__REWRITE = 'rw';
+    const ARGUMENT__PRINT__WARNINGS = 'pwa';
+    const ARGUMENT__PRINT__RESULTS = 'pre';
+    const ARGUMENT__PRINT__PACKAGES = 'ppa';
+    const ARGUMENT__PRINT__PLUGINS = 'ppl';
+    const ARGUMENT__PRINT__EXTENSIONS = 'pex';
+
+    const PRINT__NO = 0;
+    const PRINT__YES = 1;
+    const PRINT__ASK = 2;
 
     /**
      * Configure the current command.
@@ -51,6 +60,31 @@ class CrawlerPluginsCommand extends Command
                 InputArgument::OPTIONAL,
                 'Rewrite packages: 0 - no, 1 - yes',
                 0
+            )->addArgument(
+                static::ARGUMENT__PRINT__WARNINGS,
+                InputArgument::OPTIONAL,
+                'Print warnings: 0 - no, 1 - yes, 2 - ask',
+                0
+            )->addArgument(
+                static::ARGUMENT__PRINT__RESULTS,
+                InputArgument::OPTIONAL,
+                'Print results: 0 - no, 1 - yes, 2 - ask',
+                0
+            )->addArgument(
+                static::ARGUMENT__PRINT__PACKAGES,
+                InputArgument::OPTIONAL,
+                'Print operated packages: 0 - no, 1 - yes, 2 - ask',
+                0
+            )->addArgument(
+                static::ARGUMENT__PRINT__PLUGINS,
+                InputArgument::OPTIONAL,
+                'Print loaded plugins: 0 - no, 1 - yes, 2 - ask',
+                0
+            )->addArgument(
+                static::ARGUMENT__PRINT__EXTENSIONS,
+                InputArgument::OPTIONAL,
+                'Print loaded extensions: 0 - no, 1 - yes, 2 - ask',
+                0
             )
         ;
     }
@@ -74,8 +108,8 @@ class CrawlerPluginsCommand extends Command
         try {
             $foundCount = $crawler->crawlPlugins();
 
-            $this->printResults($crawler, $foundCount, $output)
-                ->printWarnings($crawler, $output)
+            $this->printResults($crawler, $foundCount, $input, $output)
+                ->printWarnings($crawler, $input, $output)
                 ->askPrintPackages($crawler, $input, $output)
                 ->askPrintPlugins($crawler, $input, $output)
                 ->askPrintExtensions($crawler, $input, $output);
@@ -92,40 +126,43 @@ class CrawlerPluginsCommand extends Command
     /**
      * @param IPluginCrawler $crawler
      * @param int $foundPackagesCount
+     * @param InputInterface $input
      * @param OutputInterface $output
      *
      * @return $this
      */
-    protected function printResults($crawler, $foundPackagesCount, $output)
+    protected function printResults($crawler, $foundPackagesCount, $input, $output)
     {
-        $output->writeln([
-            '<info> Operated packages: ' . $foundPackagesCount . ' </info>',
-            ' ========== From this packages ==================== ',
-            ' ========== Plugins ==================== ',
-            '<info> Loaded plugins: ' . $crawler->getPluginsLoaded() . ' </info>',
-            '<info> Already loaded plugins: ' . $crawler->getPluginsAlreadyLoaded() . ' </info>',
-            ' ========== Extensions ==================== ',
-            '<info> Loaded extensions: ' . $crawler->getExtensionsLoaded() . ' </info>',
-            '<info> Already loaded extensions: ' . $crawler->getExtensionsAlreadyLoaded() . ' </info>',
-            ' ============================== '
-        ]);
+        if ($print = $input->getArgument(static::ARGUMENT__PRINT__RESULTS)) {
+            if ($print == static::PRINT__ASK) {
+                /**
+                 * @var $helper QuestionHelper
+                 */
+                $helper = $this->getHelper('question');
+                $question = new ConfirmationQuestion(
+                    '<question> - Show results? (y/n)</question>' . PHP_EOL . ' - ',
+                    false
+                );
 
-        return $this;
-    }
-
-    /**
-     * @param IPluginCrawler $crawler
-     * @param OutputInterface $output
-     *
-     * @return $this
-     */
-    protected function printWarnings($crawler, $output)
-    {
-        if ($crawler->hasWarnings()) {
-            $output->writeln([
-                'There are some warnings:',
-                '<error>' . implode(PHP_EOL, $crawler->getWarnings()) . '</error>'
-            ]);
+                if ($helper->ask($input, $output, $question)) {
+                    $input->setArgument(static::ARGUMENT__PRINT__RESULTS, static::PRINT__YES);
+                    $this->printResults($crawler, $foundPackagesCount, $input, $output);
+                }
+            } else {
+                $output->writeln([
+                    '<info> Operated packages: ' . $foundPackagesCount . ' </info>',
+                    ' ========== From this packages ========== ',
+                    '',
+                    ' ---------- Plugins ---------- ',
+                    '<info> Loaded plugins: ' . $crawler->getPluginsLoaded() . ' </info>',
+                    '<info> Already loaded plugins: ' . $crawler->getPluginsAlreadyLoaded() . ' </info>',
+                    '',
+                    ' ---------- Extensions ---------- ',
+                    '<info> Loaded extensions: ' . $crawler->getExtensionsLoaded() . ' </info>',
+                    '<info> Already loaded extensions: ' . $crawler->getExtensionsAlreadyLoaded() . ' </info>',
+                    ' ============================== '
+                ]);
+            }
         }
 
         return $this;
@@ -133,24 +170,68 @@ class CrawlerPluginsCommand extends Command
 
     /**
      * @param IPluginCrawler $crawler
-     * @param $input
+     * @param InputInterface $input
+     * @param OutputInterface $output
+     *
+     * @return $this
+     */
+    protected function printWarnings($crawler, $input, $output)
+    {
+        if ($print = $input->getArgument(static::ARGUMENT__PRINT__WARNINGS)) {
+            if ($print == static::PRINT__ASK) {
+                /**
+                 * @var $helper QuestionHelper
+                 */
+                $helper = $this->getHelper('question');
+                $question = new ConfirmationQuestion(
+                    '<question> - Show warnings? (y/n)</question>' . PHP_EOL . ' - ',
+                    false
+                );
+
+                if ($helper->ask($input, $output, $question)) {
+                    $input->setArgument(static::ARGUMENT__PRINT__WARNINGS, static::PRINT__YES);
+                    $this->printWarnings($crawler, $input, $output);
+                }
+            } else {
+                if ($crawler->hasWarnings()) {
+                    $output->writeln([
+                        'There are some warnings:',
+                        '<error>' . implode(PHP_EOL, $crawler->getWarnings()) . '</error>'
+                    ]);
+                }
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @param IPluginCrawler $crawler
+     * @param InputInterface $input
      * @param OutputInterface $output
      *
      * @return $this
      */
     protected function askPrintPackages($crawler, $input, $output)
     {
-        /**
-         * @var $helper QuestionHelper
-         */
-        $helper = $this->getHelper('question');
-        $question = new ConfirmationQuestion(
-            '<question> - Show operated packages? (y/n)</question>' . PHP_EOL . ' - ',
-            false
-        );
+        if ($print = $input->getArgument(static::ARGUMENT__PRINT__PACKAGES)) {
+            if ($print == static::PRINT__ASK) {
+                /**
+                 * @var $helper QuestionHelper
+                 */
+                $helper = $this->getHelper('question');
+                $question = new ConfirmationQuestion(
+                    '<question> - Show operated packages? (y/n)</question>' . PHP_EOL . ' - ',
+                    false
+                );
 
-        if ($helper->ask($input, $output, $question)) {
-            $output->writeln([print_r($crawler->getPackages(), true)]);
+                if ($helper->ask($input, $output, $question)) {
+                    $input->setArgument(static::ARGUMENT__PRINT__PACKAGES, static::PRINT__YES);
+                    $this->askPrintPackages($crawler, $input, $output);
+                }
+            } else {
+                $output->writeln([print_r($crawler->getPackages(), true)]);
+            }
         }
 
         return $this;
@@ -158,49 +239,64 @@ class CrawlerPluginsCommand extends Command
 
     /**
      * @param IPluginCrawler $crawler
-     * @param $input
+     * @param InputInterface $input
      * @param OutputInterface $output
      *
      * @return $this
      */
     protected function askPrintPlugins($crawler, $input, $output)
     {
-        /**
-         * @var $helper QuestionHelper
-         */
-        $helper = $this->getHelper('question');
-        $question = new ConfirmationQuestion(
-            '<question> - Show loaded plugins? (y/n)</question>' . PHP_EOL . ' - ',
-            false
-        );
+        if ($print = $input->getArgument(static::ARGUMENT__PRINT__PLUGINS)) {
+            if ($print == static::PRINT__ASK) {
+                /**
+                 * @var $helper QuestionHelper
+                 */
+                $helper = $this->getHelper('question');
+                $question = new ConfirmationQuestion(
+                    '<question> - Show loaded plugins? (y/n)</question>' . PHP_EOL . ' - ',
+                    false
+                );
 
-        if ($helper->ask($input, $output, $question)) {
-            $output->writeln([print_r($crawler->getPlugins(), true)]);
+                if ($helper->ask($input, $output, $question)) {
+                    $input->setArgument(static::ARGUMENT__PRINT__PLUGINS, static::PRINT__YES);
+                    $this->askPrintPlugins($crawler, $input, $output);
+                }
+            } else {
+                $output->writeln([print_r($crawler->getPlugins(), true)]);
+            }
         }
+
 
         return $this;
     }
 
     /**
      * @param IPluginCrawler $crawler
-     * @param $input
+     * @param InputInterface $input
      * @param OutputInterface $output
      *
      * @return $this
      */
     protected function askPrintExtensions($crawler, $input, $output)
     {
-        /**
-         * @var $helper QuestionHelper
-         */
-        $helper = $this->getHelper('question');
-        $question = new ConfirmationQuestion(
-            '<question> - Show loaded extensions? (y/n)</question>' . PHP_EOL . ' - ',
-            false
-        );
+        if ($print = $input->getArgument(static::ARGUMENT__PRINT__EXTENSIONS)) {
+            if ($print == static::PRINT__ASK) {
+                /**
+                 * @var $helper QuestionHelper
+                 */
+                $helper = $this->getHelper('question');
+                $question = new ConfirmationQuestion(
+                    '<question> - Show loaded extensions? (y/n)</question>' . PHP_EOL . ' - ',
+                    false
+                );
 
-        if ($helper->ask($input, $output, $question)) {
-            $output->writeln([print_r($crawler->getExtensions(), true)]);
+                if ($helper->ask($input, $output, $question)) {
+                    $input->setArgument(static::ARGUMENT__PRINT__EXTENSIONS, static::PRINT__YES);
+                    $this->askPrintExtensions($crawler, $input, $output);
+                }
+            } else {
+                $output->writeln([print_r($crawler->getExtensions(), true)]);
+            }
         }
 
         return $this;

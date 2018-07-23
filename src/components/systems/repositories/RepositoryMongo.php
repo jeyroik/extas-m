@@ -18,7 +18,11 @@ class RepositoryMongo extends RepositoryAbstract implements IRepository
     const CLAUSE__VALUE = 2;
     const CLAUSE__GLUE = 3;
 
+    const FLAG__UPDATE = '$set';
+
     protected $collectionName = 'system';
+
+    protected $collectionUID = 'id';
 
     /**
      * @var \MongoDB\Client
@@ -113,7 +117,8 @@ class RepositoryMongo extends RepositoryAbstract implements IRepository
 
             return $updated->getModifiedCount();
         } else {
-            $this->collection->updateOne(['id' => $data['id']], $data);
+            $uid = $data[static::FLAG__UPDATE][$this->collectionUID] ?? '';
+            $this->collection->updateOne([$this->collectionUID => $uid], $data);
             return 1;
         }
     }
@@ -222,7 +227,7 @@ class RepositoryMongo extends RepositoryAbstract implements IRepository
      */
     protected function prepareForUpdate($item)
     {
-        return ['$set' => $item];
+        return [static::FLAG__UPDATE => $item];
     }
 
     /**
