@@ -72,9 +72,9 @@ class CrawlerPackageCommand extends Command
 
         $packageGenerator = new PackageGenerator($whereToSearch, $whereToStore, $packageConfigName);
         try {
-            $generated = $packageGenerator->generate();
+            $packageGenerator->generate();
             $output->writeln('Config successfully generated');
-            $output->writeln('See ' . $packageConfigName);
+            $output->writeln('See <info>' . $whereToStore . '/' . $packageConfigName . '</info>');
         } catch (\Exception $e) {
             $output->writeln('Can not generate package config');
             $output->writeln($e->getMessage());

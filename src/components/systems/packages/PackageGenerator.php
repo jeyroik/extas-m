@@ -63,7 +63,7 @@ class PackageGenerator implements IPackageGenerator
     protected function extractExtensions($config)
     {
         $finder = new Finder();
-        $finder->name('Extension*.php');
+        $finder->name('*xtension*.php');
 
         foreach ($finder->in($this->whereToSearch)->files() as $file) {
             /**

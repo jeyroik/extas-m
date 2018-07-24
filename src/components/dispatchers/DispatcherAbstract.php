@@ -52,7 +52,8 @@ abstract class DispatcherAbstract extends Item implements IStateDispatcher
     {
         if (!$this->isContextImplementAllRequiredInterfaces($context)) {
             throw new \Exception(
-                'Not all interfaces are implemented: ' . implode(', ', $this->requireInterfaces)
+                'Not all interfaces for ' . get_class($this)
+                . 'are implemented: ' . implode(', ', $this->requireInterfaces)
             );
         }
 
