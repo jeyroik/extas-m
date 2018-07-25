@@ -14,7 +14,7 @@ return [
         IMachineConfig::FIELD__END_STATE => 'app:terminate',
     ],
 
-    Machine::MACHINE__STATES => [
+    IMachineConfig::FIELD__STATES => [
         'app:run' => [
             State::FIELD__ID => 'app:run',
             EMaxTry::STATE__MAX_TRY => 1,
