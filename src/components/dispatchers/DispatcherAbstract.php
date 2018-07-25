@@ -27,9 +27,12 @@ abstract class DispatcherAbstract extends Item implements IStateDispatcher
     /**
      * @var string[]
      */
-    protected $requireInterfaces = [
+    protected $requireInterfaces = [];
 
-    ];
+    /**
+     * @var array
+     */
+    protected $missedInterfaces = [];
 
     /**
      * DispatcherAbstract constructor.
@@ -53,7 +56,7 @@ abstract class DispatcherAbstract extends Item implements IStateDispatcher
         if (!$this->isContextImplementAllRequiredInterfaces($context)) {
             throw new \Exception(
                 'Not all interfaces for ' . get_class($this)
-                . 'are implemented: ' . implode(', ', $this->requireInterfaces)
+                . ' are implemented: ' . implode(', ', $this->missedInterfaces)
             );
         }
 
@@ -92,11 +95,11 @@ abstract class DispatcherAbstract extends Item implements IStateDispatcher
     {
         foreach ($this->requireInterfaces as $interface) {
             if (!$context->isImplementsInterface($interface)) {
-                return false;
+                $this->missedInterfaces[] = $interface;
             }
         }
 
-        return true;
+        return empty($this->missedInterfaces);
     }
 
     /**
