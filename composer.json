@@ -1,5 +1,5 @@
 {
-  "name": "jeyroik/extas",
+  "name": "jeyroik/extas-m",
   "description": "EXTendable State Machine.",
   "require": {
     "jeyroik/sm-plugin-error-state": "*",
