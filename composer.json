@@ -1,5 +1,5 @@
 {
-  "name": "jeyroik/extas-m",
+  "name": "jeyroik/extas",
   "description": "EXTendable State Machine.",
   "require": {
     "jeyroik/sm-plugin-error-state": "*",
@@ -10,7 +10,10 @@
     "jeyroik/sm-plugin-route-path": "*",
     "jeyroik/sm-plugin-route-from-start": "*",
     "symfony/console": "*",
-    "symfony/finder": "*"
+    "symfony/finder": "*",
+    "psr/container": "*",
+    "league/container": "*",
+    "mongodb/mongodb": "*"
   },
   "autoload": {
     "psr-4": {
