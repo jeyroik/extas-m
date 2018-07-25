@@ -100,13 +100,21 @@ class PackageGenerator implements IPackageGenerator
      */
     protected function extractExtensionMethods($classReflection)
     {
-        $methods = ['Missed, please, define $methods property in an extension class'];
-        $properties = $classReflection->getDefaultProperties();
+        $interface = $this->extractExtensionInterface($classReflection);
+        $methods = ['Missed, please, define methods in the extension interface'];
 
-        if (isset($properties['methods'])) {
-            $methods = ($preDefinedMethods = $properties['methods'])
-                ? array_keys($preDefinedMethods)
-                : $methods;
+        try {
+            $interfaceReflection = new \ReflectionClass($interface);
+            $interfaceMethods = $interfaceReflection->getMethods();
+
+            if (!empty($interfaceMethods)) {
+                $methods = [];
+                foreach ($interfaceMethods as $interfaceMethod) {
+                    $methods[] = $interfaceMethod->getName();
+                }
+            }
+        } catch (\Exception $e) {
+            // nothing to do, just skip this case
         }
 
         return $methods;
