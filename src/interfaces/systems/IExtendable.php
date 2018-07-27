@@ -17,12 +17,4 @@ interface IExtendable
      * @return bool
      */
     public function isImplementsInterface(string $interface): bool;
-
-    /**
-     * @param string $interface
-     * @param IExtension $interfaceImplementation
-     *
-     * @return bool true - interface registered, false - interface registration is failed
-     */
-    public function registerInterface(string $interface, IExtension $interfaceImplementation): bool;
 }

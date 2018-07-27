@@ -34,11 +34,6 @@ interface IExtension extends IItem
     const FIELD__ID = 'id';
 
     /**
-     * @return string[]
-     */
-    public function getMethodsNames();
-
-    /**
      * @param object $extendingSubject
      * @param string $methodName
      * @param $args

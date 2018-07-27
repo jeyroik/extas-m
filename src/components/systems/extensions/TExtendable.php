@@ -62,28 +62,6 @@ trait TExtendable
 
     /**
      * @param string $interface
-     * @param IExtension $interfaceImplementation
-     *
-     * @return bool
-     */
-    public function registerInterface(string $interface, IExtension $interfaceImplementation): bool
-    {
-        /**
-         * @var $extRepo IExtensionRepository
-         */
-        $extRepo = SystemContainer::getItem(IExtensionRepository::class);
-        $extRepo->create([
-            IExtension::FIELD__SUBJECT => $this->getSubjectForExtension(),
-            IExtension::FIELD__INTERFACE => $interface,
-            IExtension::FIELD__CLASS => get_class($interfaceImplementation),
-            IExtension::FIELD__METHODS => $interfaceImplementation->getMethodsNames()
-        ]);
-
-        return true;
-    }
-
-    /**
-     * @param string $interface
      *
      * @return bool
      */

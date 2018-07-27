@@ -28,7 +28,7 @@ class Extension extends Item implements IExtension
     {
         $args[] = &$subject;
 
-        return isset($this->methods[$methodName])
+        return method_exists($this, $methodName)
             ? call_user_func_array([$this, $methodName], $args)
             : null;
     }
