@@ -283,7 +283,7 @@ class PluginCrawler implements IPluginCrawler
 
             if ($this->rewriteIsOn()) {
                 if ($package && $packageDb) {
-                    $package->id = $packageDb->getId();
+                    $package['id'] = $packageDb->getId();
                 }
                 $storageMethod = $packageDb ? 'update' : 'create';
             } else {
