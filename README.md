@@ -36,7 +36,7 @@ Extas let you extend it by two dimensions:
 - functionality
 - stages triggering
 
-Stages - they are like events, you can subscribe to it by plugins and then react on stage is reached.
+Stages - they are like events, you can react on stage when it is reached.
 
 Functionality - this is built-in opportunity for extending exactly objects interface without needs to extends them physically by class extending. 
 This is reached by extensions.
