@@ -18,11 +18,17 @@ class PackageRootComposerExtractor implements IPackageRootExtractor
      * @param $rootPackagePath
      *
      * @return IPackageRoot
+     *
+     * @throws \Exception
      */
     public function __invoke($rootPackagePath): IPackageRoot
     {
         $finder = new Finder();
         $rootPackage = [];
+
+        if (!is_dir($rootPackagePath)) {
+            throw new \Exception('Missed or restricted path "' . $rootPackagePath . '".');
+        }
 
         foreach ($finder->files()->in($rootPackagePath) as $file) {
             /**

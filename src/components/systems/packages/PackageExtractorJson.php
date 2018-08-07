@@ -28,6 +28,10 @@ class PackageExtractorJson implements IPackageExtractor
         $finder = new Finder();
         $finder->name($packageConfigName);
 
+        if (!is_dir($fullPath)) {
+            return null;
+        }
+
         foreach ($finder->files()->in($fullPath) as $file) {
             /**
              * @var $file SplFileInfo

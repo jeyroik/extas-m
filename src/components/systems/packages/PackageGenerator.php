@@ -28,6 +28,8 @@ class PackageGenerator implements IPackageGenerator
      * @param $whereToSearch
      * @param $whereToPut
      * @param $configName
+     *
+     * @throws \Exception
      */
     public function __construct($whereToSearch, $whereToPut, $configName)
     {
@@ -255,9 +257,14 @@ class PackageGenerator implements IPackageGenerator
      * @param $path
      *
      * @return $this
+     * @throws \Exception
      */
     protected function setPathToSearch($path)
     {
+        if (!is_dir($path)) {
+            throw new \Exception('Missed or restricted path "' . $path . '".');
+        }
+
         $this->whereToSearch = $path;
 
         return $this;
@@ -267,9 +274,14 @@ class PackageGenerator implements IPackageGenerator
      * @param $path
      *
      * @return $this
+     * @throws \Exception
      */
     protected function setPathToPut($path)
     {
+        if (!is_dir($path)) {
+            throw new \Exception('Missed or restricted path "' . $path . '".');
+        }
+
         $this->whereToPut = $path;
 
         return $this;

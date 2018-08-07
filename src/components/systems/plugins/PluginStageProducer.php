@@ -23,6 +23,8 @@ class PluginStageProducer
      * PluginStageProducer constructor.
      *
      * @param $rootPath
+     *
+     * @throws \Exception
      */
     public function __construct($rootPath)
     {
@@ -100,6 +102,7 @@ class PluginStageProducer
 
     /**
      * @return $this
+     * @throws \Exception
      */
     protected function loadStages()
     {
@@ -215,9 +218,14 @@ class PluginStageProducer
      * @param $rootPath
      *
      * @return $this
+     * @throws \Exception
      */
     protected function setRootPath($rootPath)
     {
+        if (!is_dir($rootPath)) {
+            throw new \Exception('Missed or restricted path "' . $rootPath . '".');
+        }
+
         $this->rootPath = $rootPath;
 
         return $this;
