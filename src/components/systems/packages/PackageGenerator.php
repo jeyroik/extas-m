@@ -38,6 +38,7 @@ class PackageGenerator implements IPackageGenerator
 
     /**
      * @return bool
+     * @throws \Exception
      */
     public function generate(): bool
     {
@@ -59,6 +60,7 @@ class PackageGenerator implements IPackageGenerator
      * @param $config
      *
      * @return mixed
+     * @throws \Exception
      */
     protected function extractExtensions($config)
     {
@@ -81,6 +83,10 @@ class PackageGenerator implements IPackageGenerator
                 require_once $file->getRealPath();
                 $classReflection = new \ReflectionClass($className);
 
+                if ($classReflection->isInterface()) {
+                    continue;
+                }
+
                 $config['extensions'][] = [
                     'class' => $className,
                     'interface' => $this->extractExtensionInterface($classReflection),
@@ -101,7 +107,7 @@ class PackageGenerator implements IPackageGenerator
     protected function extractExtensionMethods($classReflection)
     {
         $interface = $this->extractExtensionInterface($classReflection);
-        $methods = ['Missed, please, define methods in the extension interface'];
+        $methods = ['Missed, please, define methods in the extension interface "' . $interface . '"'];
 
         try {
             $interfaceReflection = new \ReflectionClass($interface);
@@ -159,6 +165,7 @@ class PackageGenerator implements IPackageGenerator
      * @param $config
      *
      * @return mixed
+     * @throws \Exception
      */
     protected function extractPlugins($config)
     {
@@ -232,13 +239,10 @@ class PackageGenerator implements IPackageGenerator
     protected function extractPluginStage($classReflection)
     {
         $properties = $classReflection->getDefaultProperties();
+        $stage = 'Missed: please, define $preDefinedStage property in a plugin class';
 
-        if (isset($properties['preDefinedStage'])) {
-            $stage = ($preDefinedStage = $properties['preDefinedStage'])
-                ? $preDefinedStage
-                : 'Missed: please, define $preDefinedStage property in a plugin class';
-        } else {
-            $stage = 'Missed: please, define $preDefinedStage property in a plugin class';
+        if (isset($properties['preDefinedStage']) && ($preDefinedStage = $properties['preDefinedStage'])) {
+            $stage = $preDefinedStage;
         }
 
         return $stage;
