@@ -53,7 +53,10 @@ class PackageGenerator implements IPackageGenerator
         $config = $this->extractPlugins($config);
         $config = $this->extractExtensions($config);
 
-        return file_put_contents($this->configName, json_encode($config, JSON_PRETTY_PRINT));
+        return file_put_contents(
+            $this->whereToPut . '/' . $this->configName,
+            json_encode($config, JSON_PRETTY_PRINT)
+        );
     }
 
     /**
