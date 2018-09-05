@@ -20,6 +20,7 @@ class RepositoryMongo extends RepositoryAbstract implements IRepository
 
     const FLAG__UPDATE = '$set';
 
+    protected $dbName = 'g5';
     protected $collectionName = 'system';
 
     protected $collectionUID = 'id';
@@ -48,6 +49,8 @@ class RepositoryMongo extends RepositoryAbstract implements IRepository
     /**
      * RepositoryMongo constructor.
      * @param string $dsn
+     *
+     * @throws
      */
     public function __construct($dsn = '')
     {
@@ -268,6 +271,7 @@ class RepositoryMongo extends RepositoryAbstract implements IRepository
 
     /**
      * @return $this
+     * @throws
      */
     protected function initCollection()
     {
@@ -276,11 +280,21 @@ class RepositoryMongo extends RepositoryAbstract implements IRepository
         }
 
         $collectionName = $this->collectionName;
-        $this->collection = $this->driver->g5->$collectionName;
+        $dbName = $this->dbName ?: getenv('EXTAS__MONGO_DB');
+
+        if (empty($dbName)) {
+            throw new \Exception('Missed Mongo db name');
+        }
+
+        $this->collection = $this->driver->$dbName->$collectionName;
 
         return $this;
     }
 
+    /**
+     * @return $this
+     * @throws \Exception
+     */
     protected function initDriver()
     {
         $this->driver = new \MongoDB\Client($this->dsn);
