@@ -211,10 +211,10 @@ class RepositoryMongo extends RepositoryAbstract implements IRepository
                 $itemValue = ['$in' => $itemValue->__toArray()];
             }
 
-            $this->where[$itemName] = $itemValue;
+            $where[$itemName] = $itemValue;
         }
 
-        return $this;
+        return $where;
     }
 
     /**
