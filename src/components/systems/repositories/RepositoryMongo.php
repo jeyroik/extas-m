@@ -190,8 +190,28 @@ class RepositoryMongo extends RepositoryAbstract implements IRepository
                 $compositeWhere .= '}';
                 $this->where = ['$where' => $compositeWhere];
             } else {
-                $this->where = $where;
+                $this->where = $this->buildWhere($where);
             }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @param $where
+     *
+     * @return $this
+     */
+    protected function buildWhere($where)
+    {
+        foreach ($where as $itemName => $itemValue) {
+            if (is_array($itemValue)) {
+                $itemValue = ['$in' => $itemValue];
+            } elseif ($itemValue instanceof IItem) {
+                $itemValue = ['$in' => $itemValue->__toArray()];
+            }
+
+            $this->where[$itemName] = $itemValue;
         }
 
         return $this;
