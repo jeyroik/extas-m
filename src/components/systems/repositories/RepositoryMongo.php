@@ -198,6 +198,47 @@ class RepositoryMongo extends RepositoryAbstract implements IRepository
     }
 
     /**
+     * @param $name
+     * @param $value
+     *
+     * @return mixed
+     */
+    protected function queryModification($name, $value)
+    {
+        /**
+         * todo
+         */
+        $modificators = [
+            '$regex' => function ($name, $value, $operated) {
+                if (is_array($value) && isset($value['$regex']) && !$operated) {
+                    return [$name, $value, true];
+                }
+
+                return [$name, $value, $operated];
+            },
+            '$in' => function ($name, $value, $operated) {
+                if (is_array($value) && !$operated) {
+                    return [
+                        $name,
+                        ['$in' => $value],
+                        true
+                    ];
+                }
+
+                return [$name, $value, $operated];
+            }
+        ];
+
+        $operated = false;
+
+        foreach ($modificators as $modificator) {
+            list($name, $value, $operated) = $modificator($name, $value, $operated);
+        }
+
+        return [$name, $value];
+    }
+
+    /**
      * @param $where
      *
      * @return $this
@@ -205,12 +246,11 @@ class RepositoryMongo extends RepositoryAbstract implements IRepository
     protected function buildWhere($where)
     {
         foreach ($where as $itemName => $itemValue) {
-            if (is_array($itemValue)) {
-                $itemValue = ['$in' => $itemValue];
-            } elseif ($itemValue instanceof IItem) {
-                $itemValue = ['$in' => $itemValue->__toArray()];
+            if ($itemValue instanceof IItem) {
+                $itemValue = $itemValue->__toArray();
             }
 
+            list($itemName, $itemValue) = $this->queryModification($itemName, $itemValue);
             $where[$itemName] = $itemValue;
         }
 
