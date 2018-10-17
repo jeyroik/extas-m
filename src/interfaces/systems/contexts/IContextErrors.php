@@ -20,4 +20,9 @@ interface IContextErrors
      * @return IContext
      */
     public function addError($error, IContext &$context = null);
+
+    /**
+     * @return mixed
+     */
+    public function getErrors();
 }

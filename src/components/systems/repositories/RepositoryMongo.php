@@ -135,7 +135,7 @@ class RepositoryMongo extends RepositoryAbstract implements IRepository
      */
     public function one()
     {
-        $items = $this->where ? $this->collection->find($this->where)->toArray() : [];
+        $items = $this->collection->find($this->where ?: [])->toArray();
         $item = count($items) ? array_shift($items) : [];
 
         $itemClass = $this->getItemClass();
@@ -152,15 +152,13 @@ class RepositoryMongo extends RepositoryAbstract implements IRepository
         $items = [];
         $itemClass = $this->getItemClass();
 
-        if ($this->where) {
-            $rows = $this->collection->find($this->where)->toArray();
+        $rows = $this->collection->find($this->where ?: [])->toArray();
 
-            foreach ($rows as $item) {
-                /**
-                 * @var $item BSONDocument
-                 */
-                $items[] = new $itemClass($this->unSerializeItem($item));
-            }
+        foreach ($rows as $item) {
+            /**
+             * @var $item BSONDocument
+             */
+            $items[] = new $itemClass($this->unSerializeItem($item));
         }
 
         $this->reset();

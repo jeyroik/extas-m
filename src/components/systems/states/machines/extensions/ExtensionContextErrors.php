@@ -40,4 +40,14 @@ class ExtensionContextErrors extends Extension implements IContextErrors
 
         return $context;
     }
+
+    /**
+     * @param IContext|null $context
+     *
+     * @return mixed
+     */
+    public function getErrors(IContext $context = null)
+    {
+        return isset($context[static::CONTEXT__ITEM__ERRORS]) ? $context[static::CONTEXT__ITEM__ERRORS] : [];
+    }
 }
