@@ -92,6 +92,8 @@ class RepositoryMongo extends RepositoryAbstract implements IRepository
             $this->reset();
 
             return $removed->getDeletedCount();
+        } else {
+            $this->find([$this->collectionUID => $item[$this->collectionUID]])->delete($item);
         }
 
         return 0;
