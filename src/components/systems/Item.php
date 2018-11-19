@@ -200,6 +200,20 @@ abstract class Item implements IItem, IMachineAvailable
     }
 
     /**
+     * @param $item
+     *
+     * @return $this|IItem
+     */
+    public function __saved($item)
+    {
+        foreach ($this->getPluginsByStage($this->getSubjectForExtension() . '.saved') as $plugin) {
+            $plugin($this, $item);
+        }
+
+        return $this;
+    }
+
+    /**
      * @param $config
      *
      * @return IItem|mixed

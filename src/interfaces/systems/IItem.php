@@ -37,4 +37,11 @@ interface IItem extends \ArrayAccess, \Iterator, IPluginsAcceptable, IExtendable
      * @return int
      */
     public function __toInt(): int;
+
+    /**
+     * @param $item
+     *
+     * @return $this
+     */
+    public function __saved($item);
 }
