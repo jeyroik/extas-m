@@ -74,7 +74,10 @@ class RepositoryMongo extends RepositoryAbstract implements IRepository
             throw new \Exception('Unsupported item type "' . gettype($item) . '".');
         }
 
-        $this->collection->insertOne($data);
+        $inserted = $this->collection->insertOne($data);
+        if ($this->collectionUID == '_id') {
+            $item[$this->collectionUID] = $inserted->getInsertedId();
+        }
         $itemClass = $this->getItemClass();
 
         return is_object($item) ? $item : new $itemClass($item);
