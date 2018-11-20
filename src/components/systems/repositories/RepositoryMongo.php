@@ -79,9 +79,9 @@ class RepositoryMongo extends RepositoryAbstract implements IRepository
         if ($this->collectionUID == '_id') {
             $item[$this->collectionUID] = $inserted->getInsertedId();
         }
-        
+
         if ($item instanceof IItem) {
-            $item->__saved($inserted);
+            $item->__saved($inserted, $this);
         }
 
         $itemClass = $this->getItemClass();

@@ -40,8 +40,9 @@ interface IItem extends \ArrayAccess, \Iterator, IPluginsAcceptable, IExtendable
 
     /**
      * @param $item
+     * @param $repo IRepository
      *
      * @return $this
      */
-    public function __saved($item);
+    public function __saved($item, $repo);
 }

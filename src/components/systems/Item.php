@@ -4,6 +4,7 @@ namespace jeyroik\extas\components\systems;
 use jeyroik\extas\components\systems\extensions\TExtendable;
 use jeyroik\extas\components\systems\states\machines\TMachineAvailable;
 use jeyroik\extas\interfaces\systems\IItem;
+use jeyroik\extas\interfaces\systems\IRepository;
 use jeyroik\extas\interfaces\systems\states\machines\IMachineAvailable;
 
 /**
@@ -201,13 +202,14 @@ abstract class Item implements IItem, IMachineAvailable
 
     /**
      * @param $item
+     * @param $repo IRepository
      *
      * @return $this|IItem
      */
-    public function __saved($item)
+    public function __saved($item, $repo)
     {
         foreach ($this->getPluginsByStage($this->getSubjectForExtension() . '.saved') as $plugin) {
-            $plugin($this, $item);
+            $plugin($this, $item, $repo);
         }
 
         return $this;
