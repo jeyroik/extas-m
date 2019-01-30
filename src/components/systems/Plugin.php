@@ -100,6 +100,18 @@ class Plugin extends Item implements IPlugin, IItemClassObject
         return $this->stage;
     }
 
+    protected function triggerInit()
+    {
+        /**
+         * Пытаемся избежать цикличности.
+         */
+        if ($this->getStage() == static::SUBJECT . '.init') {
+            return $this;
+        }
+
+        return parent::triggerInit();
+    }
+
     /**
      * @return string
      */
