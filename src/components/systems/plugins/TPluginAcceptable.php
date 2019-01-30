@@ -25,8 +25,10 @@ trait TPluginAcceptable
          */
         $pluginRepo = SystemContainer::getItem(IPluginRepository::class);
         $plugins = $pluginRepo->find([IPlugin::FIELD__STAGE => $stage])->all();
+        $logIndex = PluginLog::log(get_class($this), $stage, count($plugins));
 
         foreach ($plugins as $plugin) {
+            PluginLog::logPluginClass(get_class($plugin), $logIndex);
             yield $plugin;
         }
     }
