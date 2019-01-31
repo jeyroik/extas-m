@@ -94,15 +94,7 @@ class Plugin extends Item implements IPlugin, IItemClassObject
      */
     public function getClass(): string
     {
-        return $this->class;
-    }
-
-    /**
-     * @return string
-     */
-    public function getVersion()
-    {
-        return $this->version;
+        return $this->config[static::FIELD__CLASS] ?? '';
     }
 
     /**
@@ -110,9 +102,12 @@ class Plugin extends Item implements IPlugin, IItemClassObject
      */
     public function getStage(): string
     {
-        return $this->stage;
+        return $this->config[static::FIELD__STAGE] ?? '';
     }
 
+    /**
+     * @return $this|Item
+     */
     protected function triggerInit()
     {
         /**
