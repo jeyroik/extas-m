@@ -223,10 +223,11 @@ class RepositoryMongo extends RepositoryAbstract implements IRepositoryMongo
         ]];
 
         foreach ($fields as $index => $field) {
+            unset($fields[$index]);
             if (is_array($field)) {
+                $query[0]['$group'][$index] = $field;
                 continue;
             }
-            unset($fields[$index]);
             $fields[$field] = '$' . $field;
         }
 
