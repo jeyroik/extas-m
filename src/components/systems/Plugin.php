@@ -20,6 +20,19 @@ class Plugin extends Item implements IPlugin, IItemClassObject
     public $preDefinedStage = '';
 
     /**
+     *
+     */
+    public function __destruct()
+    {
+        /**
+         * Пытаемся избежать цикличности.
+         */
+        if ($this->getStage() != static::SUBJECT . '.after') {
+            parent::__destruct();
+        }
+    }
+
+    /**
      * @param $config
      *
      * @return IPlugin
