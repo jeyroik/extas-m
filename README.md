@@ -1,8 +1,6 @@
 # extas-m
 EXTendable State Machine
 
-Stage flow see here: http://extas.jeyroik.ru (RU lang)
-
 # install
 
 ```composer require jeyroik/extas-m:*```
@@ -34,19 +32,13 @@ echo '</pre>';
 Extas let you extend it by two dimensions:
 
 - functionality
-- stages triggering
+- behaviour
 
 Stages - they are like events, you can react on stage when it is reached.
 
 Functionality - this is built-in opportunity for extending exactly objects interface without needs to extends them physically by class extending. 
 This is reached by extensions.
 
-## plugins
+## using parts of extas
 
-- create you plugin
-- require it to you project
-
-## extensions
-
-- create extension
-- require it to your project
+You also can use only parts of extas, for example, you can create event-based app by including only plugins mechanism.
