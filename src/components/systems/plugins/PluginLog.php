@@ -35,6 +35,14 @@ class PluginLog
     ];
 
     /**
+     * @return array
+     */
+    public static function getLog()
+    {
+        return static::$pluginLog;
+    }
+
+    /**
      * @return int
      */
     public static function getLogIndex()
