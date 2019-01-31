@@ -1,9 +1,10 @@
 <?php
 namespace jeyroik\extas\components\systems\repositories;
 
+use jeyroik\extas\interfaces\systems\IRepository;
+use jeyroik\extas\interfaces\systems\repositories\IRepositoryMongo;
 use MongoDB\Model\BSONDocument;
 use jeyroik\extas\interfaces\systems\IItem;
-use jeyroik\extas\interfaces\systems\IRepository;
 
 /**
  * Class RepositoryMongo
@@ -11,7 +12,7 @@ use jeyroik\extas\interfaces\systems\IRepository;
  * @package jeyroik\extas\components\systems\repositories
  * @author Funcraft <me@funcraft.ru>
  */
-class RepositoryMongo extends RepositoryAbstract implements IRepository
+class RepositoryMongo extends RepositoryAbstract implements IRepositoryMongo
 {
     const CLAUSE__FIELD = 0;
     const CLAUSE__WHERE = 1;
@@ -204,6 +205,52 @@ class RepositoryMongo extends RepositoryAbstract implements IRepository
         }
 
         return $this;
+    }
+
+    /**
+     * @param $fields
+     * @param $options
+     *
+     * @return array
+     */
+    public function group($fields, $options = [])
+    {
+        /**
+         * @var $cursor \MongoDb\Driver\Cursor
+         */
+        $query = [[
+            '$group' => ['_id' => []]
+        ]];
+
+        foreach ($fields as $index => $field) {
+            if (is_array($field)) {
+                continue;
+            }
+            unset($fields[$index]);
+            $fields[$field] = '$' . $field;
+        }
+
+        $query[0]['$group']['_id'] = $fields;
+        if (!empty($options)) {
+            $query = array_merge($query, $options);
+        }
+        $cursor = $this->collection->aggregate($query);
+
+        $rows = $cursor->toArray();
+        $items = [];
+
+        foreach ($rows as $item) {
+            /**
+             * @var $item BSONDocument
+             */
+            $unpackedItem = $this->unSerializeItem($item);
+            $groupedField = $unpackedItem['_id'];
+            unset($unpackedItem['_id']);
+            $items[] = array_merge($unpackedItem, $groupedField);
+        }
+        $this->reset();
+
+        return $items;
     }
 
     /**

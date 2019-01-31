@@ -11,5 +11,17 @@ use jeyroik\extas\interfaces\systems\IRepository;
  */
 interface IPluginRepository extends IRepository
 {
+    /**
+     * @param $stage
+     *
+     * @return bool
+     */
+    public function hasStagePlugins($stage): bool;
 
+    /**
+     * @param $stage
+     *
+     * @return \Generator
+     */
+    public function getStagePlugins($stage);
 }

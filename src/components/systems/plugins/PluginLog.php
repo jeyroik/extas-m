@@ -53,18 +53,17 @@ class PluginLog
     /**
      * @param $riser
      * @param $stage
-     * @param $pluginsCount
      *
      * @return int
      */
-    public static function log($riser, $stage, $pluginsCount)
+    public static function log($riser, $stage)
     {
         $riserClass = self::getRiser($riser);
         $logIndex = static::getLogIndex();
         self::$pluginLog['log'][$logIndex] = [
             'stage' => $stage,
             'riser' => $riserClass,
-            'plugins_count' => $pluginsCount,
+            'plugins_count' => 0,
             'plugins' => []
         ];
         static::logPluginRiser($riserClass);
@@ -100,6 +99,8 @@ class PluginLog
     public static function logPluginClass($class, $logIndex)
     {
         self::$pluginLog['log'][$logIndex]['plugins'][] = $class;
+        self::$pluginLog['log'][$logIndex]['plugins_count'] ++;
+
         self::$pluginLog['count']['pct'] ++;
         self::$pluginLog['count']['pc'][$class] = self::$pluginLog['count']['pc'][$class] ?? 0;
         self::$pluginLog['count']['pc'][$class] ++;
