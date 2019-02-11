@@ -273,6 +273,17 @@ class RepositoryMongo extends RepositoryAbstract implements IRepositoryMongo
 
                 return [$name, $value, $operated];
             },
+            '$ne' => function ($name, $value, $operated) {
+                if (is_array($value) && !$operated && isset($value['$ne'])) {
+                    return [
+                        $name,
+                        ['$ne' => $value],
+                        true
+                    ];
+                }
+
+                return [$name, $value, $operated];
+            },
             '$in' => function ($name, $value, $operated) {
                 if (is_array($value) && !$operated) {
                     return [
@@ -290,6 +301,9 @@ class RepositoryMongo extends RepositoryAbstract implements IRepositoryMongo
 
         foreach ($modificators as $modificator) {
             list($name, $value, $operated) = $modificator($name, $value, $operated);
+            if ($operated) {
+                break;
+            }
         }
 
         return [$name, $value];
