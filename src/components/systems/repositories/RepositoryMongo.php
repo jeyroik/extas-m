@@ -274,12 +274,8 @@ class RepositoryMongo extends RepositoryAbstract implements IRepositoryMongo
                 return [$name, $value, $operated];
             },
             '$ne' => function ($name, $value, $operated) {
-                if (is_array($value) && !$operated && isset($value['$ne'])) {
-                    return [
-                        $name,
-                        ['$ne' => $value],
-                        true
-                    ];
+                if (is_array($value) && isset($value['$ne']) && !$operated) {
+                    return [$name, $value, true];
                 }
 
                 return [$name, $value, $operated];
