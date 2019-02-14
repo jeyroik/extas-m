@@ -97,13 +97,13 @@ class RepositoryMongo extends RepositoryAbstract implements IRepositoryMongo
      */
     public function delete($item): int
     {
-        if ($this->where) {
+        if (!empty($this->where)) {
             $removed = $this->collection->deleteMany($this->where);
             $this->reset();
 
             return $removed->getDeletedCount();
         } else {
-            $this->find([$this->collectionUID => $item[$this->collectionUID]])->delete($item);
+            $this->find([$this->collectionUID => $this->validateUid($item[$this->collectionUID])])->delete($item);
         }
 
         return 0;
@@ -252,6 +252,30 @@ class RepositoryMongo extends RepositoryAbstract implements IRepositoryMongo
         $this->reset();
 
         return $items;
+    }
+
+    /**
+     * @param $uid
+     *
+     * @return mixed|string
+     * @throws
+     */
+    protected function validateUid($uid)
+    {
+        if (is_array($uid)) {
+            if (isset($uid['oid'])) {
+                $uid = $uid['oid'];
+            } else {
+                foreach ($uid as $index => $uidItem) {
+                    if (!is_numeric($index)) {
+                        throw new \Exception('Incorrect index "' . $index . '"');
+                    }
+                }
+                return $uid;
+            }
+        }
+
+        return (string) $uid;
     }
 
     /**
