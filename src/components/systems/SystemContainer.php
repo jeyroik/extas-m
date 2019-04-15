@@ -25,7 +25,7 @@ class SystemContainer implements IContainer
     /**
      * @param string $name
      *
-     * @return mixed|object
+     * @return mixed
      */
     public static function getItem($name)
     {
@@ -33,7 +33,19 @@ class SystemContainer implements IContainer
     }
 
     /**
+     * @param string $name
+     * @param $value
+     *
+     * @return mixed
+     */
+    public static function addItem($name, $value)
+    {
+        return static::getInstance()->add($name, $value);
+    }
+
+    /**
      * @return static
+     * @throws
      */
     protected static function getInstance()
     {
@@ -67,10 +79,21 @@ class SystemContainer implements IContainer
     /**
      * @param $name
      *
-     * @return mixed|object
+     * @return mixed
      */
     public function get($name)
     {
         return $this->container->get($name);
+    }
+
+    /**
+     * @param $name
+     * @param $value
+     *
+     * @return mixed
+     */
+    public function add($name, $value)
+    {
+        return $this->container->add($name, $value);
     }
 }

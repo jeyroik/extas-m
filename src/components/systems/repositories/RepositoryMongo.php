@@ -94,6 +94,7 @@ class RepositoryMongo extends RepositoryAbstract implements IRepositoryMongo
      * @param $item
      *
      * @return int
+     * @throws
      */
     public function delete($item): int
     {

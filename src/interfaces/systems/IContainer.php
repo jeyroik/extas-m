@@ -15,4 +15,12 @@ interface IContainer
      * @return mixed
      */
     public static function getItem($name);
+
+    /**
+     * @param $name string
+     * @param $value
+     *
+     * @return mixed
+     */
+    public static function addItem($name, $value);
 }
