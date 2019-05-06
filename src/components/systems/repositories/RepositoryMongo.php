@@ -81,13 +81,14 @@ class RepositoryMongo extends RepositoryAbstract implements IRepositoryMongo
             $item[$this->collectionUID] = $inserted->getInsertedId();
         }
 
+        $itemClass = $this->getItemClass();
+        $item = is_object($item) ? $item : new $itemClass($item);
+
         if ($item instanceof IItem) {
-            $item->__saved($inserted, $this);
+            $item->__created($inserted, $this);
         }
 
-        $itemClass = $this->getItemClass();
-
-        return is_object($item) ? $item : new $itemClass($item);
+        return $item;
     }
 
     /**

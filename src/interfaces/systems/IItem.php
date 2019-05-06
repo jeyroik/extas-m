@@ -44,5 +44,5 @@ interface IItem extends \ArrayAccess, \Iterator, IPluginsAcceptable, IExtendable
      *
      * @return $this
      */
-    public function __saved($item, $repo);
+    public function __created($item, $repo);
 }

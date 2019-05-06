@@ -206,9 +206,9 @@ abstract class Item implements IItem, IMachineAvailable
      *
      * @return $this|IItem
      */
-    public function __saved($item, $repo)
+    public function __created($item, $repo)
     {
-        foreach ($this->getPluginsByStage($this->getSubjectForExtension() . '.saved') as $plugin) {
+        foreach ($this->getPluginsByStage($this->getSubjectForExtension() . '.created') as $plugin) {
             $plugin($this, $item, $repo);
         }
 
