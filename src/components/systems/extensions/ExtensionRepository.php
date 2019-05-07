@@ -15,4 +15,5 @@ class ExtensionRepository extends RepositoryClassObjects implements IExtensionRe
 {
     protected $itemClass = Extension::class;
     protected $collectionName = 'extas__extensions';
+    protected $collectionUID = Extension::FIELD__CLASS;
 }
