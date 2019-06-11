@@ -433,7 +433,7 @@ class RepositoryMongo extends RepositoryAbstract implements IRepositoryMongo
         }
 
         $collectionName = $this->collectionName;
-        $dbName = $this->dbName ?: getenv('EXTAS__MONGO_DB');
+        $dbName = getenv('EXTAS__MONGO_DB') ?: $this->dbName;
 
         if (empty($dbName)) {
             throw new \Exception('Missed Mongo db name');
@@ -450,7 +450,7 @@ class RepositoryMongo extends RepositoryAbstract implements IRepositoryMongo
      */
     protected function initDriver()
     {
-        $this->driver = new \MongoDB\Client($this->dsn);
+        $this->driver = new \MongoDB\Client(getenv('EXTAS__MONGO_DSN') ?: $this->dsn);
         $this->initCollection();
 
         return $this;

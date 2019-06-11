@@ -23,4 +23,9 @@ interface IContainer
      * @return mixed
      */
     public static function addItem($name, $value);
+
+    /**
+     * @return mixed
+     */
+    public static function reset();
 }

@@ -44,6 +44,16 @@ class SystemContainer implements IContainer
     }
 
     /**
+     * @return IContainer
+     */
+    public static function reset()
+    {
+        self::$instance = null;
+
+        return self::getInstance();
+    }
+
+    /**
      * @return static
      * @throws
      */
