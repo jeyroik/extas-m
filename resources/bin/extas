@@ -4,6 +4,11 @@ require getcwd() . '/vendor/autoload.php';
 
 define('EXTAS__APPLICATION_PATH', getcwd());
 
+if (is_file(getcwd() . '/.env')) {
+    $dotenv = new \Dotenv\Dotenv(getcwd().'/');
+    $dotenv->load();
+}
+
 use Symfony\Component\Console\Application;
 
 $application = new Application();

@@ -13,7 +13,8 @@
     "symfony/finder": "*",
     "psr/container": "*",
     "league/container": "*",
-    "mongodb/mongodb": "*"
+    "mongodb/mongodb": "*",
+    "vlucas/phpdotenv": "^2.4"
   },
   "autoload": {
     "psr-4": {
