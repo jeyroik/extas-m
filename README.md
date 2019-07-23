@@ -1,44 +1,257 @@
 # extas-m
-EXTendable State Machine
 
-# install
+Пакет машины состояния для Extas'a.
+
+# Установка
 
 ```composer require jeyroik/extas-m:*```
 
-# usage
+# Использование
 
-- define generic plugins
-- define all other plugins
-- define machine config
-- define dispatchers for your states (or you can use built-in dispatchers for test aims)
-- run machine
+## Использование демонстрационной машины состояния
+
+Сразу же после установки можно запустить демонстрационную машину состояния:
 
 ```php
-$config = [...]; // or dsn if you have db generic plugins
-$extas = new jeyroik\extas\components\systmes\states\StateMachine($config);
-$extas->run();
+use extas\components\SystemContainer as Container;
+use extas\interfaces\machines\IMachineRepository;
+use extas\interfaces\machines\IMachine;
+
+$machineRepo = Container::getItem(IMachineRepository::class);
+$machine = $machineRepo->one([IMachine::FIELD__NAME => 'extas.demo']);
+$machine->run('init', ['anything' => 'you want']);
 ```
 
-If you are using State route plugin (by default), you can see states route:
+Вы должны увидеть следующий вывод:
+
+```text
+Initialized demo machine with the context:
+[
+    'anything' => 'you want'
+]
+Set to context initialized = true
+Finished demo machine with the context: 
+[
+    'anything' => 'you want',
+    'initialized' => true
+]
+```
+
+Кроме того, можно посмотреть цепочку переходов состояний из одного в другое:
 
 ```php
-echo '<pre>';
-print_r($extas->getRoute());
-echo '</pre>';
+echo '<pre>' . print_r($machine->getDump(), true) . '</pre>;
 ```
 
-# extending state machine
+Вы должны увидеть следующее:
 
-Extas let you extend it by two dimensions:
+```text
+[
+    [
+        'state_from' => 'extas.demo.not initialized yet',
+        'state_to' => 'extas.demo.init',
+        'context' => [
+            'anything' => 'you want'
+        ]
+    ],
+    [
+        'state_from' => 'extas.demo.init',
+        'state_to' => 'extas.demo.end',
+        'context' => [
+            'anything' => 'you want',
+            'initialized' => true
+        ]    
+    ]
+]
+```
 
-- functionality
-- behaviour
+## Создание своей машины состояния
+    
+### Создание конфигурации машины
 
-Stages - they are like events, you can react on stage when it is reached.
+Для начала необходимо сконфигурировать машину и состояния. Их необходимо указать в extas-совместимой конфигурации.
 
-Functionality - this is built-in opportunity for extending exactly objects interface without needs to extends them physically by class extending. 
-This is reached by extensions.
+```json
+{
+  "machine_states": [
+    {
+      "name": "init",
+      "title": "Инициализация",
+      "description": "Состояние инициализации машины"
+    },
+    {
+      "name": "hello",
+      "title": "Привет",
+      "description": "Приветствие",
+      "parameters": [{"name": "text"}]
+    },
+    {
+      "name": "space",
+      "title": "Пробел",
+      "description": "Состояние пробела",
+      "parameters": [{"name": "text"}]
+    },
+    {
+      "name": "end",
+      "title": "Конец",
+      "description": "завершающее состояние машины",
+      "parameters": [{"name": "text"}]
+    },
+    {
+      "name": "someone",
+      "title": "Некто",
+      "description": "Состояние незнакомца",
+      "parameters": [{"name": "text"}, {"name": "user"}]
+    },
+    {
+      "name": "print_html",
+      "title": "Вывести HTML",
+      "description": "Вывод HTML",
+      "parameters": [{"name": "data"}]
+    },
+    {
+      "name": "print_json",
+      "title": "Вывод JSON",
+      "description": "Вывод JSON",
+      "parameters": [{"name": "data"}]
+    }
+  ],
+  "machines": [
+    {
+      "name": "hello_world",
+      "title": "Привет мир",
+      "description": "Данная машина выводит приветственное сообщение миру",
+      "states": [
+        {
+          "name": "init",
+          "on_success": {"state": "hello"},
+          "on_failure": {"state": "end"}
+        },
+        {
+          "name": "hello",
+          "on_success": {"state": "space"},
+          "on_failure": {"state": "end"}
+        },
+        {
+          "name": "space",
+          "on_success": {"state": "world"},
+          "on_failure": {"state": "end"}
+        },
+        {
+          "name": "world",
+          "on_success": {"state": "end"},
+          "on_failure": {"state": "someone"}
+        },
+        {
+          "name": "end",
+          "on_success": {"machine": "sub_machine", "state": "print_html"}
+        },
+        {
+          "name": "someone"
+        }
+      ]
+    },
+    {
+      "name": "sub_machine",
+      "parameters": [{"name": "text"}],
+      "states": [
+        {
+          "name": "print_html",
+          "on_failure": {"state": "print_json"}
+        },
+        {
+          "name": "print_json"
+        }
+      ]
+    }
+  ]
+}
+```
 
-## using parts of extas
+- `Параметры состояния` - это необходимые для состояния параметры контекста. Если хотя бы один из параметров отсутствует в контексте, то состояние считается не валидным и его запуск будет отменён.
+- `Параметры машины` - это параметры для всех состояний, используемых в данной машине. 
 
-You also can use only parts of extas, for example, you can create event-based app by including only plugins mechanism.
+### Создание плагинов для состояний
+
+Далее необходимо создать плагины для обработки состояний. 
+
+```php
+use extas\components\plugins\Plugin;
+
+class PluginStateHello extends Plugin
+{
+    public function __invoke($state, &$context, $machine, &$isSuccess)
+    {
+        $context['text'] = $context['text'] . 'hello';
+        $isSuccess = true;
+    }
+}
+
+class PluginStateSpace extends Plugin
+{
+    public function __invoke($state, &$context, $machine, &$isSuccess)
+    {
+        $context['text'] = $context['text'] . ' ';
+        $isSuccess = true;
+    }
+}
+
+class PluginStateWorld extends Plugin
+{
+    public function __invoke($state, &$context, $machine, &$isSuccess)
+    {
+        $context['text'] = $context['text'] . 'world';
+        $isSuccess = true;
+    }
+}
+```
+### Установка машины, состояний и плагинов
+
+`/vendor/bin/extas i`
+
+### Запуск машины состояния
+
+```php
+$machine = $machineRepo->one([IMachine::FIELD__NAME => 'hello_world'])
+$machine->run('hello', ['text' => '']); // "hello world" 
+/**
+ * [
+ *    [
+ *      "state_from" => "hello_world.init",
+ *      "state_to" => "hello_world.hello",
+ *      "context" => [
+ *        "text" => ""
+ *      ]
+ *    ],
+ *    [
+ *      "state_from" => "hello_world.hello",
+ *      "state_to" => "hello_world.hello",
+ *      "context" => [
+ *        "text" => "hello"
+ *      ]
+ *    ], 
+ *    [
+ *      "state_from" => "hello_world.space",
+ *      "state_to" => "hello_world.hello",
+ *      "context" => [
+ *        "text" => "hello "
+ *      ]
+ *    ],
+ *    [
+ *      "state_from" => "hello_world.world",
+ *      "state_to" => "hello_world.end",
+ *      "context" => [
+ *        "text" => "hello world"
+ *      ]
+ *    ],
+ *    [
+ *      "state_from" => "hello_world.end",
+ *      "state_to" => "sub_machine.print_html",
+ *      "context" => [
+ *        "text" => "hello world"
+ *      ]
+ *    ]
+ * ] 
+ */
+$machine->dump();
+```
