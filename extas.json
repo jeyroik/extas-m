@@ -3,11 +3,11 @@
   "package_classes": [
     {
       "class": "extas\\components\\machines\\MachineRepository",
-      "interface": "extas\\interafces\\machines\\IMachineRepository"
+      "interface": "extas\\interfaces\\machines\\IMachineRepository"
     },
     {
       "class": "extas\\components\\machines\\states\\MachineStateRepository",
-      "interface": "extas\\interafces\\machines\\states\\IMachineStateRepository"
+      "interface": "extas\\interfaces\\machines\\states\\IMachineStateRepository"
     }
   ],
   "machine_states": [
