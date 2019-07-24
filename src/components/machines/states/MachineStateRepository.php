@@ -1,5 +1,5 @@
 <?php
-namespace extas\components\states;
+namespace extas\components\machines\states;
 
 use extas\components\machines\states\MachineState;
 use extas\components\repositories\Repository;
