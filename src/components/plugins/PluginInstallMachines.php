@@ -12,9 +12,9 @@ use extas\interfaces\machines\IMachineRepository;
  */
 class PluginInstallMachines extends PluginInstallDefault
 {
-    protected $selfItemClass = Machine::class;
-    protected $selfRepositoryClass = IMachineRepository::class;
-    protected $selfUID = Machine::FIELD__NAME;
-    protected $selfSection = 'machines';
-    protected $selfName = 'machine';
+    protected string $selfItemClass = Machine::class;
+    protected string $selfRepositoryClass = IMachineRepository::class;
+    protected string $selfUID = Machine::FIELD__NAME;
+    protected string $selfSection = 'machines';
+    protected string $selfName = 'machine';
 }

@@ -9,7 +9,7 @@ namespace extas\interfaces\contexts;
  */
 interface IHasContext
 {
-    const FIELD__CONTEXT = 'context';
+    public const FIELD__CONTEXT = 'context';
 
     /**
      * @return IContext

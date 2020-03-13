@@ -13,9 +13,9 @@ use extas\interfaces\machines\states\IMachineStateRepository;
  */
 class MachineStateRepository extends Repository implements IMachineStateRepository
 {
-    protected $pk = MachineState::FIELD__NAME;
-    protected $name = 'state';
-    protected $scope = 'extas';
-    protected $itemClass = MachineState::class;
-    protected $idAs = '';
+    protected string $pk = MachineState::FIELD__NAME;
+    protected string $name = 'state';
+    protected string $scope = 'extas';
+    protected string $itemClass = MachineState::class;
+    protected string $idAs = '';
 }

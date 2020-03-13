@@ -2,9 +2,9 @@
   "name": "jeyroik/extas-m",
   "description": "EXTendable State Machine.",
   "require": {
-    "jeyroik/extas-foundation": "*",
-    "jeyroik/extas-base": "*",
-    "jeyroik/extas-installer": "*"
+    "jeyroik/extas-foundation": "2.*",
+    "jeyroik/extas-base": "1.*",
+    "jeyroik/extas-installer": "2.*"
   },
   "autoload": {
     "psr-4": {

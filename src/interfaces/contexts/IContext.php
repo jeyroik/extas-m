@@ -11,5 +11,5 @@ use extas\interfaces\IItem;
  */
 interface IContext extends IItem
 {
-    const SUBJECT = 'extas.context';
+    public const SUBJECT = 'extas.context';
 }

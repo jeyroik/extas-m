@@ -12,9 +12,9 @@ use extas\interfaces\repositories\IRepository;
  */
 class MachineRepository extends Repository implements IRepository
 {
-    protected $idAs = '';
-    protected $itemClass = Machine::class;
-    protected $scope = 'extas';
-    protected $name = 'machines';
-    protected $pk = Machine::FIELD__NAME;
+    protected string $idAs = '';
+    protected string $itemClass = Machine::class;
+    protected string $scope = 'extas';
+    protected string $name = 'machines';
+    protected string $pk = Machine::FIELD__NAME;
 }

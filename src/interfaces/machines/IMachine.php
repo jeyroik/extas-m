@@ -16,14 +16,14 @@ use extas\interfaces\contexts\IContext;
  */
 interface IMachine extends IItem, IHasName, IHasDescription, IHasParameters, IHasContext
 {
-    const SUBJECT = 'extas.machine';
+    public const SUBJECT = 'extas.machine';
 
-    const FIELD__CURRENT_STATE = 'current_state';
-    const FIELD__STATES = 'states';
+    public const FIELD__CURRENT_STATE = 'current_state';
+    public const FIELD__STATES = 'states';
 
-    const DUMP__TO = 'state_to';
-    const DUMP__FROM = 'state_from';
-    const DUMP__CONTEXT = 'context';
+    public const DUMP__TO = 'state_to';
+    public const DUMP__FROM = 'state_from';
+    public const DUMP__CONTEXT = 'context';
 
     /**
      * @param string $stateName
@@ -31,7 +31,7 @@ interface IMachine extends IItem, IHasName, IHasDescription, IHasParameters, IHa
      *
      * @return IContext
      */
-    public function run(string $stateName = '', $context);
+    public function run(string $stateName = '', $context = null): IContext;
 
     /**
      * @return array

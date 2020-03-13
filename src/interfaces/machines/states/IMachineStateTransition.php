@@ -5,17 +5,17 @@ use extas\interfaces\IItem;
 use extas\interfaces\machines\IMachine;
 
 /**
- * Interface IStateTransition
+ * Interface IMachineStateTransition
  *
  * @package extas\interfaces\states
  * @author jeyroik@gmail.com
  */
 interface IMachineStateTransition extends IItem
 {
-    const SUBJECT = 'extas.machine.state.transition';
+    public const SUBJECT = 'extas.machine.state.transition';
 
-    const FIELD__MACHINE = 'machine';
-    const FIELD__STATE = 'state';
+    public const FIELD__MACHINE = 'machine';
+    public const FIELD__STATE = 'state';
 
     /**
      * @return string
@@ -43,7 +43,7 @@ interface IMachineStateTransition extends IItem
     public function isEmpty(): bool;
 
     /**
-     * @param string|IState $state
+     * @param string|IMachineState $state
      *
      * @return $this
      */

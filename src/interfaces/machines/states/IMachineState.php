@@ -14,11 +14,11 @@ use extas\interfaces\parameters\IHasParameters;
  */
 interface IMachineState extends IItem, IHasName, IHasDescription, IHasParameters
 {
-    const SUBJECT = 'extas.state';
+    public const SUBJECT = 'extas.state';
 
-    const FIELD__FROM_STATE = 'from_state';
-    const FIELD__ON_SUCCESS = 'on_success';
-    const FIELD__ON_FAILURE = 'on_failure';
+    public const FIELD__FROM_STATE = 'from_state';
+    public const FIELD__ON_SUCCESS = 'on_success';
+    public const FIELD__ON_FAILURE = 'on_failure';
 
     /**
      * @return string

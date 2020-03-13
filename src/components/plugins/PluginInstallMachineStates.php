@@ -12,9 +12,9 @@ use extas\interfaces\machines\states\IMachineStateRepository;
  */
 class PluginInstallMachineStates extends PluginInstallDefault
 {
-    protected $selfName = 'machine state';
-    protected $selfSection = 'machine_states';
-    protected $selfUID = MachineState::FIELD__NAME;
-    protected $selfRepositoryClass = IMachineStateRepository::class;
-    protected $selfItemClass = MachineState::class;
+    protected string $selfName = 'machine state';
+    protected string $selfSection = 'machine_states';
+    protected string $selfUID = MachineState::FIELD__NAME;
+    protected string $selfRepositoryClass = IMachineStateRepository::class;
+    protected string $selfItemClass = MachineState::class;
 }

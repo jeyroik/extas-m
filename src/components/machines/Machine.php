@@ -5,14 +5,14 @@ use extas\components\contexts\Context;
 use extas\components\contexts\THasContext;
 use extas\components\Item;
 use extas\components\parameters\THasParameters;
-use extas\components\states\State;
+use extas\components\machines\states\MachineState;
 use extas\components\SystemContainer;
 use extas\components\THasDescription;
 use extas\components\THasName;
 use extas\interfaces\contexts\IContext;
 use extas\interfaces\machines\IMachine;
-use extas\interfaces\states\IState;
-use extas\interfaces\states\IStateRepository;
+use extas\interfaces\machines\states\IMachineState;
+use extas\interfaces\machines\states\IMachineStateRepository;
 
 /**
  * Class StateMachine
@@ -28,12 +28,12 @@ class Machine extends Item implements IMachine
     use THasContext;
 
     /**
-     * @var IState
+     * @var IMachineState|null
      */
-    protected $currentState = null;
-    protected $statesByName = [];
+    protected ?IMachineState $currentState = null;
+    protected array $statesByName = [];
 
-    protected $dump = [];
+    protected array $dump = [];
 
     /**
      * @param string $stateName
@@ -42,7 +42,7 @@ class Machine extends Item implements IMachine
      * @throws \Exception
      * @return IContext
      */
-    public function run(string $stateName = '', $context)
+    public function run(string $stateName = '', $context = null): IContext
     {
         $context = $context instanceof IContext ? $context : new Context($context);
 
@@ -100,7 +100,7 @@ class Machine extends Item implements IMachine
     }
 
     /**
-     * @param IState $state
+     * @param IMachineState $state
      * @param IContext $context
      *
      * @return bool
@@ -128,28 +128,28 @@ class Machine extends Item implements IMachine
      * @param $stateName
      * @param $context
      *
-     * @return IState
+     * @return IMachineState
      * @throws
      */
     protected function buildState($stateConfig, $stateName, &$context)
     {
         /**
-         * @var $stateRepo IStateRepository
-         * @var $state IState
+         * @var $stateRepo IMachineStateRepository
+         * @var $state IMachineState
          */
-        $stateRepo = SystemContainer::getItem(IStateRepository::class);
-        $state = $stateRepo->one([IState::FIELD__NAME => $stateName]);
+        $stateRepo = SystemContainer::getItem(IMachineStateRepository::class);
+        $state = $stateRepo->one([IMachineState::FIELD__NAME => $stateName]);
         if (!$state) {
             throw new \Exception('Unknown state "' . $stateName . '"');
         }
 
-        $state = new State(array_merge($state->__toArray(), $stateConfig));
+        $state = new MachineState(array_merge($state->__toArray(), $stateConfig));
 
-        if (isset($context[IState::FIELD__FROM_STATE]) && $context[IState::FIELD__FROM_STATE]) {
-            $fromState = $context[IState::FIELD__FROM_STATE];
+        if (isset($context[IMachineState::FIELD__FROM_STATE]) && $context[IMachineState::FIELD__FROM_STATE]) {
+            $fromState = $context[IMachineState::FIELD__FROM_STATE];
         } else {
             $fromState = $this->getCurrentState();
-            $context[IState::FIELD__FROM_STATE] = $fromState;
+            $context[IMachineState::FIELD__FROM_STATE] = $fromState;
             /**
              * Исходим из того, что если в контексте нет исходного состояния, то машина запускается "с начала".
              */
@@ -181,7 +181,7 @@ class Machine extends Item implements IMachine
     }
 
     /**
-     * @param IState $state
+     * @param IMachineState $state
      * @param IContext $context
      *
      * @return bool
@@ -239,7 +239,7 @@ class Machine extends Item implements IMachine
             $this->statesByName = array_column(
                 $this->getStatesConfigs(),
                 null,
-                IState::FIELD__NAME
+                IMachineState::FIELD__NAME
             );
         }
 
