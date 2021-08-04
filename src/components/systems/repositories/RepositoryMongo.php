@@ -55,6 +55,7 @@ class RepositoryMongo extends RepositoryAbstract implements IRepositoryMongo
      */
     public function __construct($dsn = '')
     {
+        $dsn = $dsn ? $dsn : getenv('MONGO__DSN');
         $dsn && $this->setDsn($dsn);
         $this->initDriver();
     }
