@@ -1,65 +1,49 @@
 {
-  "name": "extas/state-machine",
-  "package_classes": [
-    {
-      "class": "extas\\components\\machines\\MachineRepository",
-      "interface": "extas\\interfaces\\machines\\IMachineRepository"
-    },
-    {
-      "class": "extas\\components\\machines\\states\\MachineStateRepository",
-      "interface": "extas\\interfaces\\machines\\states\\IMachineStateRepository"
-    }
-  ],
-  "machine_states": [
-    {
-      "name": "init",
-      "title": "Инициализация",
-      "description": "Инициализация машины состояния"
-    },
-    {
-      "name": "end",
-      "title": "Завершение",
-      "description": "Завершение работы машины состояния"
-    }
-  ],
-  "machines": [
-    {
-      "name": "extas.demo",
-      "title": "Демо-машина",
-      "description": "Демонстрационная машина состояния",
-      "current_state": "not initialized yet",
-      "states": [
-        {
-          "name": "init",
-          "on_success": {"state": "end"},
-          "on_failure": {"state": "end"}
-        },
-        {
-          "name": "end"
-        }
-      ]
-    }
-  ],
+  "title": "Default plugins & extensions",
+  "description": "This is pack of default (core) plugins and extensions",
+  "schema": "1.0",
   "plugins": [
     {
-      "class": "extas\\components\\plugins\\PluginInstallMachines",
-      "stage": "extas.install"
+      "class": "jeyroik\\extas\\components\\systems\\states\\machines\\plugins\\PluginStateRunBeforeSubMachine",
+      "stage": "state.run.before"
     },
     {
-      "class": "extas\\components\\plugins\\PluginInstallMachineStates",
-      "stage": "extas.install"
+      "class": "jeyroik\\extas\\components\\systems\\states\\machines\\plugins\\PluginInitContextSuccess",
+      "stage": "context.init"
     },
     {
-      "class": "extas\\components\\plugins\\states\\StatePluginValidationParameters",
-      "stage": "machine.state.validation"
+      "class": "jeyroik\\extas\\components\\systems\\states\\machines\\plugins\\PluginBeforeMachineInitJsonConfig",
+      "stage": "machine.init.config"
     },
     {
-      "class": "extas\\components\\plugins\\states\\StatePluginDemoInit",
-      "stage": "extas.demo.to.init"
+      "class": "jeyroik\\extas\\components\\systems\\states\\machines\\plugins\\PluginBeforeMachineInitPhpConfig",
+      "stage": "machine.init.config"
     },
     {
-      "class": "extas\\components\\plugins\\states\\StatePluginDemoEnd",
-      "stage": "extas.demo.to.end"
+      "class": "jeyroik\\extas\\components\\systems\\states\\machines\\plugins\\PluginStateRunBeforeStart",
+      "stage": "state.run.before"
+    },
+    {
+      "class": "jeyroik\\extas\\components\\systems\\states\\machines\\plugins\\PluginStateRunBeforeExistingState",
+      "stage": "state.run.before"
+    },
+    {
+      "class": "jeyroik\\extas\\components\\systems\\states\\machines\\plugins\\PluginStateRunBeforeCycle",
+      "stage": "state.run.before"
+    },
+    {
+      "class": "jeyroik\\extas\\components\\systems\\states\\machines\\plugins\\PluginStateRunBeforeTheEnd",
+      "stage": "state.run.before"
+    }
+  ],
+  "extensions": [
+    {
+      "class": "jeyroik\\extas\\components\\systems\\states\\machines\\extensions\\ExtensionContextErrors",
+      "interface": "jeyroik\\extas\\interfaces\\systems\\contexts\\IContextErrors",
+      "subject": "context",
+      "methods": [
+        "addError"
+      ]
     }
   ]
 }

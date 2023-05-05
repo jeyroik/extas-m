@@ -2,13 +2,26 @@
   "name": "jeyroik/extas-m",
   "description": "EXTendable State Machine.",
   "require": {
-    "jeyroik/extas-base": "2.*",
-    "jeyroik/extas-installer": "2.*",
-    "jeyroik/extas-parameters": "0.*"
+    "jeyroik/sm-plugin-error-state": "*",
+    "jeyroik/sm-plugin-guarantee-state-id": "*",
+    "jeyroik/sm-plugin-max-try": "*",
+    "jeyroik/sm-plugin-on-failure": "*",
+    "jeyroik/sm-plugin-states-route": "*",
+    "jeyroik/sm-plugin-route-path": "*",
+    "jeyroik/sm-plugin-route-from-start": "*",
+    "symfony/console": "*",
+    "symfony/finder": "*",
+    "psr/container": "*",
+    "league/container": "*",
+    "mongodb/mongodb": "*",
+    "vlucas/phpdotenv": "^2.4"
   },
   "autoload": {
     "psr-4": {
-      "extas\\": "src/"
+      "jeyroik\\extas\\": "src/"
     }
-  }
+  },
+  "bin": [
+    "resources/bin/extas"
+  ]
 }
