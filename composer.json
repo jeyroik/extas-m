@@ -19,8 +19,5 @@
     "psr-4": {
       "jeyroik\\extas\\": "src/"
     }
-  },
-  "bin": [
-    "resources/bin/extas"
-  ]
+  }
 }
